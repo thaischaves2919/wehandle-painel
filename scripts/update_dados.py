@@ -51,7 +51,7 @@ DB_ID = 14  # Snowflake - DB wehandle
 def get_vidas(idempresa, data_inicio):
     sql = f"""
     SELECT COUNT(DISTINCT IDUSUARIO) AS vidas
-    FROM DATABUNKER.SD_EMPRESA_USUARIO
+    FROM SD_EMPRESA_USUARIO
     WHERE IDEMPRESA = {idempresa}
       AND PROJDESATIVADO <> 'S'
       AND USUDESATIVADO = FALSE
@@ -73,7 +73,7 @@ def get_aderencia(idempresa):
     SELECT
       SUM(CASE WHEN STATUS IN ({status_in}) THEN 1 ELSE 0 END) AS aderentes,
       COUNT(*) AS total
-    FROM DATABUNKER.SD_DOCUMENTOS_ATIVO
+    FROM SD_DOCUMENTOS_ATIVO
     WHERE IDEMPRESA = {idempresa}
       AND STATUS <> 'Documento Substituido'
     """
