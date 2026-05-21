@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="refresh" content="60" />
+  <title>wehandle — Rampagem de Vidas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1e2b4a; min-height: 100vh; padding: 32px 24px; }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-icon  { width: 40px; height: 40px; }
+    .logo-text  { font-size: 22px; font-weight: 700; color: #1e2b4a; letter-spacing: -0.5px; }
+    .page-subtitle { font-size: 13px; color: #7a869a; margin-top: 2px; }
+    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .badge-prazo { background: #fff; border: 1px solid #dde1ea; color: #4a5568; padding: 6px 14px; border-radius: 20px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .badge-prazo strong { color: #1e2b4a; }
+    .badge-leitura { background: #f0f4ff; border: 1px solid #c3cfe2; color: #4a5568; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .deadline-card { background: #1e2b4a; border-radius: 16px; padding: 20px 28px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(30,43,74,0.15); }
+    .deadline-item { text-align: center; }
+    .deadline-num  { font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .deadline-num.urgente { color: #f687b3; }
+    .deadline-lbl  { font-size: 11px; color: #8896b3; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .divider       { width: 1px; height: 50px; background: #2d3f65; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
+    .status-badge { font-size: 11px; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+    .status-critico { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .status-ok      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .status-atencao { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+    .metric-row { display: flex; gap: 12px; margin-bottom: 16px; }
+    .metric-box { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
+    .metric-label { font-size: 11px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .metric-value { font-size: 28px; font-weight: 800; color: #1e2b4a; line-height: 1; display: flex; align-items: baseline; justify-content: center; gap: 1px; }
+    .metric-sub { font-size: 11px; color: #a0aec0; margin-top: 4px; }
+    .progress-section { margin-bottom: 14px; }
+    .progress-label   { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 6px; }
+    .progress-bar     { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .progress-fill    { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+    .fill-pink   { background: linear-gradient(90deg, #d4326d, #e8679a); }
+    .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
+    .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+    .gap-box { background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
+    .gap-label { color: #718096; }
+    .gap-value { font-weight: 700; color: #1e2b4a; }
+    .gap-value.alerta { color: #c53030; }
+    .gap-value.ok     { color: #276749; }
+    .section-title { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 18px; }
+    .table-wrap { max-height: 420px; overflow-y: auto; overflow-x: auto; border-radius: 8px; border: 1px solid #edf2f7; }
+    .fornecedor-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .fornecedor-table thead th { position: sticky; top: 0; background: #f7f8fa; z-index: 1; }
+    .fornecedor-table th { text-align: left; color: #a0aec0; font-weight: 600; padding: 7px 8px; border-bottom: 1px solid #edf2f7; white-space: nowrap; }
+    .fornecedor-table td { padding: 7px 8px; border-bottom: 1px solid #f7f8fa; color: #4a5568; vertical-align: middle; }
+    .fornecedor-table td.center { text-align: center; }
+    .fornecedor-table td.cnpj { font-family: monospace; font-size: 10px; color: #718096; white-space: nowrap; }
+    .row-aguardando { background: #fffff0; }
+    .row-pendente   { background: #fffdf0; }
+    .section-sub { font-size: 10px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
+    .sub-verde   { background: #276749; }
+    .sub-laranja { background: #b7791f; }
+    .sub-amarelo { background: #975a16; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+    .pill-sim      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-nao      { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .pill-sub      { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .pill-aguardando { background: #fefcbf; color: #744210; border: 1px solid #f6e05e; }
+    .pill-wa       { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-email    { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .filtro-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filtro-label { font-size: 12px; color: #7a869a; font-weight: 600; margin-right: 4px; }
+    .filtro-btn { padding: 6px 18px; border-radius: 20px; border: 1px solid #dde1ea; background: #fff; font-size: 12px; font-weight: 600; color: #4a5568; cursor: pointer; transition: all 0.2s; }
+    .filtro-btn.ativo { background: #1e2b4a; color: #fff; border-color: #1e2b4a; }
+    .pesquisa-wrap { margin-bottom: 16px; }
+    .pesquisa-input { width: 100%; padding: 10px 16px 10px 38px; border: 1px solid #dde1ea; border-radius: 10px; font-size: 13px; color: #1e2b4a; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0aec0' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .pesquisa-input:focus { border-color: #e0296f; }
+    .pesquisa-info { font-size: 11px; color: #a0aec0; margin-top: 6px; display: none; }
+    .secao-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+    .secao-titulo::before { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
+    .secao-titulo::after  { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
+    .btn-colapsar { background: #f7f8fa; border: 1px solid #e2e6ef; color: #718096; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin: 0 auto 16px; }
+    .grid-encerrados { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .grid-encerrados .card { opacity: 0.65; filter: grayscale(40%); }
+    .encerrado-wrap { display: none; }
+    .encerrado-wrap.aberto { display: block; }
+    .footer-leitura { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e6ef; }
+    .footer-leitura strong { color: #e0296f; }
+    .bonus-section { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+    .bonus-titulo { font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .bonus-faixa { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e2e6ef; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; gap: 12px; }
+    .bonus-faixa-info { flex: 1; }
+    .bonus-faixa-nome { font-size: 12px; font-weight: 600; color: #1e2b4a; }
+    .bonus-faixa-gap { font-size: 11px; color: #718096; margin-top: 2px; }
+    .bonus-faixa-gap.ok { color: #166534; font-weight: 700; }
+    .bonus-faixa-valor { font-size: 17px; font-weight: 800; color: #cbd5e0; white-space: nowrap; }
+    .bonus-faixa-valor.on { color: #166534; }
+    .bonus-projecao { display: flex; justify-content: space-between; align-items: center; background: #1e2b4a; border-radius: 8px 8px 0 0; padding: 10px 14px; margin-top: 2px; }
+    .bonus-projecao-label { font-size: 11px; color: #8896b3; text-transform: uppercase; letter-spacing: 0.5px; }
+    .bonus-projecao-sub { font-size: 10px; color: #5a7099; margin-top: 2px; }
+    .bonus-projecao-valor { font-size: 20px; font-weight: 800; color: #4ade80; }
+    .bonus-projecao-valor.zero { color: #4a6080; font-size: 14px; font-weight: 600; }
+    .bonus-confirmado { display: flex; justify-content: space-between; align-items: center; background: #162036; border-radius: 0 0 8px 8px; padding: 8px 14px; border-top: 1px solid #2d3f65; }
+    .bonus-conf-label { font-size: 10px; color: #8896b3; text-transform: uppercase; letter-spacing: 0.5px; }
+    .bonus-conf-valor { font-size: 14px; font-weight: 700; color: #4ade80; }
+    .bonus-conf-valor.aguardando { color: #4a6080; font-size: 12px; font-weight: 600; }
+    .bp-wrap { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .bp-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .bp-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid #e2e6ef; border-radius: 10px; overflow: hidden; }
+    .bp-table th { text-align: left; padding: 9px 14px; font-size: 11px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; background: #f7f8fa; border-bottom: 2px solid #e2e6ef; }
+    .bp-table th:not(:first-child) { text-align: right; }
+    .bp-table td { padding: 11px 14px; border-bottom: 1px solid #f7f8fa; vertical-align: middle; }
+    .bp-td-nome { font-weight: 600; color: #1e2b4a; }
+    .bp-td-faixas { font-size: 11px; color: #a0aec0; margin-top: 3px; }
+    .bp-td-faixas span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+    .bp-td-faixas .ok { color: #276749; font-weight: 700; }
+    .bp-td-val { text-align: right; font-weight: 700; color: #1e2b4a; }
+    .bp-td-conf { text-align: right; font-weight: 600; color: #1e2b4a; }
+    .bp-td-conf.aguardando { color: #a0aec0; font-weight: 400; font-size: 12px; }
+    .bp-total td { background: #1e2b4a; color: #fff; border-bottom: none; font-weight: 700; font-size: 14px; }
+    .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .bp-total .bp-td-val { color: #4ade80; font-size: 18px; }
+    .bp-total .bp-td-conf { color: #4ade80; }
+    @media (max-width: 600px) { .deadline-card { gap: 16px; padding: 16px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="8,8 92,8 88,32 32,12"  fill="#e0296f"/>
+      <polygon points="92,8 92,92 68,88 88,32" fill="#e0296f"/>
+      <polygon points="92,92 8,92 12,68 68,88" fill="#e0296f"/>
+      <polygon points="8,92 8,8 32,12 12,68"  fill="#e0296f"/>
+    </svg>
+    <div>
+      <div class="logo-text">wehandle</div>
+      <div class="page-subtitle">Rampagem de Vidas — Visão Executiva</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="badge-prazo">Próximo prazo: <strong id="prazo-display">—</strong></span>
+    <span class="badge-leitura">Somente leitura</span>
+  </div>
+</header>
+
+<div class="deadline-card">
+  <div class="deadline-item">
+    <div class="deadline-num" id="dias-restantes">—</div>
+    <div class="deadline-lbl" id="proximo-prazo-label">dias para o próximo prazo</div>
+  </div>
+  <div class="divider"></div>
+  <div class="deadline-item">
+    <div class="deadline-num">45</div>
+    <div class="deadline-lbl">dias por cliente</div>
+  </div>
+  <div class="divider"></div>
+  <div class="deadline-item">
+    <div class="deadline-num">50%</div>
+    <div class="deadline-lbl">meta aderência</div>
+  </div>
+</div>
+
+    <div class="filtro-wrap" id="filtro-wrap">
+      <span class="filtro-label">Cliente:</span>
+      <button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente('todos')">Todos</button>
+    </div>
+
+    <div class="pesquisa-wrap">
+      <input class="pesquisa-input" id="pesquisa" type="text" placeholder="Pesquisar por nome, CNPJ, telefone ou e-mail..." oninput="pesquisarFornecedor(this.value)" />
+      <div class="pesquisa-info" id="pesquisa-info"></div>
+    </div>
+
+    <div class="grid" id="cards-container"></div>
+
+    <div id="secao-encerrados" style="display:none">
+      <div class="secao-titulo">Período encerrado</div>
+      <button class="btn-colapsar" onclick="toggleEncerrados()">
+        <span id="label-colapsar">▼ Ver clientes encerrados</span>
+        <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
+      </button>
+      <div class="encerrado-wrap" id="encerrado-wrap">
+        <div class="grid-encerrados" id="cards-encerrados"></div>
+      </div>
+    </div>
+
+
+<div class="footer-leitura">
+  Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · Atualizado em <span id="footer-data"></span>
+</div>
+
+<script src="dados.js"></script>
+<script>
+  const OVERRIDES_KEY           = 'wehandle_contacts_v2';
+  const CLIENTES_EXTRAS_KEY     = 'wehandle_clientes_extras_v1';
+  const FORNECEDORES_EXTRAS_KEY = 'wehandle_fornecedores_extras_v1';
+  const METRICAS_KEY            = 'wehandle_metricas_v1';
+
+  function carregarFornecedoresExtras() {
+    try { const r = localStorage.getItem(FORNECEDORES_EXTRAS_KEY); return r ? JSON.parse(r) : []; } catch(e) { return []; }
+  }
+
+  function getMetricasOverride(clienteId) {
+    try { const r = localStorage.getItem(METRICAS_KEY); return (r ? JSON.parse(r) : {})[clienteId] || {}; } catch(e) { return {}; }
+  }
+
+  const STATUS_OPTS = [
+    { value: 'contatado',  label: 'Contatado',         cls: 'pill-sim'       },
+    { value: 'aguardando', label: 'Aguardando reunião', cls: 'pill-aguardando'},
+    { value: 'pendente',   label: 'Pendente',           cls: 'pill-nao'       },
+  ];
+  const VIA_OPTS = [
+    { value: 'whatsapp', label: 'WhatsApp', cls: 'pill-wa'    },
+    { value: 'email',    label: 'E-mail',   cls: 'pill-email' },
+  ];
+
+  function carregarOverrides() {
+    try { const r = localStorage.getItem(OVERRIDES_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; }
+  }
+
+  function getFornecedor(f, overrides) {
+    const o = overrides[f.cnpj] || {};
+    const statusFinal = o.status ? o.status : f.status;
+    return {
+      ...f,
+      status: statusFinal,
+      via:    o.via   || f.via,
+      tel:    o.tel   !== undefined ? o.tel   : f.tel,
+      email:  o.email !== undefined ? o.email : f.email,
+      vidas:  o.vidas !== undefined ? o.vidas : f.vidas,
+    };
+  }
+
+  function calcPrazo(dataInicio) {
+    const d = new Date(dataInicio + 'T00:00:00');
+    d.setDate(d.getDate() + 45);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function clienteEncerrado(c) {
+    if (!c.dataInicio) return false;
+    return calcPrazo(c.dataInicio) < new Date();
+  }
+
+  function todosClientes() {
+    try {
+      const raw = localStorage.getItem(CLIENTES_EXTRAS_KEY);
+      const extras = raw ? JSON.parse(raw) : [];
+      return [...WEHANDLE_DADOS.clientes, ...extras];
+    } catch(e) { return WEHANDLE_DADOS.clientes; }
+  }
+
+  function calcDiasRestantes() {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    let proxDiff = null, proxCliente = null, proxData = null;
+    todosClientes().forEach(c => {
+      if (!c.dataInicio) return;
+      const prazo = calcPrazo(c.dataInicio);
+      const diff  = Math.round((prazo - hoje) / 86400000);
+      if (diff < 0) return;
+      if (proxDiff === null || diff < proxDiff) { proxDiff = diff; proxCliente = c.nome; proxData = prazo; }
+    });
+    const el = document.getElementById('dias-restantes');
+    el.textContent = proxDiff !== null ? proxDiff : '—';
+    if (el) { el.classList.toggle('urgente', proxDiff !== null && proxDiff <= 15); }
+    const lblEl = document.getElementById('proximo-prazo-label');
+    if (lblEl && proxCliente) lblEl.textContent = 'dias restantes — ' + proxCliente;
+    const prazoDisplay = document.getElementById('prazo-display');
+    if (prazoDisplay && proxData) prazoDisplay.textContent = proxData.toLocaleDateString('pt-BR');
+  }
+
+  function criarLinha(f) {
+    const curStatus = STATUS_OPTS.find(o => o.value === f.status) || STATUS_OPTS[0];
+    const curVia    = VIA_OPTS.find(o => o.value === f.via)       || VIA_OPTS[0];
+
+    const tr = document.createElement('tr');
+    if (f.status === 'aguardando') tr.className = 'row-aguardando';
+    if (f.status === 'pendente')   tr.className = 'row-pendente';
+
+    const td1 = document.createElement('td'); td1.textContent = f.razaoSocial;
+    const td2 = document.createElement('td'); td2.className = 'cnpj'; td2.textContent = f.cnpj;
+
+    const td3 = document.createElement('td'); td3.className = 'center';
+    const pCon = document.createElement('span');
+    pCon.className = 'pill ' + (f.contrato === 'subcontratado' ? 'pill-sub' : 'pill-sim');
+    pCon.textContent = f.contrato === 'subcontratado' ? 'Subcontratado' : 'Contratado';
+    td3.appendChild(pCon);
+
+    const td4 = document.createElement('td');
+    const telDisp = document.createElement('div');
+    telDisp.style.fontSize = '11px'; telDisp.textContent = f.tel || '—';
+    const emailDisp = document.createElement('div');
+    emailDisp.style.cssText = 'font-size:10px;color:#718096'; emailDisp.textContent = f.email || '—';
+    td4.append(telDisp, emailDisp);
+
+    const td5 = document.createElement('td'); td5.className = 'center';
+    const viaDisp = document.createElement('span');
+    viaDisp.className = 'pill ' + curVia.cls; viaDisp.textContent = curVia.label;
+    td5.appendChild(viaDisp);
+
+    const td6 = document.createElement('td'); td6.className = 'center';
+    const statusDisp = document.createElement('span');
+    statusDisp.className = 'pill ' + curStatus.cls; statusDisp.textContent = curStatus.label;
+    td6.appendChild(statusDisp);
+
+    tr.append(td1, td2, td3, td4, td5, td6);
+    return tr;
+  }
+
+  function criarCard(cliente, overrides) {
+    const mOv       = getMetricasOverride(cliente.id);
+    const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
+    const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
+    const metaF1    = cliente.metaVidasF1;
+    const metaF2    = cliente.metaVidasF2;
+    const metaAd    = cliente.metaAderencia || 50;
+    const gapF1     = Math.max(metaF1 - vidas, 0);
+    const gapAd     = metaAd - aderencia;
+    const adPct     = Math.min((aderencia / metaAd) * 100, 100);
+    const f1Pct     = Math.min((vidas / metaF1) * 100, 100);
+    const adDispStr = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
+
+    const badgeVidasCls = vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
+    const badgeVidasTxt = vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico';
+    const badgeAderCls  = aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico';
+    const badgeAderTxt  = aderencia >= metaAd ? 'Aderência OK' : aderencia >= metaAd - 5 ? 'Aderência: Atenção' : 'Aderência: Crítico';
+
+    const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === cliente.id);
+    const forn       = [...(cliente.fornecedores || []).map(f => getFornecedor(f, overrides)), ...extrasCliente.map(f => getFornecedor(f, overrides))];
+    const contatados = forn.filter(f => f.status === 'contatado');
+    const aguardando = forn.filter(f => f.status === 'aguardando');
+    const pendentes  = forn.filter(f => f.status === 'pendente');
+    const total      = forn.length;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-' + cliente.id;
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="card-title">${cliente.nome}</div>
+          ${cliente.cnpj ? `<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">${cliente.cnpj}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="status-badge ${badgeVidasCls}">${badgeVidasTxt}</span>
+          <span class="status-badge ${badgeAderCls}">${badgeAderTxt}</span>
+        </div>
+      </div>
+      ${cliente.dataInicio ? (() => {
+        const prazo = calcPrazo(cliente.dataInicio);
+        const hojeCard = new Date(); hojeCard.setHours(0,0,0,0);
+        const dias  = Math.round((prazo - hojeCard) / 86400000);
+        const prazoStr = prazo.toLocaleDateString('pt-BR');
+        const urgente  = dias <= 15;
+        return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:${urgente?'#fff0f3':'#f7f8fa'};border:1px solid ${urgente?'#feb2b2':'#e2e6ef'};border-radius:10px;padding:10px 14px;font-size:12px;">
+          <span style="font-size:22px;font-weight:800;color:${urgente?'#c53030':'#1e2b4a'}">${Math.max(dias,0)}</span>
+          <span style="color:#718096">dias restantes · prazo <strong style="color:${urgente?'#c53030':'#1e2b4a'}">${prazoStr}</strong> · início ${new Date(cliente.dataInicio+'T00:00:00').toLocaleDateString('pt-BR')}</span>
+        </div>`;
+      })() : ''}
+      <div class="metric-row">
+        <div class="metric-box">
+          <div class="metric-label">Vidas alocadas</div>
+          <div class="metric-value"><span style="font-size:28px;font-weight:800">${vidas}</span></div>
+          <div class="metric-sub">atual</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">Aderência</div>
+          <div class="metric-value"><span style="font-size:28px;font-weight:800">${adDispStr}</span>%</div>
+          <div class="metric-sub">atual</div>
+        </div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-label"><span>Aderência — Meta ${metaAd}%</span><span>${adDispStr}%</span></div>
+        <div class="progress-bar"><div class="progress-fill ${gapAd <= 0 ? 'fill-green' : 'fill-orange'}" style="width:${adPct}%"></div></div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-label"><span>Faixa 1 — Meta ${metaF1} vidas</span><span>${vidas} / ${metaF1}</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${f1Pct}%"></div></div>
+      </div>
+      ${metaF2 ? `<div class="progress-section">
+        <div class="progress-label"><span>Faixa 2 — Meta ${metaF2} vidas</span><span>${vidas} / ${metaF2}</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${Math.min((vidas/metaF2)*100,100)}%"></div></div>
+      </div>` : ''}
+      <div class="gap-box">
+        <span class="gap-label">Gap para faixa 1 (${metaF1} vidas)</span>
+        <span class="gap-value ${gapF1 === 0 ? 'ok' : 'alerta'}">${gapF1 === 0 ? '✓ Faixa 1 atingida' : gapF1 + ' vidas'}</span>
+      </div>
+      ${metaF2 ? `<div class="gap-box">
+        <span class="gap-label">Gap para faixa 2 (${metaF2} vidas)</span>
+        <span class="gap-value alerta">${Math.max(metaF2 - vidas, 0)} vidas</span>
+      </div>` : ''}
+      <div class="gap-box">
+        <span class="gap-label">Gap de aderência para ${metaAd}%</span>
+        <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}">${gapAd <= 0 ? '✓ Meta atingida' : gapAd.toFixed(1).replace('.', ',') + ' p.p.'}</span>
+      </div>
+
+
+      <div class="section-title">Fornecedores ${cliente.nome} <span style="color:#a0aec0;font-weight:400">(${total} total)</span></div>
+      <div class="section-sub sub-verde">✓ Já contatados (${contatados.length})</div>
+      <div class="table-wrap" style="margin-bottom:12px">
+        <table class="fornecedor-table">
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+          <tbody id="tbody-${cliente.id}-contatados"></tbody>
+        </table>
+      </div>
+      <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (${aguardando.length})</div>
+      <div class="table-wrap" style="margin-bottom:12px">
+        <table class="fornecedor-table">
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+          <tbody id="tbody-${cliente.id}-aguardando"></tbody>
+        </table>
+      </div>
+      ${pendentes.length > 0 ? `<div style="margin-top:8px">
+        <div class="section-sub sub-laranja">⏳ Pendentes de contato (${pendentes.length})</div>
+        <div class="table-wrap" style="margin-top:8px">
+          <table class="fornecedor-table">
+            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+            <tbody id="tbody-${cliente.id}-pendentes"></tbody>
+          </table>
+        </div>
+      </div>` : ''}
+    `;
+
+    const tC = card.querySelector('#tbody-' + cliente.id + '-contatados');
+    const tA = card.querySelector('#tbody-' + cliente.id + '-aguardando');
+    const tP = card.querySelector('#tbody-' + cliente.id + '-pendentes');
+    contatados.forEach(f => tC.appendChild(criarLinha(f)));
+    aguardando.forEach(f => tA.appendChild(criarLinha(f)));
+    if (tP) pendentes.forEach(f => tP.appendChild(criarLinha(f)));
+
+    return card;
+  }
+
+  function toggleEncerrados() {
+    const wrap  = document.getElementById('encerrado-wrap');
+    const label = document.getElementById('label-colapsar');
+    const aberto = wrap.classList.toggle('aberto');
+    label.textContent = aberto ? '▲ Ocultar clientes encerrados' : '▼ Ver clientes encerrados';
+  }
+
+  function renderizarClientes() {
+    const container  = document.getElementById('cards-container');
+    const containerE = document.getElementById('cards-encerrados');
+    container.innerHTML  = '';
+    containerE.innerHTML = '';
+
+    const overrides  = carregarOverrides();
+    const lista      = todosClientes();
+    const ativos     = lista.filter(c => !clienteEncerrado(c));
+    const encerrados = lista.filter(c =>  clienteEncerrado(c));
+
+    const filtroWrap = document.getElementById('filtro-wrap');
+    filtroWrap.innerHTML = '<span class="filtro-label">Cliente:</span><button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente(\'todos\')">Todos</button>';
+    lista.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'filtro-btn';
+      btn.dataset.cliente = c.id;
+      btn.textContent = c.nome + (clienteEncerrado(c) ? ' ✓' : '');
+      btn.onclick = () => filtrarCliente(c.id);
+      filtroWrap.appendChild(btn);
+    });
+
+    ativos.forEach(c     => container.appendChild(criarCard(c, overrides)));
+    encerrados.forEach(c => containerE.appendChild(criarCard(c, overrides)));
+
+    const secao = document.getElementById('secao-encerrados');
+    secao.style.display = encerrados.length > 0 ? '' : 'none';
+    const count = document.getElementById('count-encerrados');
+    if (count) count.textContent = encerrados.length + (encerrados.length === 1 ? ' cliente' : ' clientes');
+
+    document.getElementById('footer-data').textContent = new Date().toLocaleString('pt-BR');
+  }
+
+  function filtrarCliente(id) {
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.toggle('ativo', b.dataset.cliente === id));
+    todosClientes().forEach(c => {
+      const card = document.getElementById('card-' + c.id);
+      if (card) card.style.display = (id === 'todos' || id === c.id) ? '' : 'none';
+    });
+  }
+
+  function pesquisarFornecedor(termo) {
+    const t     = termo.toLowerCase().trim();
+    const tNums = t.replace(/\D/g, '');
+    let total = 0, encontrados = 0;
+    document.querySelectorAll('.fornecedor-table tbody tr').forEach(tr => {
+      total++;
+      if (!t) { tr.style.display = ''; encontrados++; return; }
+      const nome     = tr.querySelector('td:first-child')?.textContent.toLowerCase() || '';
+      const cnpj     = tr.querySelector('.cnpj')?.textContent.toLowerCase() || '';
+      const cnpjNums = cnpj.replace(/\D/g, '');
+      const cells    = tr.querySelectorAll('td');
+      const tel      = cells[3]?.children[0]?.textContent.toLowerCase() || '';
+      const email    = cells[3]?.children[1]?.textContent.toLowerCase() || '';
+      const match = nome.includes(t) || cnpj.includes(t) || (tNums.length > 0 && cnpjNums.includes(tNums)) || tel.includes(t) || email.includes(t);
+      tr.style.display = match ? '' : 'none';
+      if (match) encontrados++;
+    });
+    const info = document.getElementById('pesquisa-info');
+    if (t) { info.style.display = 'block'; info.textContent = encontrados + ' fornecedor(es) encontrado(s) de ' + total; }
+    else   { info.style.display = 'none'; }
+  }
+
+  // Atualização em tempo real quando painel.html salva dados
+  try {
+    new BroadcastChannel('wehandle_painel').onmessage = () => {
+      renderizarClientes();
+      calcDiasRestantes();
+    };
+  } catch(e) {}
+
+  calcDiasRestantes();
+  renderizarClientes();
+  setInterval(calcDiasRestantes, 60000); // atualiza a cada minuto — vira a data sem precisar de F5
+</script>
+</body>
+</html>
