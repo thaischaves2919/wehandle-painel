@@ -250,7 +250,7 @@
       if (proxDiff === null || diff < proxDiff) { proxDiff = diff; proxCliente = c.nome; proxData = prazo; }
     });
     const el = document.getElementById('dias-restantes');
-    el.textContent = proxDiff !== null ? proxDiff : '—';
+    if (el) { el.textContent = proxDiff !== null ? proxDiff : '—'; }
     if (el) { el.classList.toggle('urgente', proxDiff !== null && proxDiff <= 15); }
     const lblEl = document.getElementById('proximo-prazo-label');
     if (lblEl && proxCliente) lblEl.textContent = 'dias restantes — ' + proxCliente;
