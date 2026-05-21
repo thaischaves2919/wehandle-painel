@@ -37,7 +37,9 @@ def run_query(database_id, native_sql):
         "native": {"query": native_sql}
     }
     r = session.post(f"{MB_URL}/api/dataset", json=payload, timeout=60)
-    r.raise_for_status()
+    if not r.ok:
+        print(f"Erro {r.status_code} na query: {r.text[:500]}")
+        r.raise_for_status()
     data = r.json()
     rows = data.get("data", {}).get("rows", [])
     cols = [c["name"] for c in data.get("data", {}).get("cols", [])]
