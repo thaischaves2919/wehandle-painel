@@ -9,23 +9,25 @@ import json
 import datetime
 import requests
 
-MB_URL   = "https://mbwh.wehandle.com.br"
-MB_USER  = os.environ["MB_USER"]
-MB_PASS  = os.environ["MB_PASS"]
+MB_URL     = "https://mbwh.wehandle.com.br"
+MB_SESSION = os.environ["MB_SESSION"]
 TODAY    = datetime.date.today().isoformat()          # YYYY-MM-DD
 TODAY_BR = datetime.date.today().strftime("%d/%m/%Y") # DD/MM/YYYY
 
 session = requests.Session()
-session.headers.update({"Content-Type": "application/json"})
+session.headers.update({
+    "Content-Type": "application/json",
+    "X-Metabase-Session": MB_SESSION
+})
 
-# ── 1. Autenticar ──────────────────────────────────────────────────────────────
+# ── 1. Verificar autenticação ──────────────────────────────────────────────────
 def autenticar():
-    r = session.post(f"{MB_URL}/api/session",
-                     json={"username": MB_USER, "password": MB_PASS})
-    r.raise_for_status()
-    token = r.json()["id"]
-    session.headers.update({"X-Metabase-Session": token})
-    print("✓ Autenticado no Metabase")
+    r = session.get(f"{MB_URL}/api/user/current")
+    if r.status_code == 200:
+        nome = r.json().get("first_name", "usuário")
+        print(f"✓ Autenticado no Metabase como {nome}")
+    else:
+        raise Exception(f"Token de sessão inválido ou expirado (status {r.status_code}). Renove o MB_SESSION no GitHub Secrets.")
 
 # ── 2. Executar query Metabase (dataset endpoint) ──────────────────────────────
 def run_query(database_id, native_sql):
