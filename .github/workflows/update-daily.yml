@@ -25,8 +25,7 @@ jobs:
 
       - name: Rodar script de atualização
         env:
-          MB_USER: ${{ secrets.MB_USER }}
-          MB_PASS: ${{ secrets.MB_PASS }}
+                    MB_SESSION: ${{ secrets.MB_SESSION }}
         run: python scripts/update_dados.py
 
       - name: Commit e push das atualizações
