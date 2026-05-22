@@ -2,7 +2,9 @@ name: Atualização diária do painel
 
 on:
   schedule:
-    - cron: '45 10 * * *'
+    - cron: '0 11 * * *'
+    - cron: '0 16 * * *'
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 jobs:
