@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 21/05/2026
+// Última atualização: 22/05/2026
 var WEHANDLE_DADOS = {
   versao: '20260521b',
   clientes: [
@@ -9,15 +9,16 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 112,
-      aderencia: 61.7,
+      vidas: 113,
+      aderencia: 63.07,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
         { data: '2026-04-30', vidas: 46,  aderencia: 47.2  },
         { data: '2026-05-08', vidas: 53,  aderencia: 49.1  },
         { data: '2026-05-11', vidas: 54,  aderencia: 49.6  },
         { data: '2026-05-15', vidas: 83,  aderencia: 44.1  },
-        { data: '2026-05-21', vidas: 112, aderencia: 61.7 },
+        { data: '2026-05-21', vidas: 112, aderencia: 61.7  },
+        { data: '2026-05-22', vidas: 113, aderencia: 63.07 },
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -106,9 +107,10 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 17,
-      aderencia: 35.92,
+      aderencia: 37.44,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
+        { data: '2026-05-22', vidas: 17, aderencia: 37.44 },
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
