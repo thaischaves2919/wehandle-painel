@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 23/05/2026
+// Última atualização: 24/05/2026
 var WEHANDLE_DADOS = {
   versao: '20260521b',
   clientes: [
@@ -19,7 +19,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-15', vidas: 83,  aderencia: 44.1  },
         { data: '2026-05-21', vidas: 112, aderencia: 61.7  },
         { data: '2026-05-22', vidas: 114, aderencia: 63.07 },,
-        { data: '2026-05-23', vidas: 114, aderencia: 64.03 }
+        { data: '2026-05-23', vidas: 114, aderencia: 64.03 },
+        { data: '2026-05-24', vidas: 114, aderencia: 64.03 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -92,7 +93,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-15', vidas: 19, aderencia: 91.08 },
         { data: '2026-05-21', vidas: 19, aderencia: 91.35 },,
         { data: '2026-05-22', vidas: 19, aderencia: 91.35 },
-        { data: '2026-05-23', vidas: 19, aderencia: 91.35 }
+        { data: '2026-05-23', vidas: 19, aderencia: 91.35 },
+        { data: '2026-05-24', vidas: 19, aderencia: 91.35 }
       ],
       metaVidasF1: 201,
       metaVidasF2: null,
@@ -114,7 +116,8 @@ var WEHANDLE_DADOS = {
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },,
-        { data: '2026-05-23', vidas: 24, aderencia: 43.46 }
+        { data: '2026-05-23', vidas: 24, aderencia: 43.46 },
+        { data: '2026-05-24', vidas: 24, aderencia: 43.46 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
