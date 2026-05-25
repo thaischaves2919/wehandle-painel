@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 113,
+      vidas: 114,
       aderencia: 64.03,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -21,7 +21,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-22', vidas: 114, aderencia: 63.07 },,
         { data: '2026-05-23', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-24', vidas: 114, aderencia: 64.03 },
-        { data: '2026-05-25', vidas: 113, aderencia: 64.03 }
+        { data: '2026-05-25', vidas: 114, aderencia: 64.03 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -114,13 +114,13 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 25,
-      aderencia: 45.25,
+      aderencia: 45.27,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },,
         { data: '2026-05-23', vidas: 24, aderencia: 43.46 },
         { data: '2026-05-24', vidas: 24, aderencia: 43.46 },
-        { data: '2026-05-25', vidas: 25, aderencia: 45.25 }
+        { data: '2026-05-25', vidas: 25, aderencia: 45.27 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
