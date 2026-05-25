@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 24/05/2026
+// Última atualização: 25/05/2026
 var WEHANDLE_DADOS = {
   versao: '20260521b',
   clientes: [
@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 114,
+      vidas: 113,
       aderencia: 64.03,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -20,7 +20,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-21', vidas: 112, aderencia: 61.7  },
         { data: '2026-05-22', vidas: 114, aderencia: 63.07 },,
         { data: '2026-05-23', vidas: 114, aderencia: 64.03 },
-        { data: '2026-05-24', vidas: 114, aderencia: 64.03 }
+        { data: '2026-05-24', vidas: 114, aderencia: 64.03 },
+        { data: '2026-05-25', vidas: 113, aderencia: 64.03 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -94,7 +95,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-21', vidas: 19, aderencia: 91.35 },,
         { data: '2026-05-22', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-23', vidas: 19, aderencia: 91.35 },
-        { data: '2026-05-24', vidas: 19, aderencia: 91.35 }
+        { data: '2026-05-24', vidas: 19, aderencia: 91.35 },
+        { data: '2026-05-25', vidas: 19, aderencia: 91.35 }
       ],
       metaVidasF1: 201,
       metaVidasF2: null,
@@ -111,13 +113,14 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 24,
-      aderencia: 43.46,
+      vidas: 25,
+      aderencia: 45.25,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },,
         { data: '2026-05-23', vidas: 24, aderencia: 43.46 },
-        { data: '2026-05-24', vidas: 24, aderencia: 43.46 }
+        { data: '2026-05-24', vidas: 24, aderencia: 43.46 },
+        { data: '2026-05-25', vidas: 25, aderencia: 45.25 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
