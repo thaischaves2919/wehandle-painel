@@ -300,17 +300,17 @@
     const mOv       = getMetricasOverride(cliente.id);
     const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
     const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
-    const metaF1    = cliente.metaVidasF1;
-    const metaF2    = cliente.metaVidasF2;
+    const metaF1    = cliente.metaVidasF1  != null ? cliente.metaVidasF1  : null;
+    const metaF2    = cliente.metaVidasF2  != null ? cliente.metaVidasF2  : null;
     const metaAd    = cliente.metaAderencia || 50;
-    const gapF1     = Math.max(metaF1 - vidas, 0);
+    const gapF1     = metaF1 != null ? Math.max(metaF1 - vidas, 0) : null;
     const gapAd     = metaAd - aderencia;
     const adPct     = Math.min((aderencia / metaAd) * 100, 100);
-    const f1Pct     = Math.min((vidas / metaF1) * 100, 100);
-    const adDispStr = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
+    const f1Pct     = metaF1 != null ? Math.min((vidas / metaF1) * 100, 100) : 0;
+    const adDispStr = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 2).replace('.', ',') : '—';
 
-    const badgeVidasCls = vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
-    const badgeVidasTxt = vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico';
+    const badgeVidasCls = metaF1 == null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
+    const badgeVidasTxt = metaF1 == null ? 'Aguardando meta' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico';
     const badgeAderCls  = aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico';
     const badgeAderTxt  = aderencia >= metaAd ? 'Aderência OK' : aderencia >= metaAd - 5 ? 'Aderência: Atenção' : 'Aderência: Crítico';
 
@@ -363,25 +363,25 @@
         <div class="progress-label"><span>Aderência — Meta ${metaAd}%</span><span>${adDispStr}%</span></div>
         <div class="progress-bar"><div class="progress-fill ${gapAd <= 0 ? 'fill-green' : 'fill-orange'}" style="width:${adPct}%"></div></div>
       </div>
-      <div class="progress-section">
+      ${metaF1 != null ? `<div class="progress-section">
         <div class="progress-label"><span>Faixa 1 — Meta ${metaF1} vidas</span><span>${vidas} / ${metaF1}</span></div>
         <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${f1Pct}%"></div></div>
-      </div>
-      ${metaF2 ? `<div class="progress-section">
+      </div>` : '<div class="gap-box"><span class="gap-label">Faixa 1</span><span class="gap-value alerta">Aguardando definição de meta</span></div>'}
+      ${metaF2 != null ? `<div class="progress-section">
         <div class="progress-label"><span>Faixa 2 — Meta ${metaF2} vidas</span><span>${vidas} / ${metaF2}</span></div>
         <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${Math.min((vidas/metaF2)*100,100)}%"></div></div>
       </div>` : ''}
-      <div class="gap-box">
+      ${metaF1 != null ? `<div class="gap-box">
         <span class="gap-label">Gap para faixa 1 (${metaF1} vidas)</span>
         <span class="gap-value ${gapF1 === 0 ? 'ok' : 'alerta'}">${gapF1 === 0 ? '✓ Faixa 1 atingida' : gapF1 + ' vidas'}</span>
-      </div>
-      ${metaF2 ? `<div class="gap-box">
+      </div>` : ''}
+      ${metaF2 != null ? `<div class="gap-box">
         <span class="gap-label">Gap para faixa 2 (${metaF2} vidas)</span>
         <span class="gap-value alerta">${Math.max(metaF2 - vidas, 0)} vidas</span>
       </div>` : ''}
       <div class="gap-box">
         <span class="gap-label">Gap de aderência para ${metaAd}%</span>
-        <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}">${gapAd <= 0 ? '✓ Meta atingida' : gapAd.toFixed(1).replace('.', ',') + ' p.p.'}</span>
+        <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}">${gapAd <= 0 ? '✓ Meta atingida' : Number(gapAd).toFixed(1).replace('.', ',') + ' p.p.'}</span>
       </div>
 
 
