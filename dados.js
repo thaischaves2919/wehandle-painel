@@ -159,7 +159,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'MASTER REMOCAO E TRANSPORTES LTDA', cnpj: '06.240.984/0001-64', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ALTERNATIVA LOCACAO DE GALPOES LONADOS LTDA', cnpj: '11.621.068/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'WOODPACK', cnpj: '33.765.500/0001-73', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'MARUCCI', cnpj: '19.978.232/0001-47', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'MARUCCI', cnpj: '19.978.232/0001-47', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ELETROTAU SOLUCOES INDUSTRIAIS', cnpj: '34.913.121/0001-46', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
