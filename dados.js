@@ -117,8 +117,8 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 44,
-      aderencia: 57.1,
+      vidas: 45,
+      aderencia: 56.53,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -126,7 +126,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-24', vidas: 24, aderencia: 43.46 },
         { data: '2026-05-25', vidas: 25, aderencia: 45.27 },
         { data: '2026-05-26', vidas: 28, aderencia: 48.21 },
-        { data: '2026-06-09', vidas: 44, aderencia: 57.1  },
+        { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -153,7 +153,13 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'RFM REFRIGERACAO FERNANDO MARCHETTI LTDA',                            cnpj: '51.423.938/0001-55', contrato: 'contratado', tel: '15974044837',  email: 'atendimento@refrimec.com',                 via: 'whatsapp', vidas: 0, status: 'contatado' },
         { razaoSocial: 'RODRIGUES SOLUCOES INDUSTRIAIS LTDA',                                 cnpj: '00.715.152/0001-70', contrato: 'contratado', tel: '15997425939',  email: 'lucio@rodriguessi.com.br',                via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'SEMATEC LTDA',                                                        cnpj: '52.645.694/0001-18', contrato: 'contratado', tel: '12997519663',  email: 'deborahpinho71@gmail.com',                via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'SERVNEWS ROBOTICA E AUTOMACAO LTDA',                                  cnpj: '02.973.703/0001-21', contrato: 'contratado', tel: '1239034107',   email: 'vanessa@servnews.com.br',                 via: 'whatsapp', vidas: 0, status: 'contatado' },
+        { razaoSocial: 'SERVNEWS ROBOTICA E AUTOMACAO LTDA',                                  cnpj: '02.973.703/0001-21', contrato: 'contratado', tel: '1239034107',   email: 'vanessa@servnews.com.br',                 via: 'whatsapp', vidas: 0, status: 'contatado' },,
+        { razaoSocial: 'RED GROUP AUTOMACAO INDUSTRIAL', cnpj: '13.799.959/0001-80', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MONTARIM MONTAGENS INDUSTRIAIS LTDA', cnpj: '67.133.900/0001-88', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MASTER REMOCAO E TRANSPORTES LTDA', cnpj: '06.240.984/0001-64', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ALTERNATIVA LOCACAO DE GALPOES LONADOS LTDA', cnpj: '11.621.068/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'WOODPACK', cnpj: '33.765.500/0001-73', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MARUCCI', cnpj: '19.978.232/0001-47', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
