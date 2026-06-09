@@ -175,6 +175,9 @@ var WEHANDLE_DADOS = {
       fornecedores: [
         { razaoSocial: 'TRIUNFO SEGURANCA LTDA',       cnpj: '08.562.228/0001-87', contrato: 'contratado', tel: '31993063864', email: 'fat@grupotriunfomg.com.br',                    via: 'whatsapp', vidas: 0, status: 'aguardando' },
         { razaoSocial: 'ARTEBRILHO MULTISERVIÇOS LTDA', cnpj: '07.655.416/0001-97', contrato: 'contratado', tel: '31992208954', email: 'gestaodocumental@grupoartebrilho.com.br', via: 'whatsapp', vidas: 0, status: 'contatado'  },
+        { razaoSocial: 'QUANTUM',                       cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',                   via: 'whatsapp', vidas: 0, status: 'aguardando' },
+        { razaoSocial: 'SODEXO',                        cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51993658061', email: 'susana.soares@sodexo.com',                via: 'whatsapp', vidas: 0, status: 'aguardando' },
+        { razaoSocial: 'MANTECH',                       cnpj: '35.523.140/0001-29', contrato: 'contratado', tel: '51991147879', email: 'rh@mantech.com.br',                       via: 'whatsapp', vidas: 0, status: 'aguardando' },
       ]
     },
     {
