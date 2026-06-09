@@ -161,10 +161,9 @@ def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
         return conteudo, 0
 
     insercao = ",\n".join(novos)
-    if bloco.rstrip().endswith("]"):
-        novo_bloco = bloco[:-1].rstrip() + ",\n" + insercao + "\n      ]"
-    else:
-        novo_bloco = bloco[:-1].rstrip() + ",\n" + insercao + "\n      ]"
+    # Remover vírgulas finais extras antes de inserir
+    bloco_sem_trailing = re.sub(r',(\s*\])', r'\1', bloco)
+    novo_bloco = bloco_sem_trailing[:-1].rstrip() + ",\n" + insercao + "\n      ]"
 
     conteudo = conteudo[:inicio_arr] + novo_bloco + conteudo[fim_arr + 1:]
     return conteudo, len(novos)
