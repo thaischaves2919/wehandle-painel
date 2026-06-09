@@ -1,7 +1,8 @@
 """
 Script de atualização automática do painel wehandle.
-Roda via GitHub Actions diariamente às 07:45 BRT (10:45 UTC).
+Roda via GitHub Actions 3x por dia (08h, 13h e 18h BRT).
 Usa Metabase Card API com token de sessão SSO → atualiza dados.js → commit + push.
+Só atualiza clientes cujo período de 45 dias ainda não encerrou.
 """
 import os
 import re
@@ -142,6 +143,13 @@ def formatar_cliente(nome, prazo, vidas, vidas_meta, aderencia, aderencia_meta, 
     )
     return f"\n{nome} (prazo: {prazo})\n  {vidas_str}\n  {ader_str}"
 
+# ── 6. Verificar se cliente está dentro do período de 45 dias ─────────────────
+def dentro_do_prazo(data_inicio_str):
+    data_inicio = datetime.date.fromisoformat(data_inicio_str)
+    prazo = data_inicio + datetime.timedelta(days=45)
+    hoje = datetime.date.today()
+    return hoje <= prazo
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
     autenticar()
@@ -171,6 +179,12 @@ def main():
     relatorio_partes = [f"📊 Relatório diário — {TODAY_BR}\n"]
 
     for c in clientes:
+        # Pular clientes fora do período de 45 dias
+        if not dentro_do_prazo(c["data_inicio"]):
+            print(f"\n--- {c['nome']} --- (período encerrado, pulando)")
+            relatorio_partes.append(f"\n⚪ {c['nome']} (prazo: {c['prazo']})\n  (período encerrado — sem atualização)")
+            continue
+
         print(f"\n--- {c['nome']} ---")
         vidas     = get_vidas(c["idempresa"], c["data_inicio"])
         aderencia = c["get_aderencia"]()
