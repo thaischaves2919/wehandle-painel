@@ -73,6 +73,23 @@ def get_aderencia_netzsch():
             return round(float(str(perc).replace(",", ".")) * 100, 2)
     return None
 
+def get_aderencia_card_breakdown(card_id):
+    """Card que retorna breakdown: coluna categórica (Aderente/Não Aderente) + quantidade."""
+    rows = run_card(card_id)
+    ad, na = 0, 0
+    for row in rows:
+        vals = list(row.values())
+        categoria = str(vals[0]).lower()
+        qtd = int(vals[1] or 0)
+        if "não" in categoria or "nao" in categoria:
+            na += qtd
+        else:
+            ad += qtd
+    total = ad + na
+    if total > 0:
+        return round(ad / total * 100, 2)
+    return None
+
 def get_aderencia_por_cards(card_ader, card_nao_ader):
     """Calcula aderência a partir de dois cards de contagem."""
     r_ad = run_card(card_ader)
@@ -173,6 +190,19 @@ def main():
             "metaVidasF1": 201, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_por_cards(38145, 38154),
         },
+        {
+            "id": "grupo-zelo", "nome": "Grupo Zelo", "prazo": "24/07",
+            "idempresa": 78024, "data_inicio": "2026-06-09",
+            "metaVidasF1": None, "metaAderencia": 50,
+            "get_aderencia": lambda: get_aderencia_card_breakdown(39958),
+        },
+        # Melitta — aguardando idempresa e cards de aderência (ainda não cadastrada no Metabase)
+        # {
+        #     "id": "melitta", "nome": "Melitta", "prazo": "24/07",
+        #     "idempresa": ???, "data_inicio": "2026-06-09",
+        #     "metaVidasF1": None, "metaAderencia": 50,
+        #     "get_aderencia": lambda: get_aderencia_por_cards(???, ???),
+        # },
     ]
 
     conteudo = ler_dados()

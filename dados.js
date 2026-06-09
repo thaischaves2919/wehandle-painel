@@ -155,6 +155,43 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'SEMATEC LTDA',                                                        cnpj: '52.645.694/0001-18', contrato: 'contratado', tel: '12997519663',  email: 'deborahpinho71@gmail.com',                via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'SERVNEWS ROBOTICA E AUTOMACAO LTDA',                                  cnpj: '02.973.703/0001-21', contrato: 'contratado', tel: '1239034107',   email: 'vanessa@servnews.com.br',                 via: 'whatsapp', vidas: 0, status: 'contatado' },
       ]
+    },
+    {
+      id: 'grupo-zelo',
+      nome: 'Grupo Zelo',
+      cnpj: '27.630.446/0001-56',
+      idempresa: 78024,
+      dataInicio: '2026-06-09',
+      vidas: 0,
+      aderencia: 22.73,
+      historico: [
+        { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
+      ],
+      metaVidasF1: null,
+      metaVidasF2: null,
+      metaAderencia: 50,
+      mrrFaixa1: null,
+      mrrFaixa2: null,
+      fornecedores: [
+        { razaoSocial: 'TRIUNFO SEGURANCA LTDA',       cnpj: '08.562.228/0001-87', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ARTEBRILHO MULTISERVIÇOS LTDA', cnpj: '07.655.416/0001-97', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+      ]
+    },
+    {
+      id: 'melitta',
+      nome: 'Melitta',
+      cnpj: '92.788.009/0001-27',
+      idempresa: null,
+      dataInicio: '2026-06-09',
+      vidas: 0,
+      aderencia: 0,
+      historico: [],
+      metaVidasF1: null,
+      metaVidasF2: null,
+      metaAderencia: 50,
+      mrrFaixa1: null,
+      mrrFaixa2: null,
+      fornecedores: []
     }
   ]
 };
