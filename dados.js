@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 26/05/2026
+// Última atualização: 09/06/2026
 var WEHANDLE_DADOS = {
   versao: '20260521b',
   clientes: [
@@ -9,8 +9,8 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 120,
-      aderencia: 64.0,
+      vidas: 161,
+      aderencia: 74.34,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
         { data: '2026-04-30', vidas: 46,  aderencia: 47.2  },
@@ -18,11 +18,12 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-11', vidas: 54,  aderencia: 49.6  },
         { data: '2026-05-15', vidas: 83,  aderencia: 44.1  },
         { data: '2026-05-21', vidas: 112, aderencia: 61.7  },
-        { data: '2026-05-22', vidas: 114, aderencia: 63.07 },,
+        { data: '2026-05-22', vidas: 114, aderencia: 63.07 },
         { data: '2026-05-23', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-24', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-25', vidas: 114, aderencia: 64.03 },
-        { data: '2026-05-26', vidas: 120, aderencia: 64.0 }
+        { data: '2026-05-26', vidas: 120, aderencia: 64.0  },
+        { data: '2026-06-09', vidas: 161, aderencia: 74.34 },
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -93,12 +94,13 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-08', vidas: 19, aderencia: 90.27 },
         { data: '2026-05-11', vidas: 19, aderencia: 90.27 },
         { data: '2026-05-15', vidas: 19, aderencia: 91.08 },
-        { data: '2026-05-21', vidas: 19, aderencia: 91.35 },,
+        { data: '2026-05-21', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-22', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-23', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-24', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-25', vidas: 19, aderencia: 91.35 },
-        { data: '2026-05-26', vidas: 19, aderencia: 91.35 }
+        { data: '2026-05-26', vidas: 19, aderencia: 91.35 },
+        { data: '2026-06-09', vidas: 19, aderencia: 91.35 },
       ],
       metaVidasF1: 201,
       metaVidasF2: null,
@@ -115,15 +117,16 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 28,
-      aderencia: 48.21,
+      vidas: 44,
+      aderencia: 57.1,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
-        { data: '2026-05-22', vidas: 25, aderencia: 36.89 },,
+        { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
         { data: '2026-05-23', vidas: 24, aderencia: 43.46 },
         { data: '2026-05-24', vidas: 24, aderencia: 43.46 },
         { data: '2026-05-25', vidas: 25, aderencia: 45.27 },
-        { data: '2026-05-26', vidas: 28, aderencia: 48.21 }
+        { data: '2026-05-26', vidas: 28, aderencia: 48.21 },
+        { data: '2026-06-09', vidas: 44, aderencia: 57.1  },
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
