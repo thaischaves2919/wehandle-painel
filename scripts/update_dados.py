@@ -3,9 +3,11 @@ Script de atualização automática do painel wehandle.
 Roda via GitHub Actions 3x por dia (08h, 13h e 18h BRT).
 Usa Metabase Card API com token de sessão SSO → atualiza dados.js → commit + push.
 Só atualiza clientes cujo período de 45 dias ainda não encerrou.
+Sincroniza automaticamente novos fornecedores dos clientes ativos.
 """
 import os
 import re
+import json
 import datetime
 import requests
 
@@ -42,12 +44,6 @@ def run_card(card_id, parameters=None):
     return [dict(zip(cols, row)) for row in rows]
 
 # ── 3. Vidas (Card 7481 — Resultado Movimentação Período) ─────────────────────
-CLIENTES_VIDAS = {
-    "netzsch":     {"idempresa": 34863, "data_inicio": "2026-04-22"},
-    "saint-gobain":{"idempresa": 6,     "data_inicio": "2026-04-22"},
-    "gestamp":     {"idempresa": 77911, "data_inicio": "2026-05-21"},
-}
-
 def get_vidas(idempresa, data_inicio):
     params = [
         {"type": "number/=",    "target": ["variable", ["template-tag", "empresa"]],     "value": idempresa},
@@ -63,18 +59,14 @@ def get_vidas(idempresa, data_inicio):
 
 # ── 4. Aderência ───────────────────────────────────────────────────────────────
 def get_aderencia_netzsch():
-    """Card 30553 Histórico — última linha = mês atual."""
     rows = run_card(30553)
     if rows:
-        ultimo = rows[-1]
-        perc = ultimo.get("PORCENTAGEM_ADERENTE")
+        perc = rows[-1].get("PORCENTAGEM_ADERENTE")
         if perc is not None:
-            # valor como 0.617021 → 61.7
             return round(float(str(perc).replace(",", ".")) * 100, 2)
     return None
 
 def get_aderencia_card_breakdown(card_id):
-    """Card que retorna breakdown: coluna categórica (Aderente/Não Aderente) + quantidade."""
     rows = run_card(card_id)
     ad, na = 0, 0
     for row in rows:
@@ -91,7 +83,6 @@ def get_aderencia_card_breakdown(card_id):
     return None
 
 def get_aderencia_por_cards(card_ader, card_nao_ader):
-    """Calcula aderência a partir de dois cards de contagem."""
     r_ad = run_card(card_ader)
     r_na = run_card(card_nao_ader)
     if r_ad and r_na:
@@ -102,7 +93,83 @@ def get_aderencia_por_cards(card_ader, card_nao_ader):
             return round(ad / total * 100, 2)
     return None
 
-# ── 5. Ler e atualizar dados.js ────────────────────────────────────────────────
+# ── 5. Fornecedores — busca e sincronização ────────────────────────────────────
+def get_fornecedores_sd(table_id):
+    """Busca fornecedores únicos de uma tabela SD_CLIENTE no Metabase."""
+    body = {
+        "database": 14,
+        "type": "query",
+        "query": {"source-table": table_id, "limit": 2000}
+    }
+    r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
+    if not r.ok:
+        print(f"  Erro {r.status_code} ao buscar fornecedores (table {table_id})")
+        return []
+    data = r.json().get("data", {})
+    cols = [c["name"] for c in data.get("cols", [])]
+    rows = data.get("rows", [])
+
+    idx_nome  = next((i for i, c in enumerate(cols) if c == "NOMEEMPRESATERCEIRO"), None)
+    idx_cnpj  = next((i for i, c in enumerate(cols) if c == "CNPJ"), None)
+    idx_email = next((i for i, c in enumerate(cols) if c == "EMAILCONTRATADA"), None)
+
+    if idx_cnpj is None:
+        return []
+
+    vistos = {}
+    for row in rows:
+        cnpj  = row[idx_cnpj]  if idx_cnpj  is not None else ""
+        nome  = row[idx_nome]  if idx_nome  is not None else ""
+        email = row[idx_email] if idx_email is not None else ""
+        if cnpj and cnpj not in vistos:
+            vistos[cnpj] = {"razaoSocial": nome or cnpj, "cnpj": cnpj, "email": email or ""}
+    return list(vistos.values())
+
+def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
+    """Adiciona ao dados.js os fornecedores novos do Metabase sem sobrescrever os existentes."""
+    idx_cliente = conteudo.find(f"id: '{cliente_id}'")
+    if idx_cliente == -1:
+        return conteudo, 0
+
+    # Encontrar o bloco de fornecedores deste cliente
+    idx_forn = conteudo.find("fornecedores:", idx_cliente)
+    if idx_forn == -1:
+        return conteudo, 0
+    inicio_arr = conteudo.find("[", idx_forn)
+    fim_arr    = conteudo.rfind("]", inicio_arr, conteudo.find("\n    }", idx_forn + 200))
+    if inicio_arr == -1 or fim_arr == -1:
+        return conteudo, 0
+
+    bloco = conteudo[inicio_arr:fim_arr + 1]
+
+    # CNPJs já existentes no dados.js para este cliente
+    cnpjs_existentes = set(re.findall(r"cnpj:\s*'([^']+)'", bloco))
+
+    novos = []
+    for f in fornecedores_metabase:
+        cnpj_limpo = re.sub(r'\D', '', f["cnpj"])
+        # Verificar se CNPJ já existe (comparando só dígitos)
+        ja_existe = any(re.sub(r'\D', '', c) == cnpj_limpo for c in cnpjs_existentes)
+        if not ja_existe and cnpj_limpo:
+            cnpj_fmt = f["cnpj"]  # usa o formato que veio do Metabase
+            email = f.get("email", "").strip() or ""
+            razao = (f.get("razaoSocial") or cnpj_fmt).strip()
+            nova_linha = f"        {{ razaoSocial: '{razao}', cnpj: '{cnpj_fmt}', contrato: 'contratado', tel: '', email: '{email}', via: 'whatsapp', vidas: 0, status: 'pendente' }}"
+            novos.append(nova_linha)
+
+    if not novos:
+        return conteudo, 0
+
+    insercao = ",\n".join(novos)
+    if bloco.rstrip().endswith("]"):
+        novo_bloco = bloco[:-1].rstrip() + ",\n" + insercao + "\n      ]"
+    else:
+        novo_bloco = bloco[:-1].rstrip() + ",\n" + insercao + "\n      ]"
+
+    conteudo = conteudo[:inicio_arr] + novo_bloco + conteudo[fim_arr + 1:]
+    return conteudo, len(novos)
+
+# ── 6. Ler e atualizar dados.js ────────────────────────────────────────────────
 DADOS_PATH = "dados.js"
 
 def ler_dados():
@@ -146,26 +213,26 @@ def atualizar_historico(conteudo, cliente_id, vidas, aderencia):
         bloco_novo = bloco[:-1].rstrip() + ",\n        " + entrada + "\n      ]"
     return conteudo[:inicio_arr] + bloco_novo + conteudo[fim_arr + 1:]
 
-# ── 6. Relatório ───────────────────────────────────────────────────────────────
-def formatar_cliente(nome, prazo, vidas, vidas_meta, aderencia, aderencia_meta, atualizado):
-    if not atualizado:
-        return f"\n{nome} (prazo: {prazo})\n  (sem atualização hoje)"
-    falta_vidas = (vidas_meta - vidas) if vidas_meta else None
-    gap_ader    = round(aderencia - aderencia_meta, 2) if aderencia_meta else None
-    vidas_str = f"Vidas: {vidas} | Meta F1: {vidas_meta} | " + (
-        "✅" if falta_vidas is not None and falta_vidas <= 0 else f"Faltam: {falta_vidas}"
-    )
-    ader_str = f"Aderência: {aderencia}% | Meta: {aderencia_meta}% | " + (
-        "✅" if gap_ader is not None and gap_ader >= 0 else f"Gap: {gap_ader} p.p."
-    )
-    return f"\n{nome} (prazo: {prazo})\n  {vidas_str}\n  {ader_str}"
-
-# ── 6. Verificar se cliente está dentro do período de 45 dias ─────────────────
+# ── 7. Verificar prazo de 45 dias ─────────────────────────────────────────────
 def dentro_do_prazo(data_inicio_str):
     data_inicio = datetime.date.fromisoformat(data_inicio_str)
     prazo = data_inicio + datetime.timedelta(days=45)
-    hoje = datetime.date.today()
-    return hoje <= prazo
+    return datetime.date.today() <= prazo
+
+# ── 8. Relatório ───────────────────────────────────────────────────────────────
+def formatar_cliente(nome, prazo, vidas, vidas_meta, aderencia, aderencia_meta, atualizado, novos_forn=0):
+    if not atualizado:
+        return f"\n{nome} (prazo: {prazo})\n  (sem atualização hoje)"
+    falta_vidas = (vidas_meta - vidas) if vidas_meta and vidas else None
+    gap_ader    = round(aderencia - aderencia_meta, 2) if aderencia_meta and aderencia else None
+    vidas_str = f"Vidas: {vidas} | Meta F1: {vidas_meta} | " + (
+        "✅" if falta_vidas is not None and falta_vidas <= 0 else f"Faltam: {falta_vidas}"
+    ) if vidas else "Vidas: — (sem dados)"
+    ader_str = f"Aderência: {aderencia}% | Meta: {aderencia_meta}% | " + (
+        "✅" if gap_ader is not None and gap_ader >= 0 else f"Gap: {gap_ader} p.p."
+    ) if aderencia else "Aderência: — (sem dados)"
+    forn_str = f"\n  +{novos_forn} fornecedor(es) novo(s) adicionado(s)" if novos_forn > 0 else ""
+    return f"\n{nome} (prazo: {prazo})\n  {vidas_str}\n  {ader_str}{forn_str}"
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
@@ -177,24 +244,28 @@ def main():
             "idempresa": 34863, "data_inicio": "2026-04-22",
             "metaVidasF1": 151, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_netzsch(),
+            "sd_table_id": None,  # período encerrado
         },
         {
             "id": "saint-gobain", "nome": "Saint-Gobain", "prazo": "06/06",
             "idempresa": 6, "data_inicio": "2026-04-22",
             "metaVidasF1": 201, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_por_cards(31360, 31363),
+            "sd_table_id": None,  # período encerrado
         },
         {
             "id": "gestamp", "nome": "Gestamp", "prazo": "05/07",
             "idempresa": 77911, "data_inicio": "2026-05-21",
             "metaVidasF1": 201, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_por_cards(38145, 38154),
+            "sd_table_id": 12220,  # SD_GESTAMP
         },
         {
             "id": "grupo-zelo", "nome": "Grupo Zelo", "prazo": "24/07",
             "idempresa": 78024, "data_inicio": "2026-06-09",
             "metaVidasF1": None, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_card_breakdown(39958),
+            "sd_table_id": 12586,  # SD_ZELO
         },
         # Melitta — aguardando idempresa e cards de aderência (ainda não cadastrada no Metabase)
         # {
@@ -202,6 +273,7 @@ def main():
         #     "idempresa": ???, "data_inicio": "2026-06-09",
         #     "metaVidasF1": None, "metaAderencia": 50,
         #     "get_aderencia": lambda: get_aderencia_por_cards(???, ???),
+        #     "sd_table_id": ???,
         # },
     ]
 
@@ -209,7 +281,6 @@ def main():
     relatorio_partes = [f"📊 Relatório diário — {TODAY_BR}\n"]
 
     for c in clientes:
-        # Pular clientes fora do período de 45 dias
         if not dentro_do_prazo(c["data_inicio"]):
             print(f"\n--- {c['nome']} --- (período encerrado, pulando)")
             relatorio_partes.append(f"\n⚪ {c['nome']} (prazo: {c['prazo']})\n  (período encerrado — sem atualização)")
@@ -230,11 +301,21 @@ def main():
         if atualizado and vidas and aderencia:
             conteudo = atualizar_historico(conteudo, c["id"], vidas, aderencia)
 
+        # Sincronizar fornecedores novos
+        novos_forn = 0
+        if c.get("sd_table_id"):
+            print(f"  Buscando fornecedores na tabela {c['sd_table_id']}...")
+            fornecedores_mb = get_fornecedores_sd(c["sd_table_id"])
+            conteudo, novos_forn = sincronizar_fornecedores(conteudo, c["id"], fornecedores_mb)
+            if novos_forn > 0:
+                print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")
+                atualizado = True
+
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
             vidas=vidas, vidas_meta=c["metaVidasF1"],
             aderencia=aderencia, aderencia_meta=c["metaAderencia"],
-            atualizado=atualizado,
+            atualizado=atualizado, novos_forn=novos_forn,
         ))
 
     conteudo = atualizar_data_comentario(conteudo, TODAY_BR)
