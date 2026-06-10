@@ -166,7 +166,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'HELP SOLUÇÕES AMBIENTAIS LTDA', cnpj: '25.320.905/0001-70', contrato: 'contratado', tel: '', email: 'juliana.caserta@elogi.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'conceito sul manta asfáltica', cnpj: '08.995.622/0001-09', contrato: 'contratado', tel: '', email: 'atendimento@conceitosul.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'Transforma Corporate', cnpj: '11.565.394/0001-41', contrato: 'contratado', tel: '', email: 'elaine@transformacorporate.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
