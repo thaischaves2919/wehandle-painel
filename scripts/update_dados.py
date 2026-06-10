@@ -13,6 +13,7 @@ import requests
 
 MB_URL     = "https://mbwh.wehandle.com.br"
 MB_SESSION = os.environ["MB_SESSION"]
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
 TODAY      = datetime.date.today().isoformat()          # YYYY-MM-DD
 TODAY_BR   = datetime.date.today().strftime("%d/%m/%Y") # DD/MM/YYYY
 
@@ -258,7 +259,26 @@ def dentro_do_prazo(data_inicio_str):
     prazo = data_inicio + datetime.timedelta(days=45)
     return datetime.date.today() <= prazo
 
-# ── 8. Relatório ───────────────────────────────────────────────────────────────
+# ── 8. Notificação via ntfy.sh ────────────────────────────────────────────────
+def enviar_notificacao(titulo, mensagem):
+    if not NTFY_TOPIC:
+        return
+    try:
+        requests.post(
+            f"https://ntfy.sh/{NTFY_TOPIC}",
+            data=mensagem.encode("utf-8"),
+            headers={
+                "Title": titulo,
+                "Priority": "default",
+                "Tags": "bell,office",
+            },
+            timeout=10,
+        )
+        print(f"  ✓ Notificação enviada → ntfy.sh/{NTFY_TOPIC}")
+    except Exception as e:
+        print(f"  ⚠ Notificação falhou: {e}")
+
+# ── 9. Relatório ───────────────────────────────────────────────────────────────
 def formatar_cliente(nome, prazo, vidas, vidas_meta, aderencia, aderencia_meta, atualizado, novos_forn=0):
     if not atualizado:
         return f"\n{nome} (prazo: {prazo})\n  (sem atualização hoje)"
@@ -318,6 +338,7 @@ def main():
 
     conteudo = ler_dados()
     relatorio_partes = [f"📊 Relatório diário — {TODAY_BR}\n"]
+    novos_por_cliente = []   # lista de (nome, qtd) para notificação
 
     for c in clientes:
         if not dentro_do_prazo(c["data_inicio"]):
@@ -349,6 +370,7 @@ def main():
             if novos_forn > 0:
                 print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")
                 atualizado = True
+                novos_por_cliente.append((c["nome"], novos_forn))
 
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
@@ -365,6 +387,17 @@ def main():
     print("\n" + relatorio)
     with open("relatorio.txt", "w", encoding="utf-8") as f:
         f.write(relatorio)
+
+    # Notificação quando há novos fornecedores
+    if novos_por_cliente:
+        linhas = [f"• {nome}: +{qtd} fornecedor(es)" for nome, qtd in novos_por_cliente]
+        total  = sum(q for _, q in novos_por_cliente)
+        mensagem = (
+            f"Atualização {TODAY_BR}\n"
+            + "\n".join(linhas)
+            + f"\n\nTotal: {total} novo(s) pendente(s) de contato."
+        )
+        enviar_notificacao("wehandle — Novos fornecedores detectados", mensagem)
 
 if __name__ == "__main__":
     main()

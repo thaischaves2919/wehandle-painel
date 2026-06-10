@@ -1,4 +1,4 @@
-name: Atualização diária do painel
+﻿name: Atualização diária do painel
 
 on:
   schedule:
@@ -27,7 +27,8 @@ jobs:
 
       - name: Rodar script de atualização
         env:
-                    MB_SESSION: ${{ secrets.MB_SESSION }}
+          MB_SESSION: ${{ secrets.MB_SESSION }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python scripts/update_dados.py
 
       - name: Commit e push das atualizações
