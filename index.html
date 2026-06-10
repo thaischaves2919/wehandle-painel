@@ -7,30 +7,73 @@
   <title>wehandle — Rampagem de Vidas</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1e2b4a; min-height: 100vh; padding: 32px 24px; }
-    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
-    .logo-area { display: flex; align-items: center; gap: 12px; }
-    .logo-icon  { width: 40px; height: 40px; }
-    .logo-text  { font-size: 22px; font-weight: 700; color: #1e2b4a; letter-spacing: -0.5px; }
-    .page-subtitle { font-size: 13px; color: #7a869a; margin-top: 2px; }
-    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .badge-prazo { background: #fff; border: 1px solid #dde1ea; color: #4a5568; padding: 6px 14px; border-radius: 20px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .badge-prazo strong { color: #1e2b4a; }
-    .badge-leitura { background: #f0f4ff; border: 1px solid #c3cfe2; color: #4a5568; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .deadline-card { background: #1e2b4a; border-radius: 16px; padding: 20px 28px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(30,43,74,0.15); }
-    .deadline-item { text-align: center; }
-    .deadline-num  { font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
-    .deadline-num.urgente { color: #f687b3; }
-    .deadline-lbl  { font-size: 11px; color: #8896b3; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .divider       { width: 1px; height: 50px; background: #2d3f65; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1e2b4a; min-height: 100vh; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
-    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .app-layout { display: flex; min-height: 100vh; }
+
+    .sidebar { width: 220px; min-height: 100vh; background: #1a2340; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { padding: 24px 20px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #253054; }
+    .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .logo-text { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .logo-sub { font-size: 10px; color: #5a6f9a; margin-top: 1px; }
+    .sidebar-nav { flex: 1; padding: 12px 0; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; color: #8896b3; cursor: pointer; transition: all 0.15s; border-left: 3px solid transparent; user-select: none; }
+    .nav-item:hover { background: #253054; color: #fff; }
+    .nav-item.ativo { background: #253054; color: #fff; border-left-color: #e0296f; }
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid #253054; }
+    .user-chip { display: flex; align-items: center; gap: 10px; }
+    .user-avatar { width: 32px; height: 32px; background: #e0296f; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .user-name { font-size: 12px; color: #c3cfe2; font-weight: 600; }
+    .user-role { font-size: 10px; color: #5a6f9a; margin-top: 1px; }
+
+    .main-content { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { height: 56px; background: #fff; border-bottom: 1px solid #e2e6ef; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 50; }
+    .topbar-title { font-size: 15px; font-weight: 700; color: #1e2b4a; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .topbar-ts { font-size: 11px; color: #a0aec0; }
+    .badge-leitura { background: #f0f4ff; border: 1px solid #c3cfe2; color: #4a5568; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-prazo { background: #fff; border: 1px solid #dde1ea; color: #4a5568; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .badge-prazo strong { color: #1e2b4a; }
+
+    .tela { display: none; }
+    .tela.ativa { display: block; }
+    .page-inner { padding: 28px; }
+
+    .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .compact-card { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(30,43,74,0.05); cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
+    .compact-card:hover { box-shadow: 0 4px 16px rgba(30,43,74,0.12); border-color: #c3cfe2; }
+    .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .cc-name { font-size: 15px; font-weight: 700; color: #1e2b4a; }
+    .cc-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+    .cc-metrics { display: flex; gap: 8px; margin-bottom: 12px; }
+    .cc-metric { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 8px; padding: 10px 10px 8px; text-align: center; }
+    .cc-metric-lbl { font-size: 9px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .cc-metric-val { font-size: 22px; font-weight: 800; color: #1e2b4a; line-height: 1; }
+    .cc-metric-unit { font-size: 11px; color: #718096; }
+    .cc-progress { margin-bottom: 6px; }
+    .cc-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 3px; }
+    .cc-progress-bar { height: 5px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .cc-progress-fill { height: 100%; border-radius: 99px; }
+    .cc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; border-top: 1px solid #f0f2f7; padding-top: 10px; }
+    .cc-forn-count { font-size: 11px; color: #a0aec0; }
+    .cc-deadline { font-size: 11px; font-weight: 700; }
+    .cc-deadline.urgente { color: #c53030; }
+    .cc-deadline.ok { color: #718096; }
+    .btn-ver-forn { font-size: 11px; font-weight: 600; color: #e0296f; background: none; border: none; cursor: pointer; padding: 0; }
+
+    .detalhe-nav { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .btn-voltar { display: flex; align-items: center; gap: 6px; background: #f7f8fa; border: 1px solid #e2e6ef; color: #4a5568; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-voltar:hover { background: #edf2f7; }
+    .detalhe-breadcrumb { font-size: 12px; color: #a0aec0; }
+    .detalhe-breadcrumb strong { color: #1e2b4a; }
+
+    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); margin-bottom: 20px; }
     .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
+    .card-title { font-size: 18px; font-weight: 700; color: #1e2b4a; }
     .status-badge { font-size: 11px; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
     .status-critico { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
-    .status-ok      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .status-ok { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
     .status-atencao { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
     .metric-row { display: flex; gap: 12px; margin-bottom: 16px; }
     .metric-box { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
@@ -38,17 +81,17 @@
     .metric-value { font-size: 28px; font-weight: 800; color: #1e2b4a; line-height: 1; display: flex; align-items: baseline; justify-content: center; gap: 1px; }
     .metric-sub { font-size: 11px; color: #a0aec0; margin-top: 4px; }
     .progress-section { margin-bottom: 14px; }
-    .progress-label   { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 6px; }
-    .progress-bar     { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
-    .progress-fill    { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
-    .fill-pink   { background: linear-gradient(90deg, #d4326d, #e8679a); }
-    .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 6px; }
+    .progress-bar { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+    .fill-pink { background: linear-gradient(90deg, #d4326d, #e8679a); }
+    .fill-green { background: linear-gradient(90deg, #38a169, #68d391); }
     .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
     .gap-box { background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
     .gap-label { color: #718096; }
     .gap-value { font-weight: 700; color: #1e2b4a; }
     .gap-value.alerta { color: #c53030; }
-    .gap-value.ok     { color: #276749; }
+    .gap-value.ok { color: #276749; }
     .section-title { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 18px; }
     .table-wrap { max-height: 420px; overflow-y: auto; overflow-x: auto; border-radius: 8px; border: 1px solid #edf2f7; }
     .fornecedor-table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -58,19 +101,19 @@
     .fornecedor-table td.center { text-align: center; }
     .fornecedor-table td.cnpj { font-family: monospace; font-size: 10px; color: #718096; white-space: nowrap; }
     .row-aguardando { background: #fffff0; }
-    .row-pendente   { background: #fffdf0; }
+    .row-pendente { background: #fffdf0; }
     .section-sub { font-size: 10px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
-    .sub-verde   { background: #276749; }
+    .sub-verde { background: #276749; }
     .sub-laranja { background: #b7791f; }
     .sub-amarelo { background: #975a16; }
     .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
-    .pill-sim      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-    .pill-nao      { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
-    .pill-sub      { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .pill-sim { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-nao { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .pill-sub { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
     .pill-aguardando { background: #fefcbf; color: #744210; border: 1px solid #f6e05e; }
-    .pill-wa       { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-    .pill-email    { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
-    .filtro-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .pill-wa { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-email { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .filtro-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .filtro-label { font-size: 12px; color: #7a869a; font-weight: 600; margin-right: 4px; }
     .filtro-btn { padding: 6px 18px; border-radius: 20px; border: 1px solid #dde1ea; background: #fff; font-size: 12px; font-weight: 600; color: #4a5568; cursor: pointer; transition: all 0.2s; }
     .filtro-btn.ativo { background: #1e2b4a; color: #fff; border-color: #1e2b4a; }
@@ -80,100 +123,118 @@
     .pesquisa-info { font-size: 11px; color: #a0aec0; margin-top: 6px; display: none; }
     .secao-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
     .secao-titulo::before { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
-    .secao-titulo::after  { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
+    .secao-titulo::after { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
     .btn-colapsar { background: #f7f8fa; border: 1px solid #e2e6ef; color: #718096; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin: 0 auto 16px; }
-    .grid-encerrados { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
-    .grid-encerrados .card { opacity: 0.65; filter: grayscale(40%); }
+    .grid-encerrados { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .grid-encerrados .compact-card { opacity: 0.65; filter: grayscale(40%); }
     .encerrado-wrap { display: none; }
     .encerrado-wrap.aberto { display: block; }
     .footer-leitura { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e6ef; }
     .footer-leitura strong { color: #e0296f; }
-    .bonus-section { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
-    .bonus-titulo { font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
-    .bonus-faixa { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e2e6ef; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; gap: 12px; }
-    .bonus-faixa-info { flex: 1; }
-    .bonus-faixa-nome { font-size: 12px; font-weight: 600; color: #1e2b4a; }
-    .bonus-faixa-gap { font-size: 11px; color: #718096; margin-top: 2px; }
-    .bonus-faixa-gap.ok { color: #166534; font-weight: 700; }
-    .bonus-faixa-valor { font-size: 17px; font-weight: 800; color: #cbd5e0; white-space: nowrap; }
-    .bonus-faixa-valor.on { color: #166534; }
-    .bonus-projecao { display: flex; justify-content: space-between; align-items: center; background: #1e2b4a; border-radius: 8px 8px 0 0; padding: 10px 14px; margin-top: 2px; }
-    .bonus-projecao-label { font-size: 11px; color: #8896b3; text-transform: uppercase; letter-spacing: 0.5px; }
-    .bonus-projecao-sub { font-size: 10px; color: #5a7099; margin-top: 2px; }
-    .bonus-projecao-valor { font-size: 20px; font-weight: 800; color: #4ade80; }
-    .bonus-projecao-valor.zero { color: #4a6080; font-size: 14px; font-weight: 600; }
-    .bonus-confirmado { display: flex; justify-content: space-between; align-items: center; background: #162036; border-radius: 0 0 8px 8px; padding: 8px 14px; border-top: 1px solid #2d3f65; }
-    .bonus-conf-label { font-size: 10px; color: #8896b3; text-transform: uppercase; letter-spacing: 0.5px; }
-    .bonus-conf-valor { font-size: 14px; font-weight: 700; color: #4ade80; }
-    .bonus-conf-valor.aguardando { color: #4a6080; font-size: 12px; font-weight: 600; }
-    .bp-wrap { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
-    .bp-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .bp-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid #e2e6ef; border-radius: 10px; overflow: hidden; }
-    .bp-table th { text-align: left; padding: 9px 14px; font-size: 11px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; background: #f7f8fa; border-bottom: 2px solid #e2e6ef; }
-    .bp-table th:not(:first-child) { text-align: right; }
-    .bp-table td { padding: 11px 14px; border-bottom: 1px solid #f7f8fa; vertical-align: middle; }
-    .bp-td-nome { font-weight: 600; color: #1e2b4a; }
-    .bp-td-faixas { font-size: 11px; color: #a0aec0; margin-top: 3px; }
-    .bp-td-faixas span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
-    .bp-td-faixas .ok { color: #276749; font-weight: 700; }
-    .bp-td-val { text-align: right; font-weight: 700; color: #1e2b4a; }
-    .bp-td-conf { text-align: right; font-weight: 600; color: #1e2b4a; }
-    .bp-td-conf.aguardando { color: #a0aec0; font-weight: 400; font-size: 12px; }
-    .bp-total td { background: #1e2b4a; color: #fff; border-bottom: none; font-weight: 700; font-size: 14px; }
-    .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
-    .bp-total .bp-td-val { color: #4ade80; font-size: 18px; }
-    .bp-total .bp-td-conf { color: #4ade80; }
-    @media (max-width: 600px) { .deadline-card { gap: 16px; padding: 16px; } }
+    @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-area">
-    <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="8,8 92,8 88,32 32,12"  fill="#e0296f"/>
-      <polygon points="92,8 92,92 68,88 88,32" fill="#e0296f"/>
-      <polygon points="92,92 8,92 12,68 68,88" fill="#e0296f"/>
-      <polygon points="8,92 8,8 32,12 12,68"  fill="#e0296f"/>
-    </svg>
-    <div>
-      <div class="logo-text">wehandle</div>
-      <div class="page-subtitle">Rampagem de Vidas — Visão Executiva</div>
+<div class="app-layout">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="8,8 92,8 88,32 32,12"  fill="#e0296f"/>
+        <polygon points="92,8 92,92 68,88 88,32" fill="#e0296f"/>
+        <polygon points="92,92 8,92 12,68 68,88" fill="#e0296f"/>
+        <polygon points="8,92 8,8 32,12 12,68"  fill="#e0296f"/>
+      </svg>
+      <div>
+        <div class="logo-text">wehandle</div>
+        <div class="logo-sub">Rampagem de Vidas</div>
+      </div>
     </div>
-  </div>
-  <div class="header-right">
-    <span class="badge-prazo">Próximo prazo: <strong id="prazo-display">—</strong></span>
-    <span class="badge-leitura">Somente leitura</span>
-  </div>
-</header>
-
-
-    <div class="filtro-wrap" id="filtro-wrap">
-      <span class="filtro-label">Cliente:</span>
-      <button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente('todos')">Todos</button>
+    <div class="sidebar-nav">
+      <div class="nav-item ativo" id="nav-painel" onclick="voltarPainel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Painel
+      </div>
     </div>
-
-    <div class="pesquisa-wrap">
-      <input class="pesquisa-input" id="pesquisa" type="text" placeholder="Pesquisar por nome, CNPJ, telefone ou e-mail..." oninput="pesquisarFornecedor(this.value)" />
-      <div class="pesquisa-info" id="pesquisa-info"></div>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">TC</div>
+        <div>
+          <div class="user-name">Thais Chaves</div>
+          <div class="user-role">CMS · Engajamento</div>
+        </div>
+      </div>
     </div>
+  </nav>
 
-    <div class="grid" id="cards-container"></div>
+  <div class="main-content">
 
-    <div id="secao-encerrados" style="display:none">
-      <div class="secao-titulo">Período encerrado</div>
-      <button class="btn-colapsar" onclick="toggleEncerrados()">
-        <span id="label-colapsar">▼ Ver clientes encerrados</span>
-        <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
-      </button>
-      <div class="encerrado-wrap" id="encerrado-wrap">
-        <div class="grid-encerrados" id="cards-encerrados"></div>
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Rampagem de Vidas — Visão Executiva</div>
+      <div class="topbar-right">
+        <span class="badge-prazo">Próximo prazo: <strong id="prazo-display">—</strong></span>
+        <span class="badge-leitura">Somente leitura</span>
+        <span class="topbar-ts" id="ultima-atualizacao"></span>
       </div>
     </div>
 
+    <!-- Tela: grade de clientes -->
+    <div class="tela ativa" id="tela-painel">
+      <div class="page-inner">
 
-<div class="footer-leitura">
-  Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · Atualizado em <span id="footer-data"></span>
+        <div style="margin-bottom:16px">
+          <div class="filtro-wrap" id="filtro-wrap">
+            <span class="filtro-label">Cliente:</span>
+            <button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente('todos')">Todos</button>
+          </div>
+        </div>
+
+        <div class="pesquisa-wrap">
+          <input class="pesquisa-input" id="pesquisa" type="text" placeholder="Pesquisar cliente..." oninput="pesquisarCliente(this.value)" />
+          <div class="pesquisa-info" id="pesquisa-info"></div>
+        </div>
+
+        <div class="clients-grid" id="cards-container"></div>
+
+        <div id="secao-encerrados" style="display:none">
+          <div class="secao-titulo">Período encerrado</div>
+          <button class="btn-colapsar" onclick="toggleEncerrados()">
+            <span id="label-colapsar">▼ Ver clientes encerrados</span>
+            <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
+          </button>
+          <div class="encerrado-wrap" id="encerrado-wrap">
+            <div class="grid-encerrados" id="cards-encerrados"></div>
+          </div>
+        </div>
+
+        <div class="footer-leitura">
+          Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · Atualizado em <span id="footer-data"></span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tela: detalhe do cliente -->
+    <div class="tela" id="tela-detalhe">
+      <div class="page-inner">
+        <div class="detalhe-nav">
+          <button class="btn-voltar" onclick="voltarPainel()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Voltar
+          </button>
+          <div class="detalhe-breadcrumb">Painel → <strong id="detalhe-breadcrumb-nome">—</strong></div>
+        </div>
+        <div id="detalhe-content"></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script src="dados.js"></script>
@@ -192,9 +253,9 @@
   }
 
   const STATUS_OPTS = [
-    { value: 'contatado',  label: 'Contatado',         cls: 'pill-sim'       },
-    { value: 'aguardando', label: 'Aguardando reunião', cls: 'pill-aguardando'},
-    { value: 'pendente',   label: 'Pendente',           cls: 'pill-nao'       },
+    { value: 'contatado',  label: 'Contatado',          cls: 'pill-sim'        },
+    { value: 'aguardando', label: 'Aguardando reunião',  cls: 'pill-aguardando' },
+    { value: 'pendente',   label: 'Pendente',            cls: 'pill-nao'        },
   ];
   const VIA_OPTS = [
     { value: 'whatsapp', label: 'WhatsApp', cls: 'pill-wa'    },
@@ -207,11 +268,10 @@
 
   function getFornecedor(f, overrides) {
     const o = overrides[f.cnpj] || {};
-    const statusFinal = o.status ? o.status : f.status;
     return {
       ...f,
-      status: statusFinal,
-      via:    o.via   || f.via,
+      status: o.status || f.status,
+      via:    o.via    || f.via,
       tel:    o.tel   !== undefined ? o.tel   : f.tel,
       email:  o.email !== undefined ? o.email : f.email,
       vidas:  o.vidas !== undefined ? o.vidas : f.vidas,
@@ -239,8 +299,7 @@
   }
 
   function calcDiasRestantes() {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     let proxDiff = null, proxCliente = null, proxData = null;
     todosClientes().forEach(c => {
       if (!c.dataInicio) return;
@@ -249,49 +308,39 @@
       if (diff < 0) return;
       if (proxDiff === null || diff < proxDiff) { proxDiff = diff; proxCliente = c.nome; proxData = prazo; }
     });
-    const el = document.getElementById('dias-restantes');
-    if (el) { el.textContent = proxDiff !== null ? proxDiff : '—'; }
-    if (el) { el.classList.toggle('urgente', proxDiff !== null && proxDiff <= 15); }
-    const lblEl = document.getElementById('proximo-prazo-label');
-    if (lblEl && proxCliente) lblEl.textContent = 'dias restantes — ' + proxCliente;
     const prazoDisplay = document.getElementById('prazo-display');
     if (prazoDisplay && proxData) prazoDisplay.textContent = proxData.toLocaleDateString('pt-BR');
+    const ts = document.getElementById('ultima-atualizacao');
+    if (ts) ts.textContent = 'Atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
   function criarLinha(f) {
     const curStatus = STATUS_OPTS.find(o => o.value === f.status) || STATUS_OPTS[0];
     const curVia    = VIA_OPTS.find(o => o.value === f.via)       || VIA_OPTS[0];
-
     const tr = document.createElement('tr');
     if (f.status === 'aguardando') tr.className = 'row-aguardando';
     if (f.status === 'pendente')   tr.className = 'row-pendente';
-
     const td1 = document.createElement('td'); td1.textContent = f.razaoSocial;
     const td2 = document.createElement('td'); td2.className = 'cnpj'; td2.textContent = f.cnpj;
-
     const td3 = document.createElement('td'); td3.className = 'center';
     const pCon = document.createElement('span');
     pCon.className = 'pill ' + (f.contrato === 'subcontratado' ? 'pill-sub' : 'pill-sim');
     pCon.textContent = f.contrato === 'subcontratado' ? 'Subcontratado' : 'Contratado';
     td3.appendChild(pCon);
-
     const td4 = document.createElement('td');
     const telDisp = document.createElement('div');
     telDisp.style.fontSize = '11px'; telDisp.textContent = f.tel || '—';
     const emailDisp = document.createElement('div');
     emailDisp.style.cssText = 'font-size:10px;color:#718096'; emailDisp.textContent = f.email || '—';
     td4.append(telDisp, emailDisp);
-
     const td5 = document.createElement('td'); td5.className = 'center';
     const viaDisp = document.createElement('span');
     viaDisp.className = 'pill ' + curVia.cls; viaDisp.textContent = curVia.label;
     td5.appendChild(viaDisp);
-
     const td6 = document.createElement('td'); td6.className = 'center';
     const statusDisp = document.createElement('span');
     statusDisp.className = 'pill ' + curStatus.cls; statusDisp.textContent = curStatus.label;
     td6.appendChild(statusDisp);
-
     tr.append(td1, td2, td3, td4, td5, td6);
     return tr;
   }
@@ -384,7 +433,6 @@
         <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}">${gapAd <= 0 ? '✓ Meta atingida' : Number(gapAd).toFixed(1).replace('.', ',') + ' p.p.'}</span>
       </div>
 
-
       ${clienteEncerrado(cliente) ? `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
         <div class="section-title" style="margin:0">Contatos realizados</div>
@@ -446,6 +494,99 @@
     return card;
   }
 
+  function criarCardCompacto(cliente) {
+    const mOv       = getMetricasOverride(cliente.id);
+    const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
+    const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
+    const metaF1    = cliente.metaVidasF1 != null ? cliente.metaVidasF1 : null;
+    const metaAd    = cliente.metaAderencia || 50;
+    const adPct     = Math.min((aderencia / metaAd) * 100, 100);
+    const f1Pct     = metaF1 != null ? Math.min((vidas / metaF1) * 100, 100) : 0;
+    const adDispStr = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 1).replace('.', ',') : '—';
+
+    const badgeVidasCls = metaF1 == null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
+    const badgeVidasTxt = metaF1 == null ? 'Meta pendente' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Atenção' : 'Crítico';
+    const badgeAderCls  = aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico';
+    const badgeAderTxt  = aderencia >= metaAd ? 'Ader. OK' : aderencia >= metaAd - 5 ? 'Ader. Atenção' : 'Ader. Crítico';
+
+    const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === cliente.id);
+    const totalForn = (cliente.fornecedores || []).length + extrasCliente.length;
+
+    let deadlineHtml = '';
+    if (cliente.dataInicio) {
+      const prazo = calcPrazo(cliente.dataInicio);
+      const hoje  = new Date(); hoje.setHours(0,0,0,0);
+      const dias  = Math.round((prazo - hoje) / 86400000);
+      const urgente = dias <= 15;
+      deadlineHtml = `<span class="cc-deadline ${urgente ? 'urgente' : 'ok'}">${Math.max(dias,0)}d restantes</span>`;
+    }
+
+    const el = document.createElement('div');
+    el.className = 'compact-card';
+    el.dataset.clienteId = cliente.id;
+    el.innerHTML = `
+      <div class="cc-header">
+        <div class="cc-name">${cliente.nome}</div>
+      </div>
+      <div class="cc-badges">
+        <span class="status-badge ${badgeVidasCls}">${badgeVidasTxt}</span>
+        <span class="status-badge ${badgeAderCls}">${badgeAderTxt}</span>
+      </div>
+      <div class="cc-metrics" style="margin-top:12px">
+        <div class="cc-metric">
+          <div class="cc-metric-lbl">Vidas</div>
+          <div class="cc-metric-val">${vidas}</div>
+          ${metaF1 != null ? `<div class="cc-metric-unit">meta ${metaF1}</div>` : ''}
+        </div>
+        <div class="cc-metric">
+          <div class="cc-metric-lbl">Aderência</div>
+          <div class="cc-metric-val">${adDispStr}</div>
+          <div class="cc-metric-unit">meta ${metaAd}%</div>
+        </div>
+      </div>
+      <div class="cc-progress">
+        <div class="cc-progress-label"><span>Aderência</span><span>${adDispStr}%</span></div>
+        <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:${adPct}%;background:${aderencia >= metaAd ? 'linear-gradient(90deg,#38a169,#68d391)' : 'linear-gradient(90deg,#dd6b20,#f6ad55)'}"></div></div>
+      </div>
+      ${metaF1 != null ? `<div class="cc-progress">
+        <div class="cc-progress-label"><span>Vidas (F1)</span><span>${vidas}/${metaF1}</span></div>
+        <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:${f1Pct}%;background:linear-gradient(90deg,#d4326d,#e8679a)"></div></div>
+      </div>` : ''}
+      <div class="cc-footer">
+        <span class="cc-forn-count">${totalForn} fornecedor${totalForn !== 1 ? 'es' : ''}</span>
+        ${deadlineHtml}
+        <button class="btn-ver-forn" onclick="abrirDetalhe('${cliente.id}')">Ver fornecedores →</button>
+      </div>
+    `;
+    el.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-ver-forn')) return;
+      abrirDetalhe(cliente.id);
+    });
+    return el;
+  }
+
+  function abrirDetalhe(clienteId) {
+    const overrides = carregarOverrides();
+    const cliente   = todosClientes().find(c => c.id === clienteId);
+    if (!cliente) return;
+    const content = document.getElementById('detalhe-content');
+    content.innerHTML = '';
+    content.appendChild(criarCard(cliente, overrides));
+    document.getElementById('detalhe-breadcrumb-nome').textContent = cliente.nome;
+    document.getElementById('topbar-title').textContent = cliente.nome;
+    document.getElementById('tela-painel').classList.remove('ativa');
+    document.getElementById('tela-detalhe').classList.add('ativa');
+    window.scrollTo(0, 0);
+  }
+
+  function voltarPainel() {
+    document.getElementById('tela-detalhe').classList.remove('ativa');
+    document.getElementById('tela-painel').classList.add('ativa');
+    document.getElementById('topbar-title').textContent = 'Rampagem de Vidas — Visão Executiva';
+    renderizarClientes();
+    window.scrollTo(0, 0);
+  }
+
   function toggleFornecedores(id) {
     const sec = document.getElementById('forn-section-' + id);
     const btn = document.getElementById('btn-forn-' + id);
@@ -467,7 +608,6 @@
     container.innerHTML  = '';
     containerE.innerHTML = '';
 
-    const overrides  = carregarOverrides();
     const lista      = todosClientes();
     const ativos     = lista.filter(c => !clienteEncerrado(c));
     const encerrados = lista.filter(c =>  clienteEncerrado(c));
@@ -483,8 +623,8 @@
       filtroWrap.appendChild(btn);
     });
 
-    ativos.forEach(c     => container.appendChild(criarCard(c, overrides)));
-    encerrados.forEach(c => containerE.appendChild(criarCard(c, overrides)));
+    ativos.forEach(c     => container.appendChild(criarCardCompacto(c)));
+    encerrados.forEach(c => containerE.appendChild(criarCardCompacto(c)));
 
     const secao = document.getElementById('secao-encerrados');
     secao.style.display = encerrados.length > 0 ? '' : 'none';
@@ -496,35 +636,26 @@
 
   function filtrarCliente(id) {
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.toggle('ativo', b.dataset.cliente === id));
-    todosClientes().forEach(c => {
-      const card = document.getElementById('card-' + c.id);
-      if (card) card.style.display = (id === 'todos' || id === c.id) ? '' : 'none';
+    document.querySelectorAll('.compact-card').forEach(card => {
+      card.style.display = (id === 'todos' || card.dataset.clienteId === id) ? '' : 'none';
     });
   }
 
-  function pesquisarFornecedor(termo) {
-    const t     = termo.toLowerCase().trim();
-    const tNums = t.replace(/\D/g, '');
+  function pesquisarCliente(termo) {
+    const t = termo.toLowerCase().trim();
     let total = 0, encontrados = 0;
-    document.querySelectorAll('.fornecedor-table tbody tr').forEach(tr => {
+    document.querySelectorAll('.compact-card').forEach(card => {
       total++;
-      if (!t) { tr.style.display = ''; encontrados++; return; }
-      const nome     = tr.querySelector('td:first-child')?.textContent.toLowerCase() || '';
-      const cnpj     = tr.querySelector('.cnpj')?.textContent.toLowerCase() || '';
-      const cnpjNums = cnpj.replace(/\D/g, '');
-      const cells    = tr.querySelectorAll('td');
-      const tel      = cells[3]?.children[0]?.textContent.toLowerCase() || '';
-      const email    = cells[3]?.children[1]?.textContent.toLowerCase() || '';
-      const match = nome.includes(t) || cnpj.includes(t) || (tNums.length > 0 && cnpjNums.includes(tNums)) || tel.includes(t) || email.includes(t);
-      tr.style.display = match ? '' : 'none';
+      const nome = (card.querySelector('.cc-name')?.textContent || '').toLowerCase();
+      const match = !t || nome.includes(t);
+      card.style.display = match ? '' : 'none';
       if (match) encontrados++;
     });
     const info = document.getElementById('pesquisa-info');
-    if (t) { info.style.display = 'block'; info.textContent = encontrados + ' fornecedor(es) encontrado(s) de ' + total; }
+    if (t) { info.style.display = 'block'; info.textContent = encontrados + ' cliente(s) encontrado(s) de ' + total; }
     else   { info.style.display = 'none'; }
   }
 
-  // Atualização em tempo real quando painel.html salva dados
   try {
     new BroadcastChannel('wehandle_painel').onmessage = () => {
       renderizarClientes();
@@ -534,7 +665,7 @@
 
   calcDiasRestantes();
   renderizarClientes();
-  setInterval(calcDiasRestantes, 60000); // atualiza a cada minuto — vira a data sem precisar de F5
+  setInterval(calcDiasRestantes, 60000);
 </script>
 </body>
 </html>
