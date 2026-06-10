@@ -280,11 +280,12 @@ def enviar_whatsapp(telefone, razao_social, nome_cliente):
         print(f"  ⚠ WhatsApp ignorado — telefone inválido: '{telefone}' ({razao_social})")
         return
     mensagem = (
-        f"Olá! Tudo bem?\n\n"
-        f"Sou da equipe wehandle, plataforma de gestão de fornecedores da *{nome_cliente}*.\n\n"
-        f"Identificamos que a empresa *{razao_social}* está cadastrada como fornecedora e "
-        f"gostaríamos de convidá-los a utilizar nossa plataforma. 😊\n\n"
-        f"Podemos agendar uma conversa rápida?"
+        f"Olá, tudo bem?\n\n"
+        f"Meu nome é Thais e sou responsável pela operação e pelo engajamento dos fornecedores "
+        f"na plataforma da wehandle.\n\n"
+        f"Estou entrando em contato para apoiar vocês neste início com a *{nome_cliente}*, "
+        f"auxiliando no cadastro de colaboradores, aderência e conformidade da documentação "
+        f"e explicando o funcionamento da plataforma e orientando da melhor forma possível."
     )
     try:
         url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}/send-text"
