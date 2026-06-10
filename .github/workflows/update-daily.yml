@@ -27,8 +27,10 @@ jobs:
 
       - name: Rodar script de atualização
         env:
-          MB_SESSION: ${{ secrets.MB_SESSION }}
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          MB_SESSION:    ${{ secrets.MB_SESSION }}
+          NTFY_TOPIC:    ${{ secrets.NTFY_TOPIC }}
+          ZAPI_INSTANCE: ${{ secrets.ZAPI_INSTANCE }}
+          ZAPI_TOKEN:    ${{ secrets.ZAPI_TOKEN }}
         run: python scripts/update_dados.py
 
       - name: Commit e push das atualizações

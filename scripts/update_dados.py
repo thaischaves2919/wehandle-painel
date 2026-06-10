@@ -13,7 +13,9 @@ import requests
 
 MB_URL     = "https://mbwh.wehandle.com.br"
 MB_SESSION = os.environ["MB_SESSION"]
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
+NTFY_TOPIC     = os.environ.get("NTFY_TOPIC", "")
+ZAPI_INSTANCE  = os.environ.get("ZAPI_INSTANCE", "")
+ZAPI_TOKEN     = os.environ.get("ZAPI_TOKEN", "")
 TODAY      = datetime.date.today().isoformat()          # YYYY-MM-DD
 TODAY_BR   = datetime.date.today().strftime("%d/%m/%Y") # DD/MM/YYYY
 
@@ -199,15 +201,15 @@ def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
             novos.append(nova_linha)
 
     if not novos:
-        return conteudo, 0
+        return conteudo, []
 
     insercao = ",\n".join(novos)
-    # Remover vírgulas finais extras antes de inserir
     bloco_sem_trailing = re.sub(r',(\s*\])', r'\1', bloco)
     novo_bloco = bloco_sem_trailing[:-1].rstrip() + ",\n" + insercao + "\n      ]"
 
     conteudo = conteudo[:inicio_arr] + novo_bloco + conteudo[fim_arr + 1:]
-    return conteudo, len(novos)
+    novos_objs = [f for f in fornecedores_metabase if re.sub(r'\D', '', f["cnpj"]) not in {re.sub(r'\D', '', c) for c in cnpjs_existentes} and re.sub(r'\D', '', f["cnpj"])]
+    return conteudo, novos_objs
 
 # ── 6. Ler e atualizar dados.js ────────────────────────────────────────────────
 DADOS_PATH = "dados.js"
@@ -259,7 +261,42 @@ def dentro_do_prazo(data_inicio_str):
     prazo = data_inicio + datetime.timedelta(days=45)
     return datetime.date.today() <= prazo
 
-# ── 8. Notificação via ntfy.sh ────────────────────────────────────────────────
+# ── 8. WhatsApp via Z-API ─────────────────────────────────────────────────────
+def formatar_telefone(tel):
+    nums = re.sub(r'\D', '', tel)
+    if not nums:
+        return ""
+    if nums.startswith("0"):
+        nums = nums[1:]
+    if not nums.startswith("55"):
+        nums = "55" + nums
+    return nums if 12 <= len(nums) <= 13 else ""
+
+def enviar_whatsapp(telefone, razao_social, nome_cliente):
+    if not ZAPI_INSTANCE or not ZAPI_TOKEN:
+        return
+    tel_fmt = formatar_telefone(telefone)
+    if not tel_fmt:
+        print(f"  ⚠ WhatsApp ignorado — telefone inválido: '{telefone}' ({razao_social})")
+        return
+    mensagem = (
+        f"Olá! Tudo bem?\n\n"
+        f"Sou da equipe wehandle, plataforma de gestão de fornecedores da *{nome_cliente}*.\n\n"
+        f"Identificamos que a empresa *{razao_social}* está cadastrada como fornecedora e "
+        f"gostaríamos de convidá-los a utilizar nossa plataforma. 😊\n\n"
+        f"Podemos agendar uma conversa rápida?"
+    )
+    try:
+        url = f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}/send-text"
+        r = requests.post(url, json={"phone": tel_fmt, "message": mensagem}, timeout=15)
+        if r.ok:
+            print(f"  ✓ WhatsApp enviado → {tel_fmt} ({razao_social})")
+        else:
+            print(f"  ⚠ WhatsApp falhou ({r.status_code}) → {razao_social}: {r.text}")
+    except Exception as e:
+        print(f"  ⚠ WhatsApp erro: {e}")
+
+# ── 9. Notificação via ntfy.sh ────────────────────────────────────────────────
 def enviar_notificacao(titulo, mensagem):
     if not NTFY_TOPIC:
         return
@@ -278,7 +315,7 @@ def enviar_notificacao(titulo, mensagem):
     except Exception as e:
         print(f"  ⚠ Notificação falhou: {e}")
 
-# ── 9. Relatório ───────────────────────────────────────────────────────────────
+# ── 10. Relatório ──────────────────────────────────────────────────────────────
 def formatar_cliente(nome, prazo, vidas, vidas_meta, aderencia, aderencia_meta, atualizado, novos_forn=0):
     if not atualizado:
         return f"\n{nome} (prazo: {prazo})\n  (sem atualização hoje)"
@@ -366,11 +403,15 @@ def main():
         if c.get("sd_table_id"):
             print(f"  Buscando fornecedores na tabela {c['sd_table_id']}...")
             fornecedores_mb = get_fornecedores_sd(c["sd_table_id"], idempresa=c["idempresa"])
-            conteudo, novos_forn = sincronizar_fornecedores(conteudo, c["id"], fornecedores_mb)
+            conteudo, novos_lista = sincronizar_fornecedores(conteudo, c["id"], fornecedores_mb)
+            novos_forn = len(novos_lista)
             if novos_forn > 0:
                 print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")
                 atualizado = True
                 novos_por_cliente.append((c["nome"], novos_forn))
+                for f in novos_lista:
+                    if f.get("tel"):
+                        enviar_whatsapp(f["tel"], f["razaoSocial"], c["nome"])
 
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
