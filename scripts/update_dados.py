@@ -94,8 +94,37 @@ def get_aderencia_por_cards(card_ader, card_nao_ader):
     return None
 
 # ── 5. Fornecedores — busca e sincronização ────────────────────────────────────
-def get_fornecedores_sd(table_id):
-    """Busca fornecedores únicos de uma tabela SD_CLIENTE no Metabase."""
+def get_contatos_prestadores(idempresa):
+    """Busca telefone e e-mail dos fornecedores via SILVER_VW_PRESTADORES_CONTATO (table 9046)."""
+    body = {
+        "database": 14,
+        "type": "query",
+        "query": {
+            "source-table": 9046,
+            "filter": ["=", ["field", 218559, None], idempresa],
+            "limit": 1000
+        }
+    }
+    r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
+    if not r.ok:
+        return {}
+    data = r.json().get("data", {})
+    cols = [c["name"] for c in data.get("cols", [])]
+    rows = data.get("rows", [])
+    idx_cnpj  = next((i for i, c in enumerate(cols) if c == "CNPJ"), None)
+    idx_email = next((i for i, c in enumerate(cols) if c == "EMAIL"), None)
+    idx_tel   = next((i for i, c in enumerate(cols) if c == "TELEFONE"), None)
+    contatos = {}
+    for row in rows:
+        cnpj = re.sub(r'\D', '', row[idx_cnpj] or "") if idx_cnpj is not None else ""
+        if cnpj and cnpj not in contatos:
+            tel   = re.sub(r'\D', '', row[idx_tel]   or "") if idx_tel   is not None else ""
+            email = (row[idx_email] or "").strip()          if idx_email is not None else ""
+            contatos[cnpj] = {"tel": tel, "email": email}
+    return contatos
+
+def get_fornecedores_sd(table_id, idempresa=None):
+    """Busca fornecedores únicos de uma tabela SD_CLIENTE, com telefone e e-mail via contatos."""
     body = {
         "database": 14,
         "type": "query",
@@ -116,13 +145,23 @@ def get_fornecedores_sd(table_id):
     if idx_cnpj is None:
         return []
 
+    # Buscar contatos (tel + email) da tabela de prestadores
+    contatos = get_contatos_prestadores(idempresa) if idempresa else {}
+
     vistos = {}
     for row in rows:
         cnpj  = row[idx_cnpj]  if idx_cnpj  is not None else ""
         nome  = row[idx_nome]  if idx_nome  is not None else ""
         email = row[idx_email] if idx_email is not None else ""
         if cnpj and cnpj not in vistos:
-            vistos[cnpj] = {"razaoSocial": nome or cnpj, "cnpj": cnpj, "email": email or ""}
+            cnpj_num = re.sub(r'\D', '', cnpj)
+            contato = contatos.get(cnpj_num, {})
+            vistos[cnpj] = {
+                "razaoSocial": nome or cnpj,
+                "cnpj": cnpj,
+                "email": contato.get("email") or email or "",
+                "tel":   contato.get("tel") or "",
+            }
     return list(vistos.values())
 
 def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
@@ -151,10 +190,11 @@ def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
         # Verificar se CNPJ já existe (comparando só dígitos)
         ja_existe = any(re.sub(r'\D', '', c) == cnpj_limpo for c in cnpjs_existentes)
         if not ja_existe and cnpj_limpo:
-            cnpj_fmt = f["cnpj"]  # usa o formato que veio do Metabase
+            cnpj_fmt = f["cnpj"]
             email = f.get("email", "").strip() or ""
+            tel   = f.get("tel",   "").strip() or ""
             razao = (f.get("razaoSocial") or cnpj_fmt).strip()
-            nova_linha = f"        {{ razaoSocial: '{razao}', cnpj: '{cnpj_fmt}', contrato: 'contratado', tel: '', email: '{email}', via: 'whatsapp', vidas: 0, status: 'pendente' }}"
+            nova_linha = f"        {{ razaoSocial: '{razao}', cnpj: '{cnpj_fmt}', contrato: 'contratado', tel: '{tel}', email: '{email}', via: 'whatsapp', vidas: 0, status: 'pendente' }}"
             novos.append(nova_linha)
 
     if not novos:
@@ -304,7 +344,7 @@ def main():
         novos_forn = 0
         if c.get("sd_table_id"):
             print(f"  Buscando fornecedores na tabela {c['sd_table_id']}...")
-            fornecedores_mb = get_fornecedores_sd(c["sd_table_id"])
+            fornecedores_mb = get_fornecedores_sd(c["sd_table_id"], idempresa=c["idempresa"])
             conteudo, novos_forn = sincronizar_fornecedores(conteudo, c["id"], fornecedores_mb)
             if novos_forn > 0:
                 print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")

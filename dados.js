@@ -135,10 +135,10 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: 9100,
       mrrFaixa2: 12300,
       fornecedores: [
-        { razaoSocial: 'GRABER SEGURANCA LTDA',                                               cnpj: '87.169.900/0001-45', contrato: 'contratado', tel: '',             email: 'flavio.siqueira-ext@hbsa.com.br',         via: 'email',    vidas: 0, status: 'pendente' },
-        { razaoSocial: 'TOP SERVICE SERVICOS E SISTEMAS S/A',                                 cnpj: '00.973.749/0008-91', contrato: 'contratado', tel: '',             email: 'flavio.siqueira-ext@hbsa.com.br',         via: 'email',    vidas: 0, status: 'pendente' },
+        { razaoSocial: 'GRABER SEGURANCA LTDA',                                               cnpj: '87.169.900/0001-45', contrato: 'contratado', tel: '19996754067',  email: 'Maura.germano@gpssa.com.br',              via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'TOP SERVICE SERVICOS E SISTEMAS S/A',                                 cnpj: '00.973.749/0008-91', contrato: 'contratado', tel: '11940087616',  email: 'niltonn.oliveira@gpssa.com.br',           via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'DATA PLUS ENGENHARIA LTDA',                                           cnpj: '00.612.363/0001-88', contrato: 'contratado', tel: '031336​23688',  email: 'rosangela@dataplusengenharia.com.br',      via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ELETRICAPREV LTDA',                                                   cnpj: '12.567.961/0001-61', contrato: 'contratado', tel: '47996242860',  email: 'andre@eletricaprev.com.br',               via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ELETRICAPREV LTDA',                                                   cnpj: '12.567.961/0001-61', contrato: 'contratado', tel: '4736330004',   email: 'financeiro@eletricaprev.com.br',          via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'TRY OUT SOLUTIONS FERRAMENTARIA LTDA',                                cnpj: '29.859.612/0001-16', contrato: 'contratado', tel: '4187816272',   email: 'fsilva@tryoutsolutions.com.br',            via: 'whatsapp', vidas: 0, status: 'contatado' },
         { razaoSocial: 'MACONTRIN MATERIAIS CONTRA INCENDIO LTDA',                            cnpj: '73.014.607/0001-02', contrato: 'contratado', tel: '',             email: 'vendas@macontrin.com.br',                  via: 'email',    vidas: 0, status: 'pendente' },
         { razaoSocial: 'EXAL - ADMINISTRACAO DE RESTAURANTES EMPRESARIAIS E FACILITIES LTDA', cnpj: '75.584.110/0001-47', contrato: 'contratado', tel: '',             email: 'rhdocumentacao@exal.com.br',               via: 'email',    vidas: 0, status: 'pendente' },
