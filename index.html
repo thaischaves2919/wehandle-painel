@@ -399,7 +399,11 @@
         ${pendentes.length > 0 ? `<span style="background:#fff0f3;color:#c53030;border:1px solid #feb2b2;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${pendentes.length} sem retorno</span>` : ''}
       </div>
       ` : `
-      <div class="section-title">Fornecedores ${cliente.nome} <span style="color:#a0aec0;font-weight:400">(${total} total)</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
+        <div class="section-title" style="margin:0">Fornecedores ${cliente.nome} <span style="color:#a0aec0;font-weight:400">(${total} total)</span></div>
+        <button id="btn-forn-${cliente.id}" onclick="toggleFornecedores('${cliente.id}')" style="background:#f7f8fa;border:1px solid #e2e6ef;color:#718096;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">▲ Minimizar</button>
+      </div>
+      <div id="forn-section-${cliente.id}">
       <div class="section-sub sub-verde">✓ Já contatados (${contatados.length})</div>
       <div class="table-wrap" style="margin-bottom:12px">
         <table class="fornecedor-table">
@@ -423,6 +427,7 @@
           </table>
         </div>
       </div>` : ''}
+      </div>
       `}
     `;
 
@@ -434,6 +439,14 @@
     if (tP) pendentes.forEach(f => tP.appendChild(criarLinha(f)));
 
     return card;
+  }
+
+  function toggleFornecedores(id) {
+    const sec = document.getElementById('forn-section-' + id);
+    const btn = document.getElementById('btn-forn-' + id);
+    const visivel = sec.style.display !== 'none';
+    sec.style.display = visivel ? 'none' : '';
+    btn.textContent = visivel ? '▼ Expandir fornecedores' : '▲ Minimizar';
   }
 
   function toggleEncerrados() {
