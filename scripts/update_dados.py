@@ -261,7 +261,24 @@ def dentro_do_prazo(data_inicio_str):
     prazo = data_inicio + datetime.timedelta(days=45)
     return datetime.date.today() <= prazo
 
-# ── 8. WhatsApp via Z-API ─────────────────────────────────────────────────────
+# ── 8. Busca de telefone via CNPJ (BrasilAPI) ────────────────────────────────
+def buscar_telefone_cnpj(cnpj):
+    cnpj_num = re.sub(r'\D', '', cnpj)
+    if len(cnpj_num) != 14:
+        return ""
+    try:
+        r = requests.get(f"https://brasilapi.com.br/api/cnpj/v1/{cnpj_num}", timeout=10)
+        if not r.ok:
+            return ""
+        data = r.json()
+        tel = re.sub(r'\D', '', (data.get("ddd_telefone_1") or ""))
+        if not tel:
+            tel = re.sub(r'\D', '', (data.get("ddd_telefone_2") or ""))
+        return tel
+    except Exception:
+        return ""
+
+# ── 10. WhatsApp via Z-API ────────────────────────────────────────────────────
 def formatar_telefone(tel):
     nums = re.sub(r'\D', '', tel)
     if not nums:
@@ -410,6 +427,18 @@ def main():
                 print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")
                 atualizado = True
                 novos_por_cliente.append((c["nome"], novos_forn))
+                # Para novos fornecedores sem telefone, buscar via CNPJ
+                for f in novos_lista:
+                    if not f.get("tel"):
+                        tel_cnpj = buscar_telefone_cnpj(f["cnpj"])
+                        if tel_cnpj:
+                            print(f"  ✓ Telefone encontrado via CNPJ: {tel_cnpj} ({f['razaoSocial']})")
+                            cnpj_fmt = f["cnpj"]
+                            conteudo = re.sub(
+                                rf"(cnpj:\s*'{re.escape(cnpj_fmt)}'[^}}]*tel:\s*')(')",
+                                rf"\g<1>{tel_cnpj}\2",
+                                conteudo
+                            )
 
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
