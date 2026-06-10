@@ -410,9 +410,6 @@ def main():
                 print(f"  +{novos_forn} fornecedor(es) novo(s) adicionado(s)")
                 atualizado = True
                 novos_por_cliente.append((c["nome"], novos_forn))
-                for f in novos_lista:
-                    if f.get("tel"):
-                        enviar_whatsapp(f["tel"], f["razaoSocial"], c["nome"])
 
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
