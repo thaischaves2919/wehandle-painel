@@ -386,7 +386,11 @@
 
 
       ${clienteEncerrado(cliente) ? `
-      <div class="section-title">Contatos realizados</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
+        <div class="section-title" style="margin:0">Contatos realizados</div>
+        <button id="btn-forn-${cliente.id}" onclick="toggleFornecedores('${cliente.id}')" style="background:#f7f8fa;border:1px solid #e2e6ef;color:#718096;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">▲ Minimizar</button>
+      </div>
+      <div id="forn-section-${cliente.id}">
       <div style="display:flex;gap:16px;flex-wrap:wrap;background:#f7f8fa;border:1px solid #e2e6ef;border-radius:10px;padding:16px;align-items:center">
         <div style="display:flex;align-items:center;gap:12px;flex:1">
           <span style="font-size:36px;font-weight:800;color:#276749;line-height:1">${contatados.length}</span>
@@ -397,6 +401,7 @@
         </div>
         ${aguardando.length > 0 ? `<span style="background:#fefcbf;color:#744210;border:1px solid #f6e05e;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${aguardando.length} aguardando reunião</span>` : ''}
         ${pendentes.length > 0 ? `<span style="background:#fff0f3;color:#c53030;border:1px solid #feb2b2;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${pendentes.length} sem retorno</span>` : ''}
+      </div>
       </div>
       ` : `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
