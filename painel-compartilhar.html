@@ -385,6 +385,20 @@
       </div>
 
 
+      ${clienteEncerrado(cliente) ? `
+      <div class="section-title">Contatos realizados</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;background:#f7f8fa;border:1px solid #e2e6ef;border-radius:10px;padding:16px;align-items:center">
+        <div style="display:flex;align-items:center;gap:12px;flex:1">
+          <span style="font-size:36px;font-weight:800;color:#276749;line-height:1">${contatados.length}</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#1e2b4a">fornecedores contatados</div>
+            <div style="font-size:11px;color:#718096">de ${total} cadastrados</div>
+          </div>
+        </div>
+        ${aguardando.length > 0 ? `<span style="background:#fefcbf;color:#744210;border:1px solid #f6e05e;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${aguardando.length} aguardando reunião</span>` : ''}
+        ${pendentes.length > 0 ? `<span style="background:#fff0f3;color:#c53030;border:1px solid #feb2b2;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${pendentes.length} sem retorno</span>` : ''}
+      </div>
+      ` : `
       <div class="section-title">Fornecedores ${cliente.nome} <span style="color:#a0aec0;font-weight:400">(${total} total)</span></div>
       <div class="section-sub sub-verde">✓ Já contatados (${contatados.length})</div>
       <div class="table-wrap" style="margin-bottom:12px">
@@ -409,13 +423,14 @@
           </table>
         </div>
       </div>` : ''}
+      `}
     `;
 
     const tC = card.querySelector('#tbody-' + cliente.id + '-contatados');
     const tA = card.querySelector('#tbody-' + cliente.id + '-aguardando');
     const tP = card.querySelector('#tbody-' + cliente.id + '-pendentes');
-    contatados.forEach(f => tC.appendChild(criarLinha(f)));
-    aguardando.forEach(f => tA.appendChild(criarLinha(f)));
+    if (tC) contatados.forEach(f => tC.appendChild(criarLinha(f)));
+    if (tA) aguardando.forEach(f => tA.appendChild(criarLinha(f)));
     if (tP) pendentes.forEach(f => tP.appendChild(criarLinha(f)));
 
     return card;
