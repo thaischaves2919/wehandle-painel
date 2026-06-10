@@ -131,6 +131,21 @@
     .encerrado-wrap.aberto { display: block; }
     .footer-leitura { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e6ef; }
     .footer-leitura strong { color: #e0296f; }
+    .relatorios-wrap { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .relatorios-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .relatorios-table th { background: #f7f8fa; color: #a0aec0; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; border-bottom: 2px solid #e2e6ef; white-space: nowrap; text-align: left; position: sticky; top: 0; z-index: 1; }
+    .relatorios-table th:not(:first-child) { text-align: right; }
+    .relatorios-table td { padding: 12px 14px; border-bottom: 1px solid #f0f2f7; color: #4a5568; vertical-align: middle; }
+    .relatorios-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    .relatorios-table tr:last-child td { border-bottom: none; }
+    .relatorios-table tr:hover td { background: #fafbff; }
+    .rel-nome { font-weight: 700; color: #1a2340; font-size: 13px; }
+    .rel-sub { font-size: 10px; color: #a0aec0; margin-top: 2px; }
+    .rel-ok { color: #276749 !important; font-weight: 700; }
+    .rel-alerta { color: #c53030 !important; font-weight: 700; }
+    .rel-neutro { color: #a0aec0 !important; }
+    .btn-exportar-csv { background: #276749; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-exportar-csv:hover { background: #1e5338; }
     @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
   </style>
 </head>
@@ -158,6 +173,12 @@
           <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
         </svg>
         Painel
+      </div>
+      <div class="nav-item" id="nav-relatorios" onclick="irParaRelatorios()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Relatórios
       </div>
     </div>
     <div class="sidebar-footer">
@@ -231,6 +252,23 @@
           <div class="detalhe-breadcrumb">Painel → <strong id="detalhe-breadcrumb-nome">—</strong></div>
         </div>
         <div id="detalhe-content"></div>
+      </div>
+    </div>
+
+    <!-- Tela: Relatórios -->
+    <div class="tela" id="tela-relatorios">
+      <div class="page-inner">
+        <div class="detalhe-nav">
+          <button class="btn-voltar" onclick="voltarPainel()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Voltar
+          </button>
+          <div class="detalhe-breadcrumb">Painel → <strong>Relatórios</strong></div>
+          <button class="btn-exportar-csv" onclick="exportarRelatoriosCSV()" style="margin-left:auto">⬇ Exportar CSV</button>
+        </div>
+        <div id="relatorios-content"></div>
       </div>
     </div>
 
@@ -581,10 +619,123 @@
 
   function voltarPainel() {
     document.getElementById('tela-detalhe').classList.remove('ativa');
+    document.getElementById('tela-relatorios').classList.remove('ativa');
     document.getElementById('tela-painel').classList.add('ativa');
     document.getElementById('topbar-title').textContent = 'Rampagem de Vidas — Visão Executiva';
+    document.getElementById('nav-relatorios').classList.remove('ativo');
+    document.getElementById('nav-painel').classList.add('ativo');
     renderizarClientes();
     window.scrollTo(0, 0);
+  }
+
+  function irParaRelatorios() {
+    document.getElementById('tela-painel').classList.remove('ativa');
+    document.getElementById('tela-detalhe').classList.remove('ativa');
+    document.getElementById('tela-relatorios').classList.add('ativa');
+    document.getElementById('topbar-title').textContent = 'Relatórios';
+    document.getElementById('nav-painel').classList.remove('ativo');
+    document.getElementById('nav-relatorios').classList.add('ativo');
+    renderRelatorios();
+    window.scrollTo(0, 0);
+  }
+
+  function renderRelatorios() {
+    const overrides = carregarOverrides();
+    const lista = todosClientes();
+    const rows = lista.map(c => {
+      const mOv = getMetricasOverride(c.id);
+      const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : c.vidas;
+      const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia;
+      const metaF1    = c.metaVidasF1  || null;
+      const metaAd    = c.metaAderencia || 50;
+      const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
+      const gapAd     = (metaAd - aderencia).toFixed(1).replace('.', ',');
+      const adStr     = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 2).replace('.', ',') : '—';
+      const extrasC   = carregarFornecedoresExtras().filter(f => f.clienteId === c.id);
+      const forn      = [...(c.fornecedores || []).map(f => getFornecedor(f, overrides)),
+                         ...extrasC.map(f => getFornecedor(f, overrides))];
+      const nCont = forn.filter(f => f.status === 'contatado').length;
+      const nAgu  = forn.filter(f => f.status === 'aguardando').length;
+      const nPend = forn.filter(f => f.status === 'pendente').length;
+      let prazoStr = '—', diasStr = '—', diasCls = '';
+      if (c.dataInicio) {
+        const prazo = calcPrazo(c.dataInicio);
+        const hoje  = new Date(); hoje.setHours(0,0,0,0);
+        const dias  = Math.round((prazo - hoje) / 86400000);
+        prazoStr = prazo.toLocaleDateString('pt-BR');
+        diasStr  = dias <= 0 ? 'Encerrado' : dias + 'd';
+        diasCls  = dias <= 0 ? 'rel-neutro' : dias <= 15 ? 'rel-alerta' : 'rel-ok';
+      }
+      const enc = clienteEncerrado(c);
+      return `<tr${enc ? ' style="opacity:0.6"' : ''}>
+        <td><div class="rel-nome">${c.nome}</div>${c.cnpj ? `<div class="rel-sub">${c.cnpj}</div>` : ''}</td>
+        <td class="${metaF1 && vidas >= metaF1 ? 'rel-ok' : ''}">${vidas}</td>
+        <td class="rel-neutro">${metaF1 !== null ? metaF1 : '—'}</td>
+        <td class="${gapF1 === 0 ? 'rel-ok' : gapF1 === null ? 'rel-neutro' : 'rel-alerta'}">${gapF1 === null ? '—' : gapF1 === 0 ? '✓' : gapF1 + 'v'}</td>
+        <td class="${aderencia >= metaAd ? 'rel-ok' : ''}">${adStr}%</td>
+        <td class="rel-neutro">${metaAd}%</td>
+        <td class="${parseFloat(gapAd.replace(',','.')) <= 0 ? 'rel-ok' : 'rel-alerta'}">${parseFloat(gapAd.replace(',','.')) <= 0 ? '✓' : gapAd + ' p.p.'}</td>
+        <td class="rel-ok">${nCont}</td>
+        <td style="color:#b7791f;font-weight:${nAgu > 0 ? '700' : '400'}">${nAgu}</td>
+        <td class="${nPend > 0 ? 'rel-alerta' : 'rel-neutro'}">${nPend}</td>
+        <td>${forn.length}</td>
+        <td>${prazoStr}</td>
+        <td class="${diasCls}">${diasStr}</td>
+      </tr>`;
+    });
+    document.getElementById('relatorios-content').innerHTML = `
+      <div class="relatorios-wrap">
+        <div style="overflow-x:auto">
+          <table class="relatorios-table">
+            <thead><tr>
+              <th>Cliente</th>
+              <th>Vidas</th><th>Meta F1</th><th>Gap F1</th>
+              <th>Aderência</th><th>Meta Ad</th><th>Gap Ad</th>
+              <th>Contatos</th><th>Aguardando</th><th>Pendentes</th><th>Total Forn.</th>
+              <th>Prazo</th><th>Dias</th>
+            </tr></thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  function exportarRelatoriosCSV() {
+    const overrides = carregarOverrides();
+    const lista = todosClientes();
+    const header = ['Cliente','CNPJ','Vidas','Meta F1','Gap F1','Aderência (%)','Meta Aderência (%)','Gap Aderência (p.p.)','Contatados','Aguardando','Pendentes','Total Fornecedores','Prazo','Dias Restantes'];
+    const linhas = [header];
+    lista.forEach(c => {
+      const mOv = getMetricasOverride(c.id);
+      const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : c.vidas;
+      const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia;
+      const metaF1    = c.metaVidasF1 || null;
+      const metaAd    = c.metaAderencia || 50;
+      const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : '';
+      const gapAd     = (metaAd - aderencia).toFixed(2);
+      const extrasC   = carregarFornecedoresExtras().filter(f => f.clienteId === c.id);
+      const forn      = [...(c.fornecedores || []).map(f => getFornecedor(f, overrides)),
+                         ...extrasC.map(f => getFornecedor(f, overrides))];
+      const nCont = forn.filter(f => f.status === 'contatado').length;
+      const nAgu  = forn.filter(f => f.status === 'aguardando').length;
+      const nPend = forn.filter(f => f.status === 'pendente').length;
+      let prazoStr = '', diasStr = '';
+      if (c.dataInicio) {
+        const prazo = calcPrazo(c.dataInicio);
+        const hoje  = new Date(); hoje.setHours(0,0,0,0);
+        prazoStr = prazo.toLocaleDateString('pt-BR');
+        diasStr  = String(Math.round((prazo - hoje) / 86400000));
+      }
+      linhas.push([c.nome, c.cnpj || '', vidas, metaF1 || '', gapF1, Number(aderencia).toFixed(2).replace('.',','), metaAd, gapAd.replace('.',','), nCont, nAgu, nPend, forn.length, prazoStr, diasStr]);
+    });
+    const csv  = linhas.map(r => r.join(';')).join('\r\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'relatorio-rampagem-' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function toggleFornecedores(id) {
