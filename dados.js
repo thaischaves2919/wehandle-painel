@@ -118,7 +118,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 48,
-      aderencia: 57.47,
+      aderencia: 57.74,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -127,7 +127,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-25', vidas: 25, aderencia: 45.27 },
         { data: '2026-05-26', vidas: 28, aderencia: 48.21 },
         { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
-        { data: '2026-06-10', vidas: 48, aderencia: 57.47 }
+        { data: '2026-06-10', vidas: 48, aderencia: 57.74 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -167,7 +167,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'conceito sul manta asfáltica', cnpj: '08.995.622/0001-09', contrato: 'contratado', tel: '', email: 'atendimento@conceitosul.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'Transforma Corporate', cnpj: '11.565.394/0001-41', contrato: 'contratado', tel: '', email: 'elaine@transformacorporate.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
