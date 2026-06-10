@@ -126,7 +126,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-24', vidas: 24, aderencia: 43.46 },
         { data: '2026-05-25', vidas: 25, aderencia: 45.27 },
         { data: '2026-05-26', vidas: 28, aderencia: 48.21 },
-        { data: '2026-06-09', vidas: 45, aderencia: 56.53 },,
+        { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
         { data: '2026-06-10', vidas: 46, aderencia: 56.53 }
       ],
       metaVidasF1: 201,
