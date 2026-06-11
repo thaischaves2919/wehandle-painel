@@ -433,7 +433,7 @@
     sS('B9','Thais Chaves');
 
     const sorted = [...dados.clientes]
-      .filter(c=>c.dataInicio&&c.mrrFaixa1)
+      .filter(c=>c.dataInicio)
       .sort((a,b)=>{
         const aE=encerrado(a)?1:0,bE=encerrado(b)?1:0;
         if(aE!==bE) return aE-bE;
@@ -449,7 +449,7 @@
       }
       const mF1=c.metaVidasF1, mF2=c.metaVidasF2||null;
       const mrr1=c.mrrFaixa1, mrr2=c.mrrFaixa2||null;
-      const v=c.vidas||0, f1ok=!!(mF1&&v>=mF1), f2ok=!!(mF2&&mrr2&&v>=mF2);
+      const v=c.vidas||0, f1ok=!!(mF1&&mrr1&&v>=mF1), f2ok=!!(mF2&&mrr2&&v>=mF2);
       const bB=f1ok?Math.round(mrr1*0.04):0, bE2=f2ok?Math.round(mrr2*0.01):0;
       sS('A'+r,c.nome); sN('B'+r,mF1||0); sC('C'+r,mF2);
       sD('D'+r,toSerial(c.dataInicio)); sN('F'+r,v);
