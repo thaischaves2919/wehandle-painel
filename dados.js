@@ -1,7 +1,7 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 11/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260521b',
+  versao: '20260611a',
   clientes: [
     {
       id: 'netzsch',
@@ -141,8 +141,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'DATA PLUS ENGENHARIA LTDA',                                           cnpj: '00.612.363/0001-88', contrato: 'contratado', tel: '031336​23688',  email: 'rosangela@dataplusengenharia.com.br',      via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ELETRICAPREV LTDA',                                                   cnpj: '12.567.961/0001-61', contrato: 'contratado', tel: '4736330004',   email: 'financeiro@eletricaprev.com.br',          via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'TRY OUT SOLUTIONS FERRAMENTARIA LTDA',                                cnpj: '29.859.612/0001-16', contrato: 'contratado', tel: '4187816272',   email: 'fsilva@tryoutsolutions.com.br',            via: 'whatsapp', vidas: 0, status: 'contatado' },
-        { razaoSocial: 'MACONTRIN MATERIAIS CONTRA INCENDIO LTDA',                            cnpj: '73.014.607/0001-02', contrato: 'contratado', tel: '',             email: 'vendas@macontrin.com.br',                  via: 'email',    vidas: 0, status: 'pendente' },
-        { razaoSocial: 'EXAL - ADMINISTRACAO DE RESTAURANTES EMPRESARIAIS E FACILITIES LTDA', cnpj: '75.584.110/0001-47', contrato: 'contratado', tel: '',             email: 'rhdocumentacao@exal.com.br',               via: 'email',    vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MACONTRIN MATERIAIS CONTRA INCENDIO LTDA',                            cnpj: '73.014.607/0001-02', contrato: 'contratado', tel: '1932289595', email: 'vendas@macontrin.com.br',                  via: 'email',    vidas: 0, status: 'pendente' },
+        { razaoSocial: 'EXAL - ADMINISTRACAO DE RESTAURANTES EMPRESARIAIS E FACILITIES LTDA', cnpj: '75.584.110/0001-47', contrato: 'contratado', tel: '11992238925', email: 'rhdocumentacao@exal.com.br',               via: 'email',    vidas: 0, status: 'pendente' },
         { razaoSocial: 'GH DO BRASIL INDUSTRIA E COMERCIO LTDA',                              cnpj: '04.407.579/0001-62', contrato: 'contratado', tel: '11973841528',  email: 'a.luiz@ghcranes.com.br',                  via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ABB ROBOTICA BRASIL LTDA',                                            cnpj: '61.987.477/0001-05', contrato: 'contratado', tel: '11987640074',  email: 'integracao@dboconsultoria.com.br',         via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ALMEIDA E CAMARGO SOLUCOES EM AUTOMACAO INDUSTRIAL LTDA',             cnpj: '08.625.426/0001-42', contrato: 'contratado', tel: '15997395074',  email: 'gabriel.almeida@almeidaecamargo.com.br',   via: 'whatsapp', vidas: 0, status: 'pendente' },
@@ -156,19 +156,19 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'RODRIGUES SOLUCOES INDUSTRIAIS LTDA',                                 cnpj: '00.715.152/0001-70', contrato: 'contratado', tel: '15997425939',  email: 'lucio@rodriguessi.com.br',                via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'SEMATEC LTDA',                                                        cnpj: '52.645.694/0001-18', contrato: 'contratado', tel: '12997519663',  email: 'deborahpinho71@gmail.com',                via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'SERVNEWS ROBOTICA E AUTOMACAO LTDA',                                  cnpj: '02.973.703/0001-21', contrato: 'contratado', tel: '1239034107',   email: 'vanessa@servnews.com.br',                 via: 'whatsapp', vidas: 0, status: 'contatado' },
-        { razaoSocial: 'RED GROUP AUTOMACAO INDUSTRIAL', cnpj: '13.799.959/0001-80', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'MONTARIM MONTAGENS INDUSTRIAIS LTDA', cnpj: '67.133.900/0001-88', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'MASTER REMOCAO E TRANSPORTES LTDA', cnpj: '06.240.984/0001-64', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ALTERNATIVA LOCACAO DE GALPOES LONADOS LTDA', cnpj: '11.621.068/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'WOODPACK', cnpj: '33.765.500/0001-73', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'MARUCCI', cnpj: '19.978.232/0001-47', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ELETROTAU SOLUCOES INDUSTRIAIS', cnpj: '34.913.121/0001-46', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'FLX TECNOLOGIA E INOVACAO LTDA', cnpj: '23.823.459/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'HELP SOLUÇÕES AMBIENTAIS LTDA', cnpj: '25.320.905/0001-70', contrato: 'contratado', tel: '', email: 'juliana.caserta@elogi.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'RED GROUP AUTOMACAO INDUSTRIAL', cnpj: '13.799.959/0001-80', contrato: 'contratado', tel: '11991466262', email: 'rodrigo@redgroupautomacao.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MONTARIM MONTAGENS INDUSTRIAIS LTDA', cnpj: '67.133.900/0001-88', contrato: 'contratado', tel: '1122955614', email: 'robson@montarim.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MASTER REMOCAO E TRANSPORTES LTDA', cnpj: '06.240.984/0001-64', contrato: 'contratado', tel: '15991321012', email: 'master.administracao@uol.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ALTERNATIVA LOCACAO DE GALPOES LONADOS LTDA', cnpj: '11.621.068/0001-04', contrato: 'contratado', tel: '11971114708', email: 'comercial@alternativacoberturas.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'WOODPACK', cnpj: '33.765.500/0001-73', contrato: 'contratado', tel: '12991228045', email: 'Luiz.chiachio@techpack.ind.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MARUCCI', cnpj: '19.978.232/0001-47', contrato: 'contratado', tel: '15997877334', email: 'fabriciomaruci@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ELETROTAU SOLUCOES INDUSTRIAIS', cnpj: '34.913.121/0001-46', contrato: 'contratado', tel: '12991430290', email: 'henrique@eletrotau.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'FLX TECNOLOGIA E INOVACAO LTDA', cnpj: '23.823.459/0001-90', contrato: 'contratado', tel: '15981460127', email: 'jeferson.prado@grupocsx.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'HELP SOLUÇÕES AMBIENTAIS LTDA', cnpj: '25.320.905/0001-70', contrato: 'contratado', tel: '15996085400', email: 'juliana.caserta@elogi.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'conceito sul manta asfáltica', cnpj: '08.995.622/0001-09', contrato: 'contratado', tel: '', email: 'atendimento@conceitosul.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'Transforma Corporate', cnpj: '11.565.394/0001-41', contrato: 'contratado', tel: '', email: 'elaine@transformacorporate.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '1532228610', email: 'regiane@bomclimaarcondicionado.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
