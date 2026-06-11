@@ -7,6 +7,7 @@
 <script src="dados.js"></script>
 <script src="simulador_tmpl.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6fb; color: #1a2340; }
@@ -372,72 +373,107 @@
     XLSX.writeFile(wb, 'relatorio-bonus-wehandle.xlsx');
   };
 
-  window.exportarSimulador = function() {
-    if (typeof XLSX === 'undefined' || typeof SIMULADOR_TMPL === 'undefined') {
-      alert('Aguarde o carregamento e tente novamente.'); return;
+  window.exportarSimulador = async function() {
+    if (typeof JSZip === 'undefined' || typeof SIMULADOR_TMPL === 'undefined') {
+      alert('Aguarde o carregamento...'); return;
+    }
+    // Decodifica base64 → Uint8Array
+    const bin = atob(SIMULADOR_TMPL);
+    const u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+
+    // Abre o xlsx como ZIP (preserva styles.xml intocado → cores garantidas)
+    const zip = await JSZip.loadAsync(u8);
+    zip.remove('xl/calcChain.xml'); // Excel recria automaticamente
+
+    let xml = await zip.file('xl/worksheets/sheet1.xml').async('string');
+    let ssXml = await zip.file('xl/sharedStrings.xml').async('string');
+
+    // Índice de shared strings
+    const ssList = [];
+    ssXml.replace(/<si>[\s\S]*?<\/si>/g, m => {
+      const t = m.match(/<t[^>]*>([^<]*)<\/t>/);
+      ssList.push(t ? t[1] : '');
+    });
+    const ssOrig = ssList.length, ssNew = [];
+    function xe(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function si(s) {
+      const i = ssList.indexOf(s); if (i !== -1) return i;
+      const j = ssNew.indexOf(s); if (j !== -1) return ssOrig+j;
+      ssNew.push(s); return ssOrig+ssNew.length-1;
     }
 
-    // cellStyles:true garante que índices de estilo (cores/bordas) sejam lidos e preservados
-    const wbSim = XLSX.read(SIMULADOR_TMPL, { type: 'base64', cellStyles: true });
-    const ws = wbSim.Sheets[wbSim.SheetNames[0]];
+    // Helpers — preserva atributo s= (índice de cor/estilo) de cada célula
+    function cr(ref) { return new RegExp('<c r="'+ref+'"([^>]*)(?:/>|>[\\s\\S]*?</c>)'); }
+    function sa(a) { const m=a.match(/s="(\d+)"/); return m?' s="'+m[1]+'"':''; }
 
-    // Atualiza valor SEM substituir o objeto da célula (preserva ws[ref].s = índice de cor)
-    function setVal(ref, v, t) {
-      const col = ref.match(/[A-Z]+/)[0];
-      if (!ws[ref]) {
-        // Célula nova: copia estilo do mesmo col na linha 13 para ter a cor certa
-        ws[ref] = { s: (ws[col + '13'] || {}).s };
-      }
-      ws[ref].v = v;
-      ws[ref].t = t || (typeof v === 'number' ? 'n' : 's');
-      delete ws[ref].f;
-      delete ws[ref].w;
+    // Número simples
+    function sN(ref,val) { xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+'><v>'+val+'</v></c>'); }
+    // Data — força s="20" (formato data de D13)
+    function sD(ref,v) { xml=xml.replace(cr(ref),v?'<c r="'+ref+'" s="20"><v>'+v+'</v></c>':'<c r="'+ref+'" s="20"/>'); }
+    // String compartilhada
+    function sS(ref,val) {
+      if(!val){xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+'/>');return;}
+      const i=si(val);
+      xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+' t="s"><v>'+i+'</v></c>');
+    }
+    // G col — valor estático SIM/NÃO (remove fórmula incorreta do template)
+    function sG(ref,val) {
+      xml=xml.replace(cr(ref),val?'<c r="'+ref+'" s="17" t="str"><v>'+xe(val)+'</v></c>'
+                                  :'<c r="'+ref+'" s="17"/>');
+    }
+    // C col — limpa se sem F2
+    function sC(ref,val) {
+      if(val) sN(ref,val);
+      else xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+'/>');
     }
 
-    function toSerial(dateStr) {
-      return Math.round(new Date(dateStr + 'T12:00:00').getTime() / 86400000 + 25569);
-    }
+    function toSerial(d) { return Math.round(new Date(d+'T12:00:00').getTime()/86400000+25569); }
 
-    setVal('B9', 'Thais Chaves', 's');
+    sS('B9','Thais Chaves');
 
-    const clientesSim = [...dados.clientes]
-      .filter(c => c.dataInicio && c.mrrFaixa1)
-      .sort((a, b) => {
-        const aE = encerrado(a) ? 1 : 0, bE = encerrado(b) ? 1 : 0;
-        if (aE !== bE) return aE - bE;
-        return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
+    const sorted = [...dados.clientes]
+      .filter(c=>c.dataInicio&&c.mrrFaixa1)
+      .sort((a,b)=>{
+        const aE=encerrado(a)?1:0,bE=encerrado(b)?1:0;
+        if(aE!==bE) return aE-bE;
+        return !aE?new Date(b.dataInicio)-new Date(a.dataInicio):0;
       });
 
-    for (let i = 0; i < 10; i++) {
-      const row = 13 + i;
-      const c = clientesSim[i];
-      if (!c) {
-        ['A','B','C','D','F','H','J','K'].forEach(col => {
-          const r = col + row;
-          if (ws[r]) { ws[r].v = ''; ws[r].t = 's'; delete ws[r].f; delete ws[r].w; }
-        });
+    for(let i=0;i<10;i++){
+      const r=13+i, c=sorted[i];
+      if(!c){
+        sS('A'+r,''); sN('B'+r,0); sC('C'+r,null); sD('D'+r,0);
+        sN('F'+r,0); sG('G'+r,''); sN('H'+r,0); sN('J'+r,0); sN('K'+r,0);
         continue;
       }
-      const mF1 = c.metaVidasF1, mF2 = c.metaVidasF2 || null;
-      const mrr1 = c.mrrFaixa1, mrr2 = c.mrrFaixa2 || null;
-      const vidas = c.vidas || 0;
-      const f1ok = !!(mF1 && vidas >= mF1);
-      const f2ok = !!(mF2 && mrr2 && vidas >= mF2);
-      const bonusBase  = f1ok ? Math.round(mrr1 * 0.04) : 0;
-      const bonusExtra = f2ok ? Math.round(mrr2 * 0.01) : 0;
-
-      setVal('A' + row, c.nome, 's');
-      setVal('B' + row, mF1 || 0, 'n');
-      setVal('C' + row, mF2 || 0, 'n');
-      setVal('D' + row, toSerial(c.dataInicio), 'n');
-      setVal('F' + row, vidas, 'n');
-      setVal('H' + row, bonusBase, 'n');
-      setVal('J' + row, bonusExtra, 'n');
-      setVal('K' + row, bonusBase + bonusExtra, 'n');
+      const mF1=c.metaVidasF1, mF2=c.metaVidasF2||null;
+      const mrr1=c.mrrFaixa1, mrr2=c.mrrFaixa2||null;
+      const v=c.vidas||0, f1ok=!!(mF1&&v>=mF1), f2ok=!!(mF2&&mrr2&&v>=mF2);
+      const bB=f1ok?Math.round(mrr1*0.04):0, bE2=f2ok?Math.round(mrr2*0.01):0;
+      sS('A'+r,c.nome); sN('B'+r,mF1||0); sC('C'+r,mF2);
+      sD('D'+r,toSerial(c.dataInicio)); sN('F'+r,v);
+      sG('G'+r,f1ok?'SIM':'NÃO');
+      sN('H'+r,bB); sN('J'+r,bE2); sN('K'+r,bB+bE2);
     }
 
-    // cellStyles:true no write para incluir o styles.xml no arquivo gerado
-    XLSX.writeFile(wbSim, 'Simulador_Comissão_Onboarding.xlsx', { cellStyles: true });
+    // Adiciona novos shared strings ao XML
+    if(ssNew.length){
+      const total=ssOrig+ssNew.length;
+      ssXml=ssXml
+        .replace('</sst>',ssNew.map(s=>'<si><t>'+xe(s)+'</t></si>').join('')+'</sst>')
+        .replace(/count="\d+"/,'count="'+total+'"')
+        .replace(/uniqueCount="\d+"/,'uniqueCount="'+total+'"');
+      zip.file('xl/sharedStrings.xml',ssXml);
+    }
+    zip.file('xl/worksheets/sheet1.xml',xml);
+
+    const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='Simulador_Comissão_Onboarding.xlsx';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   };
 })();
 </script>
