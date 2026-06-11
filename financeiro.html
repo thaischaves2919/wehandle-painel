@@ -377,24 +377,27 @@
       alert('Aguarde o carregamento e tente novamente.'); return;
     }
 
-    // Carrega o template original (preserva cores, fórmulas e layout)
-    const wbSim = XLSX.read(SIMULADOR_TMPL, { type: 'base64' });
+    // cellStyles:true garante que índices de estilo (cores/bordas) sejam lidos e preservados
+    const wbSim = XLSX.read(SIMULADOR_TMPL, { type: 'base64', cellStyles: true });
     const ws = wbSim.Sheets[wbSim.SheetNames[0]];
 
+    // Atualiza valor SEM substituir o objeto da célula (preserva ws[ref].s = índice de cor)
     function setVal(ref, v, t) {
-      if (!ws[ref]) ws[ref] = {};
+      const col = ref.match(/[A-Z]+/)[0];
+      if (!ws[ref]) {
+        // Célula nova: copia estilo do mesmo col na linha 13 para ter a cor certa
+        ws[ref] = { s: (ws[col + '13'] || {}).s };
+      }
       ws[ref].v = v;
       ws[ref].t = t || (typeof v === 'number' ? 'n' : 's');
       delete ws[ref].f;
       delete ws[ref].w;
     }
 
-    // Data início → número serial do Excel
     function toSerial(dateStr) {
       return Math.round(new Date(dateStr + 'T12:00:00').getTime() / 86400000 + 25569);
     }
 
-    // Colaborador
     setVal('B9', 'Thais Chaves', 's');
 
     const clientesSim = [...dados.clientes]
@@ -409,7 +412,6 @@
       const row = 13 + i;
       const c = clientesSim[i];
       if (!c) {
-        // Limpa a linha para não mostrar dados de execuções anteriores
         ['A','B','C','D','F','H','J','K'].forEach(col => {
           const r = col + row;
           if (ws[r]) { ws[r].v = ''; ws[r].t = 's'; delete ws[r].f; delete ws[r].w; }
@@ -427,16 +429,15 @@
       setVal('A' + row, c.nome, 's');
       setVal('B' + row, mF1 || 0, 'n');
       setVal('C' + row, mF2 || 0, 'n');
-      // Data como serial Excel; mantém o formato de data que já está na célula
-      const serial = toSerial(c.dataInicio);
-      ws['D' + row] = { t: 'n', v: serial, z: 'DD/MM/YYYY' };
+      setVal('D' + row, toSerial(c.dataInicio), 'n');
       setVal('F' + row, vidas, 'n');
       setVal('H' + row, bonusBase, 'n');
       setVal('J' + row, bonusExtra, 'n');
       setVal('K' + row, bonusBase + bonusExtra, 'n');
     }
 
-    XLSX.writeFile(wbSim, 'Simulador_Comissão_Onboarding.xlsx');
+    // cellStyles:true no write para incluir o styles.xml no arquivo gerado
+    XLSX.writeFile(wbSim, 'Simulador_Comissão_Onboarding.xlsx', { cellStyles: true });
   };
 })();
 </script>
