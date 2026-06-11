@@ -205,10 +205,10 @@ var WEHANDLE_DADOS = {
       aderencia: 0,
       historico: [],
       metaVidasF1: 201,
-      metaVidasF2: null,
+      metaVidasF2: 401,
       metaAderencia: 50,
       mrrFaixa1: 5400,
-      mrrFaixa2: null,
+      mrrFaixa2: 11700,
       fornecedores: [
         { razaoSocial: 'QUANTUM', cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',      via: 'whatsapp', vidas: 0, status: 'aguardando' },
         { razaoSocial: 'SODEXO',  cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51993658061', email: 'susana.soares@sodexo.com',   via: 'whatsapp', vidas: 0, status: 'aguardando' },
