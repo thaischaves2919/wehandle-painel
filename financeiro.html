@@ -213,11 +213,8 @@
     const tr = document.createElement('tr');
     if (enc) tr.className = 'enc';
     tr.innerHTML = `
-      <td>
-        <div class="nome-cliente">${c.nome}</div>
-        <div class="periodo-linha">${periodoStr(c)}</div>
-      </td>
-      <td>${periodoStr(c)}</td>
+      <td><div class="nome-cliente">${c.nome}</div></td>
+      <td style="font-size:12px;color:#4a5568">${periodoStr(c)}</td>
       <td>${vidas}${mF1 ? ' / ' + mF1 : ''}</td>
       <td>${fmtPct(ad)}</td>
       <td>${f1Status}</td>
