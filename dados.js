@@ -185,10 +185,10 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-11', vidas: 28, aderencia: 2.03 }
       ],
-      metaVidasF1: null,
+      metaVidasF1: 301,
       metaVidasF2: null,
       metaAderencia: 50,
-      mrrFaixa1: null,
+      mrrFaixa1: 10800,
       mrrFaixa2: null,
       fornecedores: [
         { razaoSocial: 'TRIUNFO SEGURANCA LTDA',       cnpj: '08.562.228/0001-87', contrato: 'contratado', tel: '31993063864', email: 'fat@grupotriunfomg.com.br',                    via: 'whatsapp', vidas: 0, status: 'aguardando' },
@@ -204,10 +204,10 @@ var WEHANDLE_DADOS = {
       vidas: 0,
       aderencia: 0,
       historico: [],
-      metaVidasF1: null,
+      metaVidasF1: 201,
       metaVidasF2: null,
       metaAderencia: 50,
-      mrrFaixa1: null,
+      mrrFaixa1: 5400,
       mrrFaixa2: null,
       fornecedores: [
         { razaoSocial: 'QUANTUM', cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',      via: 'whatsapp', vidas: 0, status: 'aguardando' },
