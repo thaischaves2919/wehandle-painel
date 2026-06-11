@@ -22,6 +22,9 @@
   .atualizado-badge { display: inline-block; background: #e8f5e9; color: #2e7d32; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; margin-left: 8px; }
   .btn-excel { background: #1e7e34; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
   .btn-excel:hover { background: #155d27; }
+  .btn-simulador { background: #1a56db; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .btn-simulador:hover { background: #1347c0; }
+  .btns-header { display: flex; gap: 10px; flex-wrap: wrap; }
   .page-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
 
   /* Resumo geral */
@@ -114,7 +117,10 @@
       <div class="page-title">Relatório de Bônus de Rampagem <span class="atualizado-badge" id="badge-atualizacao">⟳ atualizado</span></div>
       <div class="page-sub" id="sub-data">Atualizado automaticamente 3× ao dia · <span id="data-atualizacao"></span></div>
     </div>
-    <button class="btn-excel" onclick="exportarExcel()">⬇ Baixar Excel</button>
+    <div class="btns-header">
+      <button class="btn-simulador" onclick="exportarSimulador()">⬇ Simulador Preenchido</button>
+      <button class="btn-excel" onclick="exportarExcel()">⬇ Baixar Excel</button>
+    </div>
   </div>
 
   <div class="resumo-card">
@@ -363,6 +369,63 @@
     });
 
     XLSX.writeFile(wb, 'relatorio-bonus-wehandle.xlsx');
+  };
+
+  window.exportarSimulador = function() {
+    if (typeof XLSX === 'undefined') { alert('Aguarde o carregamento e tente novamente.'); return; }
+
+    const clientesSim = [...dados.clientes].filter(c => c.dataInicio && c.mrrFaixa1).sort((a, b) => {
+      const aE = encerrado(a) ? 1 : 0, bE = encerrado(b) ? 1 : 0;
+      if (aE !== bE) return aE - bE;
+      return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
+    });
+
+    const aoa = [
+      ['POLÍTICA 2 — ONBOARDING: RAMPAGEM DE FORNECEDORES'],
+      ['Bônus % do MRR atingido  ·  SLA máximo 45 dias  ·  Bônus Extra de rampagem'],
+      [],
+      ['TABELA DE REFERÊNCIA - MRR = GT (vidas)', 'Bônus Extra (Superar Faixa 2)', 'Total c/ Extra'],
+      ['Bônus Base (MRR atingido)', 'Bônus Extra (Superar Faixa 2)', 'Total c/ Extra'],
+      [0.04, '+1% sobre o bônus base', 0.05],
+      [],
+      ['SLA de rampagem (dias)', 45],
+      ['Colaborador', 'Thais Chaves'],
+      ['Trimestre', 'Q2'],
+      [],
+      ['Cliente (Tomador)', 'Vidas [Faixa 1]', 'Vidas [Faixa 2]', 'Data Entrega (Rampagem)', 'Data Fim Rampagem', 'Total de vidas ao final do período', 'Faixa 1 Atingida?', 'Bônus Base (R$)', 'Extra?', 'Bônus Extra (R$)', 'Bônus Total (R$)'],
+    ];
+
+    let totalGeral = 0;
+    for (let i = 0; i < 10; i++) {
+      const c = clientesSim[i];
+      if (!c) { aoa.push(['','','','','','','','','','','']); continue; }
+      const mF1 = c.metaVidasF1, mF2 = c.metaVidasF2 || null;
+      const mrr1 = c.mrrFaixa1, mrr2 = c.mrrFaixa2 || null;
+      const vidas = c.vidas || 0;
+      const dtI = new Date(c.dataInicio + 'T12:00:00');
+      const dtF = new Date(dtI); dtF.setDate(dtF.getDate() + 45);
+      const f1ok = !!(mF1 && vidas >= mF1);
+      const f2ok = !!(mF2 && mrr2 && vidas >= mF2);
+      const bonusBase = f1ok ? Math.round(mrr1 * 0.04) : 0;
+      const bonusExtra = f2ok ? Math.round(mrr2 * 0.01) : 0;
+      const bonusTotal = bonusBase + bonusExtra;
+      totalGeral += bonusTotal;
+      aoa.push([c.nome, mF1||'', mF2||'', dtI, dtF, vidas, f1ok?'SIM':'NÃO', bonusBase, f2ok?'SIM':(mF2?'NÃO':''), bonusExtra||'', bonusTotal]);
+    }
+    aoa.push(['TOTAL','','','','','','', totalGeral,'','','']);
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa, { cellDates: true });
+    // Format date columns D and E (rows 13–22, 0-indexed rows 12–21, cols 3 and 4)
+    for (let r = 12; r <= 21; r++) {
+      ['D','E'].forEach((col, ci) => {
+        const addr = col + (r + 1);
+        if (ws[addr] && ws[addr].t === 'd') ws[addr].z = 'DD/MM/YYYY';
+      });
+    }
+    ws['!cols'] = [22,12,12,16,16,18,14,14,8,14,14].map(w => ({ wch: w }));
+    const wbSim = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wbSim, ws, 'Acompanhamento_Onboarding 2');
+    XLSX.writeFile(wbSim, 'Simulador_Comissão_Onboarding.xlsx');
   };
 })();
 </script>
