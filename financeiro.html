@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WeHandle — Relatório de Bônus de Rampagem</title>
 <script src="dados.js"></script>
+<script src="simulador_tmpl.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -372,59 +373,69 @@
   };
 
   window.exportarSimulador = function() {
-    if (typeof XLSX === 'undefined') { alert('Aguarde o carregamento e tente novamente.'); return; }
+    if (typeof XLSX === 'undefined' || typeof SIMULADOR_TMPL === 'undefined') {
+      alert('Aguarde o carregamento e tente novamente.'); return;
+    }
 
-    const clientesSim = [...dados.clientes].filter(c => c.dataInicio && c.mrrFaixa1).sort((a, b) => {
-      const aE = encerrado(a) ? 1 : 0, bE = encerrado(b) ? 1 : 0;
-      if (aE !== bE) return aE - bE;
-      return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
-    });
+    // Carrega o template original (preserva cores, fórmulas e layout)
+    const wbSim = XLSX.read(SIMULADOR_TMPL, { type: 'base64' });
+    const ws = wbSim.Sheets[wbSim.SheetNames[0]];
 
-    const aoa = [
-      ['POLÍTICA 2 — ONBOARDING: RAMPAGEM DE FORNECEDORES'],
-      ['Bônus % do MRR atingido  ·  SLA máximo 45 dias  ·  Bônus Extra de rampagem'],
-      [],
-      ['TABELA DE REFERÊNCIA - MRR = GT (vidas)', 'Bônus Extra (Superar Faixa 2)', 'Total c/ Extra'],
-      ['Bônus Base (MRR atingido)', 'Bônus Extra (Superar Faixa 2)', 'Total c/ Extra'],
-      [0.04, '+1% sobre o bônus base', 0.05],
-      [],
-      ['SLA de rampagem (dias)', 45],
-      ['Colaborador', 'Thais Chaves'],
-      ['Trimestre', 'Q2'],
-      [],
-      ['Cliente (Tomador)', 'Vidas [Faixa 1]', 'Vidas [Faixa 2]', 'Data Entrega (Rampagem)', 'Data Fim Rampagem', 'Total de vidas ao final do período', 'Faixa 1 Atingida?', 'Bônus Base (R$)', 'Extra?', 'Bônus Extra (R$)', 'Bônus Total (R$)'],
-    ];
+    function setVal(ref, v, t) {
+      if (!ws[ref]) ws[ref] = {};
+      ws[ref].v = v;
+      ws[ref].t = t || (typeof v === 'number' ? 'n' : 's');
+      delete ws[ref].f;
+      delete ws[ref].w;
+    }
 
-    let totalGeral = 0;
+    // Data início → número serial do Excel
+    function toSerial(dateStr) {
+      return Math.round(new Date(dateStr + 'T12:00:00').getTime() / 86400000 + 25569);
+    }
+
+    // Colaborador
+    setVal('B9', 'Thais Chaves', 's');
+
+    const clientesSim = [...dados.clientes]
+      .filter(c => c.dataInicio && c.mrrFaixa1)
+      .sort((a, b) => {
+        const aE = encerrado(a) ? 1 : 0, bE = encerrado(b) ? 1 : 0;
+        if (aE !== bE) return aE - bE;
+        return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
+      });
+
     for (let i = 0; i < 10; i++) {
+      const row = 13 + i;
       const c = clientesSim[i];
-      if (!c) { aoa.push(['','','','','','','','','','','']); continue; }
+      if (!c) {
+        // Limpa a linha para não mostrar dados de execuções anteriores
+        ['A','B','C','D','F','H','J','K'].forEach(col => {
+          const r = col + row;
+          if (ws[r]) { ws[r].v = ''; ws[r].t = 's'; delete ws[r].f; delete ws[r].w; }
+        });
+        continue;
+      }
       const mF1 = c.metaVidasF1, mF2 = c.metaVidasF2 || null;
       const mrr1 = c.mrrFaixa1, mrr2 = c.mrrFaixa2 || null;
       const vidas = c.vidas || 0;
-      const dtI = new Date(c.dataInicio + 'T12:00:00');
-      const dtF = new Date(dtI); dtF.setDate(dtF.getDate() + 45);
       const f1ok = !!(mF1 && vidas >= mF1);
       const f2ok = !!(mF2 && mrr2 && vidas >= mF2);
-      const bonusBase = f1ok ? Math.round(mrr1 * 0.04) : 0;
+      const bonusBase  = f1ok ? Math.round(mrr1 * 0.04) : 0;
       const bonusExtra = f2ok ? Math.round(mrr2 * 0.01) : 0;
-      const bonusTotal = bonusBase + bonusExtra;
-      totalGeral += bonusTotal;
-      aoa.push([c.nome, mF1||'', mF2||'', dtI, dtF, vidas, f1ok?'SIM':'NÃO', bonusBase, f2ok?'SIM':(mF2?'NÃO':''), bonusExtra||'', bonusTotal]);
-    }
-    aoa.push(['TOTAL','','','','','','', totalGeral,'','','']);
 
-    const ws = XLSX.utils.aoa_to_sheet(aoa, { cellDates: true });
-    // Format date columns D and E (rows 13–22, 0-indexed rows 12–21, cols 3 and 4)
-    for (let r = 12; r <= 21; r++) {
-      ['D','E'].forEach((col, ci) => {
-        const addr = col + (r + 1);
-        if (ws[addr] && ws[addr].t === 'd') ws[addr].z = 'DD/MM/YYYY';
-      });
+      setVal('A' + row, c.nome, 's');
+      setVal('B' + row, mF1 || 0, 'n');
+      setVal('C' + row, mF2 || 0, 'n');
+      // Data como serial Excel; mantém o formato de data que já está na célula
+      const serial = toSerial(c.dataInicio);
+      ws['D' + row] = { t: 'n', v: serial, z: 'DD/MM/YYYY' };
+      setVal('F' + row, vidas, 'n');
+      setVal('H' + row, bonusBase, 'n');
+      setVal('J' + row, bonusExtra, 'n');
+      setVal('K' + row, bonusBase + bonusExtra, 'n');
     }
-    ws['!cols'] = [22,12,12,16,16,18,14,14,8,14,14].map(w => ({ wch: w }));
-    const wbSim = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wbSim, ws, 'Acompanhamento_Onboarding 2');
+
     XLSX.writeFile(wbSim, 'Simulador_Comissão_Onboarding.xlsx');
   };
 })();
