@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 161,
+      vidas: 159,
       aderencia: 74.34,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -24,7 +24,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-25', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-26', vidas: 120, aderencia: 64.0  },
         { data: '2026-06-06', vidas: 159, aderencia: 74.34 },
-        { data: '2026-06-09', vidas: 161, aderencia: 74.34 },
+        { data: '2026-06-09', vidas: 159, aderencia: 74.34 },
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
