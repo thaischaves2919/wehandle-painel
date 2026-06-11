@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WeHandle — Relatório de Bônus de Rampagem</title>
 <script src="dados.js"></script>
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6fb; color: #1a2340; }
@@ -19,6 +20,9 @@
   .page-title { font-size: 22px; font-weight: 800; color: #1a2340; margin-bottom: 4px; }
   .page-sub { font-size: 13px; color: #718096; margin-bottom: 28px; }
   .atualizado-badge { display: inline-block; background: #e8f5e9; color: #2e7d32; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; margin-left: 8px; }
+  .btn-excel { background: #1e7e34; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .btn-excel:hover { background: #155d27; }
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
 
   /* Resumo geral */
   .resumo-card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 6px rgba(26,35,64,0.07); margin-bottom: 28px; border: 1.5px solid #e8eaf0; }
@@ -104,8 +108,13 @@
 </div>
 
 <div class="container">
-  <div class="page-title">Relatório de Bônus de Rampagem <span class="atualizado-badge" id="badge-atualizacao">⟳ atualizado</span></div>
-  <div class="page-sub" id="sub-data">Atualizado automaticamente 3× ao dia · <span id="data-atualizacao"></span></div>
+  <div class="page-header">
+    <div>
+      <div class="page-title">Relatório de Bônus de Rampagem <span class="atualizado-badge" id="badge-atualizacao">⟳ atualizado</span></div>
+      <div class="page-sub" id="sub-data">Atualizado automaticamente 3× ao dia · <span id="data-atualizacao"></span></div>
+    </div>
+    <button class="btn-excel" onclick="exportarExcel()">⬇ Baixar Excel</button>
+  </div>
 
   <div class="resumo-card">
     <div class="resumo-titulo">📋 Resumo Geral</div>
@@ -299,6 +308,59 @@
   });
 
   document.getElementById('resumo-total').textContent = fmtBRL(totalReceber);
+  window.exportarExcel = function() {
+    if (typeof XLSX === 'undefined') { alert('Biblioteca ainda carregando, tente novamente em instantes.'); return; }
+    const wb = XLSX.utils.book_new();
+
+    const clientesExp = [...dados.clientes].filter(c => c.dataInicio).sort((a, b) => {
+      const aE = encerrado(a) ? 1 : 0, bE = encerrado(b) ? 1 : 0;
+      if (aE !== bE) return aE - bE;
+      return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
+    });
+
+    // Aba 1: Resumo
+    const resumoRows = [['Cliente', 'Início', 'Fim', 'Vidas', 'Meta F1', 'Meta F2', 'Aderência (%)', 'Meta Aderência (%)', 'Faixa 1', 'Faixa 2', 'Bônus a Receber']];
+    clientesExp.forEach(c => {
+      const prazo  = calcPrazo(c.dataInicio);
+      const inicio = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR');
+      const fim    = prazo.toLocaleDateString('pt-BR');
+      const mF1 = c.metaVidasF1, mF2 = c.metaVidasF2;
+      const mAd = c.metaAderencia || 50;
+      const mrr1 = c.mrrFaixa1, mrr2 = c.mrrFaixa2 || null;
+      let aReceber = 0, f1s = '—', f2s = '—';
+      if (mrr1) {
+        const bF1 = Math.round(mrr1 * 0.04);
+        const bF2 = mrr2 ? Math.round(mrr2 * 0.01) : null;
+        aReceber = (bF2 && mF2 && c.vidas >= mF2) ? bF1 + bF2 : c.vidas >= mF1 ? bF1 : 0;
+        f1s = mF1 ? (c.vidas >= mF1 ? 'Atingida' : 'Faltam ' + Math.max(mF1 - c.vidas, 0) + 'v') : '—';
+        f2s = mF2 ? (c.vidas >= mF2 ? 'Atingida' : 'Faltam ' + Math.max(mF2 - c.vidas, 0) + 'v') : '—';
+      }
+      const bonusStr = !mrr1 ? 'A definir' : aReceber > 0 ? fmtBRL(aReceber) : encerrado(c) ? 'R$ 0' : 'Em andamento';
+      resumoRows.push([c.nome, inicio, fim, c.vidas, mF1 || '—', mF2 || '—', c.aderencia, mAd, f1s, f2s, bonusStr]);
+    });
+    const wsResumo = XLSX.utils.aoa_to_sheet(resumoRows);
+    wsResumo['!cols'] = [20,12,12,8,8,8,14,16,14,14,18].map(w => ({ wch: w }));
+    XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
+
+    // Uma aba por cliente com evolução
+    clientesExp.forEach(c => {
+      if (!c.historico || c.historico.length === 0) return;
+      const mF1 = c.metaVidasF1, mAd = c.metaAderencia || 50;
+      const hist = [...c.historico].filter(h => h).reverse();
+      const sheetRows = [['Data', 'Vidas', 'Aderência (%)', 'Gap F1', 'Gap Aderência (p.p.)']];
+      hist.forEach(h => {
+        const dt   = new Date(h.data + 'T12:00:00').toLocaleDateString('pt-BR');
+        const gapV = mF1 !== null ? Math.max(mF1 - h.vidas, 0) : '—';
+        const gapA = parseFloat((mAd - h.aderencia).toFixed(2));
+        sheetRows.push([dt, h.vidas, h.aderencia, gapV === 0 ? 'Atingida' : gapV, gapA <= 0 ? 'Atingida' : gapA]);
+      });
+      const ws = XLSX.utils.aoa_to_sheet(sheetRows);
+      ws['!cols'] = [12,8,14,10,20].map(w => ({ wch: w }));
+      XLSX.utils.book_append_sheet(wb, ws, c.nome.substring(0, 31));
+    });
+
+    XLSX.writeFile(wb, 'relatorio-bonus-wehandle.xlsx');
+  };
 })();
 </script>
 </body>
