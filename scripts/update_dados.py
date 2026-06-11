@@ -252,7 +252,7 @@ def atualizar_historico(conteudo, cliente_id, vidas, aderencia):
     if padrao_hoje.search(bloco):
         bloco_novo = padrao_hoje.sub(entrada, bloco)
     else:
-        bloco_novo = bloco[:-1].rstrip() + ",\n        " + entrada + "\n      ]"
+        bloco_novo = bloco[:-1].rstrip().rstrip(',') + ",\n        " + entrada + "\n      ]"
     return conteudo[:inicio_arr] + bloco_novo + conteudo[fim_arr + 1:]
 
 # ── 7. Verificar prazo de 45 dias ─────────────────────────────────────────────

@@ -181,7 +181,7 @@ var WEHANDLE_DADOS = {
       vidas: 28,
       aderencia: 2.03,
       historico: [
-        { data: '2026-06-09', vidas: 0, aderencia: 22.73 },,
+        { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-11', vidas: 28, aderencia: 2.03 }
       ],
