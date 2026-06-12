@@ -118,7 +118,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 52,
-      aderencia: 56.94,
+      aderencia: 57.01,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -129,7 +129,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
         { data: '2026-06-10', vidas: 48, aderencia: 57.74 },
         { data: '2026-06-11', vidas: 47, aderencia: 57.74 },
-        { data: '2026-06-12', vidas: 52, aderencia: 56.94 }
+        { data: '2026-06-12', vidas: 52, aderencia: 57.01 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
