@@ -319,11 +319,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         <span>Salvar</span>
       </div>
-      <div class="nav-section-label rl-oculto">Sincronização</div>
-      <div class="nav-item rl-oculto" id="btn-publicar-chefe" onclick="publicarParaChefe()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-        <span>Publicar para chefe</span>
-      </div>
       <div class="nav-section-label">Links Rápidos</div>
       <a class="nav-item" href="https://thaischaves2919.github.io/wehandle-painel/" target="_blank" rel="noopener" style="text-decoration:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -587,6 +582,9 @@
   const WA_ENVIADOS_KEY = 'wehandle_wa_enviados_v1';
   let overrides = {};
   let isLoading = false;
+  let _publicandoChefe = false;
+  let _publicacaoPendente = false;
+  let _ultimaPublicacao = 0;
 
   function carregarWaEnviados() {
     try { const r = localStorage.getItem(WA_ENVIADOS_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; }
@@ -777,6 +775,7 @@
       tudo[clienteId] = Object.assign(tudo[clienteId] || {}, campos, extra);
       localStorage.setItem(METRICAS_KEY, JSON.stringify(tudo));
       try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+      _publicacaoPendente = true;
     } catch(e) {}
   }
 
@@ -786,13 +785,13 @@
     const agora = new Date().toLocaleString('pt-BR');
     document.getElementById('ultima-atualizacao').textContent = 'Salvo em ' + agora;
     try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+    _publicacaoPendente = true;
   }
 
   async function publicarParaChefe() {
-    const btnEl  = document.getElementById('btn-publicar-chefe');
-    const spanEl = btnEl ? btnEl.querySelector('span') : null;
-    if (spanEl) spanEl.textContent = '⏳ Publicando...';
-    if (btnEl)  btnEl.style.pointerEvents = 'none';
+    if (_publicandoChefe || READ_ONLY) return;
+    _publicandoChefe = true;
+    _publicacaoPendente = false;
     try {
       const PAT  = '';
       const REPO = 'thaischaves2919/wehandle-painel';
@@ -808,22 +807,13 @@
       const hdrs  = { 'Authorization': 'token ' + PAT, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
       const getR  = await fetch('https://api.github.com/repos/' + REPO + '/contents/overrides.js', { headers: hdrs });
       const getJ  = await getR.json();
-      const putR  = await fetch('https://api.github.com/repos/' + REPO + '/contents/overrides.js', {
+      await fetch('https://api.github.com/repos/' + REPO + '/contents/overrides.js', {
         method: 'PUT', headers: hdrs,
-        body: JSON.stringify({ message: 'sync: publicar painel para chefe', content: b64, sha: getJ.sha })
+        body: JSON.stringify({ message: 'sync: espelho automático', content: b64, sha: getJ.sha })
       });
-      if (putR.ok) {
-        mostrarToast('✓ Publicado! A chefe verá em ~1 minuto.');
-      } else {
-        const err = await putR.json();
-        mostrarToast('⚠ Erro: ' + (err.message || putR.status));
-      }
-    } catch(err) {
-      mostrarToast('⚠ Erro: ' + err.message);
-    } finally {
-      if (spanEl) spanEl.textContent = '☁ Publicar para chefe';
-      if (btnEl)  btnEl.style.pointerEvents = '';
-    }
+      _ultimaPublicacao = Date.now();
+    } catch(e) {}
+    _publicandoChefe = false;
   }
 
   function updateOverride(cnpj, campos) {
@@ -1798,6 +1788,7 @@
 
   function salvarFornecedoresExtras(lista) {
     localStorage.setItem(FORNECEDORES_EXTRAS_KEY, JSON.stringify(lista));
+    _publicacaoPendente = true;
   }
 
   function abrirModalFornecedor(clienteIdPre) {
@@ -1875,6 +1866,7 @@
 
   function salvarClientesExtras(lista) {
     localStorage.setItem(CLIENTES_EXTRAS_KEY, JSON.stringify(lista));
+    _publicacaoPendente = true;
   }
 
   function todosClientes() {
@@ -2050,6 +2042,30 @@
     document.body.classList.add('leitura');
   } else {
     atualizarBadgeSemResposta();
+  }
+
+  // ── Espelho automático para chefe ─────────────────────────────
+  if (!READ_ONLY) {
+    // Publica quando a aba fica oculta (troca de tab, minimiza janela)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && _publicacaoPendente) publicarParaChefe();
+    });
+    // Fallback: publica a cada 5 minutos se ficar na aba com mudanças pendentes
+    setInterval(() => {
+      if (_publicacaoPendente && Date.now() - _ultimaPublicacao > 300000) publicarParaChefe();
+    }, 60000);
+  } else {
+    // Painel da chefe: detecta mudança no overrides.js e recarrega
+    let _ovSnap = null;
+    setInterval(async () => {
+      try {
+        const r = await fetch('overrides.js?_=' + Date.now());
+        if (!r.ok) return;
+        const txt = await r.text();
+        if (_ovSnap === null) { _ovSnap = txt; return; }
+        if (txt !== _ovSnap) location.reload();
+      } catch(e) {}
+    }, 60000);
   }
 
   // ── Auto-refresh a cada 5 segundos ────────────────────────────
