@@ -307,11 +307,6 @@
         <span>+ Novo Fornecedor</span>
       </div>
       <div class="nav-section-label">Ferramentas</div>
-      <div class="nav-item rl-oculto" id="nav-sem-resposta" onclick="irParaSemResposta()" style="position:relative">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span>Sem Resposta</span>
-        <span id="badge-sem-resposta" style="display:none;background:#e0296f;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;margin-left:auto"></span>
-      </div>
       <div class="nav-item" id="nav-relatorios" onclick="irParaRelatorios()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         <span>Relatórios</span>
@@ -357,6 +352,7 @@
       <div class="topbar-right">
         <span class="badge-leitura">Modo leitura</span>
         <span class="atualizado" id="ultima-atualizacao">Carregando...</span>
+        <span id="badge-sem-resposta" class="rl-oculto" style="display:none;background:#e0296f;color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px" title="Fornecedores sem resposta"></span>
         <div class="toggle-modo">
           <button class="toggle-btn ativo" id="btn-edicao"  onclick="setModo('edicao')">Edição</button>
           <button class="toggle-btn"       id="btn-leitura" onclick="setModo('leitura')">Leitura</button>
@@ -606,18 +602,17 @@
   }
   function contarSemResposta() {
     const enviados = carregarWaEnviados();
+    const extras = carregarFornecedoresExtras();
     let total = 0;
     for (const cnpj of Object.keys(enviados)) {
-      const f = (() => {
-        for (const c of todosClientes()) {
-          const base = (c.fornecedores || []).find(x => x.cnpj === cnpj);
-          if (base) return getFornecedor(base);
-          const extra = carregarFornecedoresExtras().find(x => x.cnpj === cnpj);
-          if (extra) return getFornecedor(extra);
-        }
-        return null;
-      })();
-      if (f && f.status === 'pendente') total++;
+      let fornBase = null;
+      for (const c of todosClientes()) {
+        const b = (c.fornecedores || []).find(x => x.cnpj === cnpj);
+        if (b) { fornBase = b; break; }
+      }
+      if (!fornBase) { const e = extras.find(x => x.cnpj === cnpj); if (e) fornBase = e; }
+      if (!fornBase) continue;
+      if (getFornecedor(fornBase).status === 'pendente') total++;
     }
     return total;
   }
@@ -625,8 +620,8 @@
     const badge = document.getElementById('badge-sem-resposta');
     if (!badge) return;
     const n = contarSemResposta();
-    badge.textContent = n;
-    badge.style.display = n > 0 ? 'inline-flex' : 'none';
+    badge.textContent = n + (n === 1 ? ' sem resposta' : ' sem resposta');
+    badge.style.display = n > 0 ? 'inline-block' : 'none';
   }
 
   function salvarUltimaPosicaoWA(cnpj, razaoSocial, clienteId) {
@@ -1040,11 +1035,41 @@
     });
     td6.append(statusSel, statusDisp);
 
-    // 7 — WhatsApp
+    // 7 — WhatsApp / Sem Resposta inline
     const td7 = document.createElement('td');
     td7.className = 'center rl-oculto';
     const tel = (f.tel || '').replace(/\D/g, '');
-    if (tel && !eFixo(f.tel)) {
+    const _waMap = carregarWaEnviados();
+    const _waReg = _waMap[f.cnpj];
+    if (_waReg && f.status === 'pendente') {
+      // Mostra indicador "sem resposta" direto na linha
+      const diasMs = Date.now() - new Date(_waReg.data + 'T12:00:00').getTime();
+      const dias = Math.max(0, Math.floor(diasMs / 86400000));
+      const corDias = dias >= 7 ? '#c53030' : dias >= 3 ? '#c05621' : '#276749';
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:3px';
+      const lbl = document.createElement('span');
+      lbl.style.cssText = 'font-size:9px;font-weight:700;white-space:nowrap;color:' + corDias;
+      lbl.textContent = dias === 0 ? 'Hoje' : (dias === 1 ? '1d s/resp.' : dias + 'd s/resp.');
+      const btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;gap:2px';
+      if (tel && !eFixo(f.tel)) {
+        const btnR = document.createElement('button');
+        btnR.title = 'Reenviar mensagem';
+        btnR.textContent = '🔁';
+        btnR.style.cssText = 'background:#fff3e0;color:#c05621;border:1px solid #ffcc80;border-radius:4px;padding:1px 5px;cursor:pointer;font-size:11px';
+        btnR.onclick = (e) => { e.stopPropagation(); reenviarWa(f.cnpj, tel, f.razaoSocial, clienteId); };
+        btns.appendChild(btnR);
+      }
+      const btnOK = document.createElement('button');
+      btnOK.title = 'Respondeu';
+      btnOK.textContent = '✓';
+      btnOK.style.cssText = 'background:#f0fff4;color:#276749;border:1px solid #9ae6b4;border-radius:4px;padding:1px 5px;cursor:pointer;font-size:11px;font-weight:700';
+      btnOK.onclick = (e) => { e.stopPropagation(); marcarRespondeu(f.cnpj, clienteId); };
+      btns.appendChild(btnOK);
+      wrap.append(lbl, btns);
+      td7.appendChild(wrap);
+    } else if (tel && !eFixo(f.tel)) {
       const btnWa = document.createElement('button');
       btnWa.title = 'Enviar mensagem WhatsApp';
       btnWa.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
@@ -1052,7 +1077,6 @@
       btnWa.onclick = () => {
         salvarUltimaPosicaoWA(f.cnpj, f.razaoSocial, clienteId);
         enviarWhatsAppFornecedor(f.cnpj, tel, f.razaoSocial, clienteId);
-        // Atualiza DOM imediatamente — remove marcador anterior e adiciona no novo
         document.querySelectorAll('.wa-ultimo-row').forEach(r => {
           r.classList.remove('wa-ultimo-row');
           r.querySelectorAll('.wa-marker').forEach(m => m.remove());
@@ -1364,22 +1388,8 @@
     document.getElementById('tela-sem-resposta').classList.remove('ativa');
     document.getElementById('topbar-title').textContent = 'Relatórios';
     document.getElementById('nav-painel').classList.remove('ativo');
-    document.getElementById('nav-sem-resposta').classList.remove('ativo');
     document.getElementById('nav-relatorios').classList.add('ativo');
     renderRelatorios();
-    window.scrollTo(0, 0);
-  }
-
-  function irParaSemResposta() {
-    document.getElementById('tela-painel').classList.remove('ativa');
-    document.getElementById('tela-detalhe').classList.remove('ativa');
-    document.getElementById('tela-relatorios').classList.remove('ativa');
-    document.getElementById('tela-sem-resposta').classList.add('ativa');
-    document.getElementById('topbar-title').textContent = 'Sem Resposta';
-    document.getElementById('nav-painel').classList.remove('ativo');
-    document.getElementById('nav-relatorios').classList.remove('ativo');
-    document.getElementById('nav-sem-resposta').classList.add('ativo');
-    renderSemResposta();
     window.scrollTo(0, 0);
   }
 
@@ -1390,7 +1400,6 @@
     document.getElementById('tela-painel').classList.add('ativa');
     document.getElementById('topbar-title').textContent = 'Painel de Rampagem';
     document.getElementById('nav-relatorios').classList.remove('ativo');
-    document.getElementById('nav-sem-resposta').classList.remove('ativo');
     document.getElementById('nav-painel').classList.add('ativo');
     renderizarClientes();
     window.scrollTo(0, 0);
@@ -1488,13 +1497,22 @@
 
   function marcarRespondeu(cnpj, clienteId) {
     updateOverride(cnpj, { status: 'contatado' });
-    // Remove do registro de enviados para não reaparecer
     const enviados = carregarWaEnviados();
     delete enviados[cnpj];
     salvarWaEnviados(enviados);
-    atualizarBadgeSemResposta();
-    renderSemResposta();
+    if (!READ_ONLY) atualizarBadgeSemResposta();
     mostrarToast('✓ Marcado como contatado');
+    // Re-renderiza a visão atual para refletir a mudança inline
+    if (document.getElementById('tela-detalhe').classList.contains('ativa')) {
+      const cl = todosClientes().find(c => c.id === clienteId);
+      if (cl) {
+        const cont = document.getElementById('detalhe-content');
+        cont.innerHTML = '';
+        cont.appendChild(criarCard(cl));
+      }
+    } else {
+      renderizarClientes();
+    }
   }
 
   function renderRelatorios() {
