@@ -1,97 +1,120 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="refresh" content="60" />
-  <title>wehandle — Rampagem de Vidas</title>
+  <title>wehandle — Painel de Rampagem</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1e2b4a; min-height: 100vh; }
 
+    /* ── App shell ── */
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #1e2b4a; min-height: 100vh; }
     .app-layout { display: flex; min-height: 100vh; }
 
-    .sidebar { width: 220px; min-height: 100vh; background: #1a2340; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; }
-    .sidebar-logo { padding: 24px 20px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #253054; }
-    .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
-    .logo-text { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
-    .logo-sub { font-size: 10px; color: #5a6f9a; margin-top: 1px; }
-    .sidebar-nav { flex: 1; padding: 12px 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; color: #8896b3; cursor: pointer; transition: all 0.15s; border-left: 3px solid transparent; user-select: none; }
-    .nav-item:hover { background: #253054; color: #fff; }
-    .nav-item.ativo { background: #253054; color: #fff; border-left-color: #e0296f; }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid #253054; }
-    .user-chip { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 32px; height: 32px; background: #e0296f; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
-    .user-name { font-size: 12px; color: #c3cfe2; font-weight: 600; }
-    .user-role { font-size: 10px; color: #5a6f9a; margin-top: 1px; }
+    /* ── Sidebar ── */
+    .sidebar { width: 220px; min-width: 220px; background: #1a2340; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
+    .sidebar-logo-area { padding: 22px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+    .sidebar-logo-icon { width: 28px; height: 28px; flex-shrink: 0; cursor: pointer; border-radius: 4px; transition: opacity 0.15s; }
+    .sidebar-logo-icon:hover { opacity: 0.7; outline: 2px dashed rgba(255,255,255,0.4); outline-offset: 2px; }
+    .logo-upload-input { display: none; }
+    .sidebar-logo-text { font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .sidebar-logo-sub  { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+    .sidebar-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+    .nav-section-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 1px; padding: 14px 20px 5px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500; cursor: pointer; border-right: 3px solid transparent; transition: all 0.15s; user-select: none; }
+    .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); }
+    .nav-item.ativo { background: rgba(224,41,111,0.12); color: #e0296f; border-right-color: #e0296f; font-weight: 600; }
+    .sidebar-user { padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e0296f; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .user-name { color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; }
+    .user-role { color: rgba(255,255,255,0.3); font-size: 10px; }
 
+    /* ── Main content ── */
     .main-content { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-    .topbar { height: 56px; background: #fff; border-bottom: 1px solid #e2e6ef; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 50; }
-    .topbar-title { font-size: 15px; font-weight: 700; color: #1e2b4a; }
-    .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .topbar-ts { font-size: 11px; color: #a0aec0; }
-    .badge-leitura { background: #f0f4ff; border: 1px solid #c3cfe2; color: #4a5568; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .badge-prazo { background: #fff; border: 1px solid #dde1ea; color: #4a5568; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-    .badge-prazo strong { color: #1e2b4a; }
 
-    .tela { display: none; }
+    /* ── Topbar ── */
+    .topbar { background: #fff; border-bottom: 1px solid #e8eaf0; padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 90; box-shadow: 0 1px 4px rgba(26,35,64,0.04); }
+    .topbar-title { font-size: 15px; font-weight: 700; color: #1a2340; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .atualizado { font-size: 12px; color: #a0aec0; }
+    .badge-leitura { background: #f0f4ff; border: 1px solid #c3cfe2; color: #4a5568; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: none; }
+    .toggle-modo { display: flex; align-items: center; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 20px; padding: 3px; gap: 2px; }
+    .toggle-btn { padding: 4px 12px; border-radius: 16px; border: none; background: transparent; font-size: 12px; font-weight: 600; color: #718096; cursor: pointer; transition: all 0.2s; }
+    .toggle-btn.ativo { background: #1a2340; color: #fff; }
+
+    /* ── Telas ── */
+    .tela { display: none; padding: 24px 28px; }
     .tela.ativa { display: block; }
-    .page-inner { padding: 28px; }
 
-    .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .compact-card { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(30,43,74,0.05); cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
-    .compact-card:hover { box-shadow: 0 4px 16px rgba(30,43,74,0.12); border-color: #c3cfe2; }
-    .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
-    .cc-name { font-size: 15px; font-weight: 700; color: #1e2b4a; }
-    .cc-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+    /* ── Compact client cards ── */
+    .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .compact-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(26,35,64,0.05); cursor: pointer; transition: all 0.18s; }
+    .compact-card:hover { box-shadow: 0 6px 20px rgba(26,35,64,0.10); transform: translateY(-2px); border-color: #e0296f; }
+    .compact-card.encerrado { opacity: 0.6; filter: grayscale(30%); }
+    .compact-card.encerrado:hover { opacity: 0.9; filter: grayscale(0%); }
+    .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
+    .cc-name { font-size: 15px; font-weight: 700; color: #1a2340; }
+    .cc-cnpj { font-size: 10px; color: #a0aec0; font-family: monospace; margin-top: 2px; }
+    .cc-badges { display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0; }
     .cc-metrics { display: flex; gap: 8px; margin-bottom: 12px; }
-    .cc-metric { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 8px; padding: 10px 10px 8px; text-align: center; }
-    .cc-metric-lbl { font-size: 9px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .cc-metric-val { font-size: 22px; font-weight: 800; color: #1e2b4a; line-height: 1; }
-    .cc-metric-unit { font-size: 11px; color: #718096; }
-    .cc-progress { margin-bottom: 6px; }
-    .cc-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 3px; }
-    .cc-progress-bar { height: 5px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
-    .cc-progress-fill { height: 100%; border-radius: 99px; }
-    .cc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; border-top: 1px solid #f0f2f7; padding-top: 10px; }
-    .cc-forn-count { font-size: 11px; color: #a0aec0; }
-    .cc-deadline { font-size: 11px; font-weight: 700; }
-    .cc-deadline.urgente { color: #c53030; }
-    .cc-deadline.ok { color: #718096; }
-    .btn-ver-forn { font-size: 11px; font-weight: 600; color: #e0296f; background: none; border: none; cursor: pointer; padding: 0; }
+    .cc-metric { flex: 1; background: #f7f8fc; border-radius: 9px; padding: 10px 8px; text-align: center; }
+    .cc-metric-label { font-size: 10px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .cc-metric-value { font-size: 22px; font-weight: 800; color: #1a2340; line-height: 1; }
+    .cc-metric-value.ok     { color: #276749; }
+    .cc-metric-value.alerta { color: #c53030; }
+    .cc-metric-sub { font-size: 10px; color: #a0aec0; margin-top: 3px; }
+    .cc-prog { margin-bottom: 7px; }
+    .cc-prog-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 3px; }
+    .cc-prog-bar { height: 5px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .cc-prog-fill { height: 100%; border-radius: 99px; }
+    .cc-fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
+    .cc-fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+    .cc-fill-pink   { background: linear-gradient(90deg, #e0296f, #f472b6); }
+    .cc-deadline { font-size: 11px; color: #718096; margin: 10px 0 12px; padding: 7px 10px; background: #f7f8fc; border-radius: 7px; }
+    .cc-deadline.urgente { background: #fff0f3; color: #c53030; }
+    .cc-deadline strong { font-weight: 700; }
+    .cc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f7; }
+    .cc-fornecedores { font-size: 11px; color: #a0aec0; }
+    .btn-ver-forn { background: #1a2340; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .btn-ver-forn:hover { background: #e0296f; }
 
-    .detalhe-nav { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-    .btn-voltar { display: flex; align-items: center; gap: 6px; background: #f7f8fa; border: 1px solid #e2e6ef; color: #4a5568; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-    .btn-voltar:hover { background: #edf2f7; }
-    .detalhe-breadcrumb { font-size: 12px; color: #a0aec0; }
-    .detalhe-breadcrumb strong { color: #1e2b4a; }
-
-    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); margin-bottom: 20px; }
-    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .card-title { font-size: 18px; font-weight: 700; color: #1e2b4a; }
-    .status-badge { font-size: 11px; padding: 3px 12px; border-radius: 20px; font-weight: 700; }
+    /* ── Status badges (shared) ── */
+    .status-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
     .status-critico { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
-    .status-ok { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .status-ok      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
     .status-atencao { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+
+    /* ── Detalhe screen ── */
+    .detalhe-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .btn-voltar { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #e8eaf0; color: #4a5568; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-voltar:hover { background: #f7f8fc; color: #1a2340; }
+    .detalhe-breadcrumb { font-size: 13px; color: #a0aec0; }
+    .detalhe-breadcrumb span { color: #1a2340; font-weight: 600; }
+
+    /* ── Existing card/table styles (used in detail view) ── */
+    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
     .metric-row { display: flex; gap: 12px; margin-bottom: 16px; }
     .metric-box { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
     .metric-label { font-size: 11px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
     .metric-value { font-size: 28px; font-weight: 800; color: #1e2b4a; line-height: 1; display: flex; align-items: baseline; justify-content: center; gap: 1px; }
+    .metric-value input { width: 80px; background: transparent; border: none; outline: none; color: #1e2b4a; font-size: 28px; font-weight: 800; text-align: center; font-family: inherit; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+    .metric-value input:focus { border-bottom: 2px solid #d4326d; }
     .metric-sub { font-size: 11px; color: #a0aec0; margin-top: 4px; }
     .progress-section { margin-bottom: 14px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 6px; }
-    .progress-bar { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
-    .fill-pink { background: linear-gradient(90deg, #d4326d, #e8679a); }
-    .fill-green { background: linear-gradient(90deg, #38a169, #68d391); }
+    .progress-label   { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 6px; }
+    .progress-bar     { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .progress-fill    { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+    .fill-pink   { background: linear-gradient(90deg, #d4326d, #e8679a); }
+    .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
     .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
     .gap-box { background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
     .gap-label { color: #718096; }
     .gap-value { font-weight: 700; color: #1e2b4a; }
     .gap-value.alerta { color: #c53030; }
-    .gap-value.ok { color: #276749; }
+    .gap-value.ok     { color: #276749; }
     .section-title { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 18px; }
     .table-wrap { max-height: 420px; overflow-y: auto; overflow-x: auto; border-radius: 8px; border: 1px solid #edf2f7; }
     .fornecedor-table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -101,36 +124,139 @@
     .fornecedor-table td.center { text-align: center; }
     .fornecedor-table td.cnpj { font-family: monospace; font-size: 10px; color: #718096; white-space: nowrap; }
     .row-aguardando { background: #fffff0; }
-    .row-pendente { background: #fffdf0; }
+    .row-pendente   { background: #fffdf0; }
     .section-sub { font-size: 10px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
-    .sub-verde { background: #276749; }
+    .sub-verde   { background: #276749; }
     .sub-laranja { background: #b7791f; }
     .sub-amarelo { background: #975a16; }
     .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
-    .pill-sim { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-    .pill-nao { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
-    .pill-sub { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .pill-sim      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-nao      { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .pill-sub      { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
     .pill-aguardando { background: #fefcbf; color: #744210; border: 1px solid #f6e05e; }
-    .pill-wa { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-    .pill-email { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
-    .filtro-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .filtro-label { font-size: 12px; color: #7a869a; font-weight: 600; margin-right: 4px; }
-    .filtro-btn { padding: 6px 18px; border-radius: 20px; border: 1px solid #dde1ea; background: #fff; font-size: 12px; font-weight: 600; color: #4a5568; cursor: pointer; transition: all 0.2s; }
-    .filtro-btn.ativo { background: #1e2b4a; color: #fff; border-color: #1e2b4a; }
-    .pesquisa-wrap { margin-bottom: 16px; }
-    .pesquisa-input { width: 100%; padding: 10px 16px 10px 38px; border: 1px solid #dde1ea; border-radius: 10px; font-size: 13px; color: #1e2b4a; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0aec0' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .pesquisa-input:focus { border-color: #e0296f; }
-    .pesquisa-info { font-size: 11px; color: #a0aec0; margin-top: 6px; display: none; }
-    .secao-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+    .pill-wa       { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .pill-email    { background: #ebf8ff; color: #2b6cb0; border: 1px solid #90cdf4; }
+    .secao-titulo { font-size: 12px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
     .secao-titulo::before { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
-    .secao-titulo::after { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
+    .secao-titulo::after  { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
     .btn-colapsar { background: #f7f8fa; border: 1px solid #e2e6ef; color: #718096; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin: 0 auto 16px; }
-    .grid-encerrados { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .grid-encerrados .compact-card { opacity: 0.65; filter: grayscale(40%); }
+    .btn-colapsar:hover { background: #edf2f7; }
     .encerrado-wrap { display: none; }
     .encerrado-wrap.aberto { display: block; }
-    .footer-leitura { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e6ef; }
+
+    /* ── Toolbar / acoes ── */
+    .acoes-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; align-items: center; }
+    .btn-salvar { background: #d4326d; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; box-shadow: 0 2px 8px rgba(212,50,109,0.3); }
+    .btn-salvar:hover { background: #b82960; }
+    .btn-novo-cliente { background: #1a2340; color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-novo-cliente:hover { background: #2d3f65; }
+    .btn-novo-forn { background: #276749; color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-novo-forn:hover { background: #1e5338; }
+    .filtro-container { margin-bottom: 16px; }
+    .filtro-header { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; width: fit-content; }
+    .filtro-toggle-btn { background: none; border: none; font-size: 11px; color: #a0aec0; cursor: pointer; padding: 0; line-height: 1; transition: transform 0.2s; }
+    .filtro-container.recolhido .filtro-toggle-btn { transform: rotate(-90deg); }
+    .filtro-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; overflow: hidden; transition: max-height 0.25s ease, opacity 0.25s ease; max-height: 200px; opacity: 1; }
+    .filtro-container.recolhido .filtro-wrap { max-height: 0; opacity: 0; pointer-events: none; margin-top: 0; }
+    .filtro-label { font-size: 12px; color: #7a869a; font-weight: 600; margin-right: 4px; }
+    .filtro-btn { padding: 5px 16px; border-radius: 20px; border: 1px solid #dde1ea; background: #fff; font-size: 12px; font-weight: 600; color: #4a5568; cursor: pointer; transition: all 0.2s; }
+    .filtro-btn.ativo { background: #1a2340; color: #fff; border-color: #1a2340; }
+    .pesquisa-wrap { margin-bottom: 16px; }
+    .pesquisa-input { width: 100%; padding: 10px 16px 10px 38px; border: 1px solid #dde1ea; border-radius: 10px; font-size: 13px; color: #1e2b4a; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0aec0' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: border-color 0.2s; }
+    .pesquisa-input:focus { border-color: #e0296f; }
+    .pesquisa-info { font-size: 11px; color: #a0aec0; margin-top: 6px; display: none; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2b4a; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 9999; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Leitura mode ── */
+    .valor-display { display: none; font-size: 28px; font-weight: 800; color: #1e2b4a; }
+    body.leitura .valor-display       { display: inline; }
+    body.leitura input                { display: none !important; }
+    body.leitura .modal-campo input   { display: block !important; }
+    body.leitura select               { display: none !important; }
+    body.leitura .rl-oculto           { display: none !important; }
+    body.leitura .btn-remover-forn    { display: none !important; }
+    body.leitura .contato-display     { pointer-events: none; }
+    body.leitura .btn-salvar      { display: none; }
+    body.leitura .atualizado      { display: none; }
+    body.leitura .badge-leitura   { display: inline-block; }
+    body.leitura .footer-leitura  { display: block; }
+    .status-select { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
+    body.leitura .status-select { display: none !important; }
+    .status-display { display: none !important; }
+    body.leitura .status-display { display: inline-block !important; }
+    .via-select { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
+    body.leitura .via-select { display: none !important; }
+    .via-display { display: none !important; }
+    body.leitura .via-display { display: inline-block !important; }
+    .contato-input { font-size: 10px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; width: 100%; margin-bottom: 2px; background: #fff; color: #1e2b4a; }
+    .contato-input:focus { border-color: #e0296f; outline: none; }
+    body.leitura .contato-input { display: none !important; }
+    .contato-display { display: none !important; font-size: 11px; }
+    body.leitura .contato-display { display: block !important; }
+    .footer-leitura { display: none; text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e6ef; }
     .footer-leitura strong { color: #e0296f; }
+    body.leitura .btn-remover-forn { display: none; }
+
+    /* ── Modals ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30,43,74,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.aberto { display: flex; }
+    .modal-box { background: #fff; border-radius: 16px; padding: 28px; width: 100%; max-width: 480px; box-shadow: 0 8px 32px rgba(30,43,74,0.2); }
+    .modal-titulo { font-size: 18px; font-weight: 700; color: #1e2b4a; margin-bottom: 20px; }
+    .modal-campo { margin-bottom: 14px; }
+    .modal-campo label { display: block; font-size: 12px; font-weight: 600; color: #718096; margin-bottom: 5px; }
+    .modal-campo input { width: 100%; padding: 9px 12px; border: 1px solid #dde1ea; border-radius: 8px; font-size: 13px; color: #1e2b4a; outline: none; }
+    .modal-campo input:focus { border-color: #e0296f; }
+    .modal-campo select { width: 100%; padding: 9px 12px; border: 1px solid #dde1ea; border-radius: 8px; font-size: 13px; color: #1e2b4a; outline: none; background: #fff; cursor: pointer; }
+    .modal-campo select:focus { border-color: #e0296f; }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .modal-acoes { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .btn-modal-cancelar { background: #f7f8fa; color: #4a5568; border: 1px solid #dde1ea; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-modal-salvar { background: #e0296f; color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-remover-cliente { background: none; border: none; color: #c53030; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; }
+    .btn-remover-forn { background: none; border: none; color: #c53030; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; flex-shrink: 0; }
+    .btn-remover-forn:hover { opacity: 1; }
+    .badge-novo { display: inline-block; background: #e0296f; color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; flex-shrink: 0; animation: pulse-novo 1.8s infinite; }
+    @keyframes pulse-novo { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
+    .badge-fixo { display: inline-block; background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; border-radius: 4px; padding: 1px 5px; font-size: 9px; font-weight: 700; margin-left: 4px; user-select: none; -webkit-user-select: none; vertical-align: middle; white-space: nowrap; }
+
+    /* ── Bonus panel ── */
+    .bp-wrap { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .bp-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .bp-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid #e2e6ef; border-radius: 10px; overflow: hidden; }
+    .bp-table th { text-align: left; padding: 9px 14px; font-size: 11px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; background: #f7f8fa; border-bottom: 2px solid #e2e6ef; }
+    .bp-table th:not(:first-child) { text-align: right; }
+    .bp-table td { padding: 11px 14px; border-bottom: 1px solid #f7f8fa; vertical-align: middle; }
+    .bp-td-nome { font-weight: 600; color: #1e2b4a; }
+    .bp-td-faixas { font-size: 11px; color: #a0aec0; margin-top: 3px; }
+    .bp-td-faixas span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+    .bp-td-faixas .ok { color: #276749; font-weight: 700; }
+    .bp-td-val { text-align: right; font-weight: 700; color: #1e2b4a; }
+    .bp-td-val.aguardando { color: #a0aec0; font-weight: 400; font-size: 12px; }
+    .bp-td-val.andamento  { color: #2b6cb0; font-weight: 600; font-size: 12px; }
+    .bp-td-periodo { font-size: 10px; color: #a0aec0; font-weight: 400; margin-top: 2px; }
+    .bp-total td { background: #1e2b4a; color: #fff; border-bottom: none; font-weight: 700; font-size: 14px; }
+    .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .bp-total .bp-td-val { color: #4ade80; font-size: 18px; }
+
+    /* ── Evolution modal ── */
+    .modal-evolucao { max-width: 620px; }
+    .evol-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+    .evol-table th { text-align: right; padding: 8px 12px; font-size: 11px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; background: #f7f8fa; border-bottom: 2px solid #e2e6ef; }
+    .evol-table th:first-child { text-align: left; }
+    .evol-table td { padding: 10px 12px; border-bottom: 1px solid #f0f2f7; text-align: right; color: #4a5568; }
+    .evol-table td:first-child { text-align: left; font-weight: 600; color: #1a2340; }
+    .evol-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f7f8fa; }
+    .evol-ok    { color: #276749 !important; font-weight: 700 !important; }
+    .evol-alerta{ color: #c53030 !important; }
+    .btn-exportar-csv { background: #276749; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-exportar-csv:hover { background: #1e5338; }
+    .btn-evolucao { background: #f0f4ff; color: #2b4acb; border: 1px solid #c3cfe2; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-evolucao:hover { background: #e0e8ff; }
+
+    /* ── Reports tela ── */
     .relatorios-wrap { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
     .relatorios-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     .relatorios-table th { background: #f7f8fa; color: #a0aec0; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; border-bottom: 2px solid #e2e6ef; white-space: nowrap; text-align: left; position: sticky; top: 0; z-index: 1; }
@@ -144,268 +270,786 @@
     .rel-ok { color: #276749 !important; font-weight: 700; }
     .rel-alerta { color: #c53030 !important; font-weight: 700; }
     .rel-neutro { color: #a0aec0 !important; }
-    .btn-exportar-csv { background: #276749; color: #fff; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .btn-exportar-csv:hover { background: #1e5338; }
-    @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    /* WA last-position marker */
+    .wa-ultimo-row td { background: #fffde7 !important; }
+    .wa-marker { display: inline-flex; align-items: center; gap: 3px; background: #fef9c3; color: #854d0e; border: 1px solid #fde68a; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; margin-left: 6px; white-space: nowrap; vertical-align: middle; user-select: none; -webkit-user-select: none; pointer-events: none; }
+
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+      .modal-row { grid-template-columns: 1fr; }
+      .metric-value input { font-size: 22px; width: 60px; }
+    }
   </style>
 </head>
 <body>
 
 <div class="app-layout">
 
-  <nav class="sidebar">
-    <div class="sidebar-logo">
-      <img src="logo.png" class="logo-icon" alt="wehandle" onerror="this.style.display='none'" />
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo-area">
+      <input type="file" id="logo-upload-input" class="logo-upload-input" accept="image/*" />
+      <img src="logo.png" id="sidebar-logo-img" class="sidebar-logo-icon" alt="wehandle" title="Clique para trocar o logo" onclick="document.getElementById('logo-upload-input').click()" onerror="this.src='';this.style.opacity='0.3'" />
       <div>
-        <div class="logo-text">wehandle</div>
-        <div class="logo-sub">Rampagem de Vidas</div>
+        <div class="sidebar-logo-text">wehandle</div>
+        <div class="sidebar-logo-sub">CMS Engajamento</div>
       </div>
     </div>
-    <div class="sidebar-nav">
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
       <div class="nav-item ativo" id="nav-painel" onclick="voltarPainel()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-        </svg>
-        Painel
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Painel</span>
+      </div>
+      <div class="nav-item rl-oculto" onclick="abrirModalFornecedor()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>+ Novo Fornecedor</span>
+      </div>
+      <div class="nav-section-label">Ferramentas</div>
+      <div class="nav-item rl-oculto" id="nav-sem-resposta" onclick="irParaSemResposta()" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Sem Resposta</span>
+        <span id="badge-sem-resposta" style="display:none;background:#e0296f;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;margin-left:auto"></span>
       </div>
       <div class="nav-item" id="nav-relatorios" onclick="irParaRelatorios()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-        </svg>
-        Relatórios
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Relatórios</span>
+      </div>
+      <div class="nav-item rl-oculto" onclick="abrirModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Novo Cliente</span>
+      </div>
+      <div class="nav-item rl-oculto" onclick="salvarDados()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Salvar</span>
+      </div>
+      <div class="nav-section-label">Links Rápidos</div>
+      <a class="nav-item" href="https://thaischaves2919.github.io/wehandle-painel/" target="_blank" rel="noopener" style="text-decoration:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span>Compartilhado</span>
+      </a>
+      <a class="nav-item" href="financeiro.html" target="_blank" rel="noopener" style="text-decoration:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Financeiro</span>
+      </a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar">TC</div>
+      <div>
+        <div class="user-name">Thais Chaves</div>
+        <div class="user-role">CMS · Engajamento</div>
       </div>
     </div>
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar">TC</div>
-        <div>
-          <div class="user-name">Thais Chaves</div>
-          <div class="user-role">CMS · Engajamento</div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  </aside>
 
+  <!-- ── Main ── -->
   <div class="main-content">
 
+    <!-- Topbar -->
     <div class="topbar">
-      <div class="topbar-title" id="topbar-title">Rampagem de Vidas — Visão Executiva</div>
+      <div class="topbar-title" id="topbar-title">Painel de Rampagem</div>
       <div class="topbar-right">
-        <span class="badge-prazo">Próximo prazo: <strong id="prazo-display">—</strong></span>
-        <span class="badge-leitura">Somente leitura</span>
-        <span class="topbar-ts" id="ultima-atualizacao"></span>
+        <span class="badge-leitura">Modo leitura</span>
+        <span class="atualizado" id="ultima-atualizacao">Carregando...</span>
+        <div class="toggle-modo">
+          <button class="toggle-btn ativo" id="btn-edicao"  onclick="setModo('edicao')">Edição</button>
+          <button class="toggle-btn"       id="btn-leitura" onclick="setModo('leitura')">Leitura</button>
+        </div>
       </div>
     </div>
 
-    <!-- Tela: grade de clientes -->
-    <div class="tela ativa" id="tela-painel">
-      <div class="page-inner">
+    <!-- ── Tela: Painel principal ── -->
+    <div id="tela-painel" class="tela ativa">
 
-        <div style="margin-bottom:16px">
-          <div class="filtro-wrap" id="filtro-wrap">
-            <span class="filtro-label">Cliente:</span>
-            <button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente('todos')">Todos</button>
-          </div>
+      <div class="filtro-container" id="filtro-container">
+        <div class="filtro-header" onclick="toggleFiltroClientes()">
+          <span class="filtro-label">Cliente:</span>
+          <button class="filtro-toggle-btn" id="filtro-toggle">▼</button>
         </div>
-
-        <div class="pesquisa-wrap">
-          <input class="pesquisa-input" id="pesquisa" type="text" placeholder="Pesquisar cliente..." oninput="pesquisarCliente(this.value)" />
-          <div class="pesquisa-info" id="pesquisa-info"></div>
+        <div class="filtro-wrap" id="filtro-wrap">
+          <button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente('todos')">Todos</button>
         </div>
+      </div>
 
-        <div class="clients-grid" id="cards-container"></div>
+      <div class="pesquisa-wrap">
+        <input class="pesquisa-input" id="pesquisa" type="text" placeholder="Pesquisar cliente..." oninput="pesquisarCliente(this.value)" />
+        <div class="pesquisa-info" id="pesquisa-info"></div>
+      </div>
 
-        <div id="secao-encerrados" style="display:none">
-          <div class="secao-titulo">Período encerrado</div>
-          <button class="btn-colapsar" onclick="toggleEncerrados()">
-            <span id="label-colapsar">▼ Ver clientes encerrados</span>
-            <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
-          </button>
-          <div class="encerrado-wrap" id="encerrado-wrap">
-            <div class="grid-encerrados" id="cards-encerrados"></div>
-          </div>
+      <div class="acoes-bar">
+        <button class="btn-novo-forn" onclick="abrirModalFornecedor()">+ Novo Fornecedor</button>
+        <button class="btn-novo-cliente" onclick="abrirModal()">+ Novo Cliente</button>
+      </div>
+
+      <div class="clients-grid" id="cards-container"></div>
+
+      <div id="secao-encerrados" style="display:none">
+        <div class="secao-titulo">Período encerrado</div>
+        <button class="btn-colapsar" id="btn-colapsar" onclick="toggleEncerrados()">
+          <span id="label-colapsar">▼ Ver clientes encerrados</span>
+          <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
+        </button>
+        <div class="encerrado-wrap" id="encerrado-wrap">
+          <div class="clients-grid" id="cards-encerrados"></div>
         </div>
+      </div>
 
-        <div class="footer-leitura">
-          Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · Atualizado em <span id="footer-data"></span>
-        </div>
+      <div id="painel-bonus"></div>
 
+      <div style="display:flex;justify-content:center;margin-top:24px;margin-bottom:8px">
+        <button class="btn-salvar rl-oculto" onclick="salvarDados()">Salvar agora</button>
+      </div>
+
+      <div class="footer-leitura">
+        Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · <span id="footer-data"></span>
       </div>
     </div>
 
-    <!-- Tela: detalhe do cliente -->
-    <div class="tela" id="tela-detalhe">
-      <div class="page-inner">
-        <div class="detalhe-nav">
-          <button class="btn-voltar" onclick="voltarPainel()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-            Voltar
-          </button>
-          <div class="detalhe-breadcrumb">Painel → <strong id="detalhe-breadcrumb-nome">—</strong></div>
-        </div>
-        <div id="detalhe-content"></div>
+    <!-- ── Tela: Detalhe do cliente ── -->
+    <div id="tela-detalhe" class="tela">
+      <div class="detalhe-nav">
+        <button class="btn-voltar" onclick="voltarPainel()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
+          Voltar
+        </button>
+        <div class="detalhe-breadcrumb">Painel → <span id="detalhe-nome-cliente"></span></div>
+      </div>
+      <div id="detalhe-content"></div>
+      <div style="display:flex;justify-content:center;margin-top:24px;margin-bottom:8px">
+        <button class="btn-salvar rl-oculto" onclick="salvarDados()">Salvar agora</button>
+      </div>
+      <div class="footer-leitura">
+        Gerado por <strong>wehandle</strong> · CMS Engajamento de Fornecedores · <span id="footer-data-detalhe"></span>
       </div>
     </div>
 
-    <!-- Tela: Relatórios -->
-    <div class="tela" id="tela-relatorios">
-      <div class="page-inner">
-        <div class="detalhe-nav">
-          <button class="btn-voltar" onclick="voltarPainel()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-            Voltar
-          </button>
-          <div class="detalhe-breadcrumb">Painel → <strong>Relatórios</strong></div>
-          <button class="btn-exportar-csv" onclick="exportarRelatoriosCSV()" style="margin-left:auto">⬇ Exportar CSV</button>
-        </div>
-        <div id="relatorios-content"></div>
+    <!-- ── Tela: Relatórios ── -->
+    <div id="tela-relatorios" class="tela">
+      <div class="detalhe-nav">
+        <button class="btn-voltar" onclick="voltarPainel()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
+          Voltar
+        </button>
+        <div class="detalhe-breadcrumb">Painel → <span>Relatórios</span></div>
+        <button class="btn-exportar-csv" id="btn-exportar-relatorios" onclick="exportarRelatoriosCSV()" style="margin-left:auto">⬇ Exportar CSV</button>
       </div>
+      <div id="relatorios-content"></div>
     </div>
 
+    <!-- ── Tela: Sem Resposta ── -->
+    <div id="tela-sem-resposta" class="tela">
+      <div class="detalhe-nav">
+        <button class="btn-voltar" onclick="voltarPainel()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+          Voltar
+        </button>
+        <div class="detalhe-breadcrumb">Painel → <span>Sem Resposta</span></div>
+      </div>
+      <div id="sem-resposta-content" style="padding:24px 28px"></div>
+    </div>
+
+  </div><!-- .main-content -->
+</div><!-- .app-layout -->
+
+
+<!-- Modal evolução -->
+<div class="modal-overlay" id="modal-evolucao">
+  <div class="modal-box modal-evolucao">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div class="modal-titulo" id="evolucao-titulo" style="margin-bottom:0">Evolução</div>
+      <button onclick="fecharEvolucao()" style="background:none;border:none;font-size:20px;color:#a0aec0;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div id="evolucao-corpo"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+      <button class="btn-exportar-csv" id="btn-exportar-csv">⬇ Exportar CSV</button>
+      <button class="btn-modal-cancelar" onclick="fecharEvolucao()">Fechar</button>
+    </div>
   </div>
 </div>
 
-<script src="dados.js"></script>
-<script>
-  const OVERRIDES_KEY           = 'wehandle_contacts_v2';
-  const CLIENTES_EXTRAS_KEY     = 'wehandle_clientes_extras_v1';
-  const FORNECEDORES_EXTRAS_KEY = 'wehandle_fornecedores_extras_v1';
-  const METRICAS_KEY            = 'wehandle_metricas_v1';
+<!-- Modal novo fornecedor -->
+<div class="modal-overlay" id="modal-novo-fornecedor">
+  <div class="modal-box">
+    <div class="modal-titulo">Novo Fornecedor</div>
+    <div class="modal-campo">
+      <label>Cliente *</label>
+      <select id="nf-cliente"></select>
+    </div>
+    <div class="modal-campo">
+      <label>Razão Social *</label>
+      <input type="text" id="nf-nome" placeholder="Ex: Empresa ABC Ltda" />
+    </div>
+    <div class="modal-row">
+      <div class="modal-campo">
+        <label>CNPJ</label>
+        <input type="text" id="nf-cnpj" placeholder="00.000.000/0000-00" />
+      </div>
+      <div class="modal-campo">
+        <label>Contrato</label>
+        <select id="nf-contrato">
+          <option value="contratado">Contratado</option>
+          <option value="subcontratado">Subcontratado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-campo">
+        <label>Telefone</label>
+        <input type="text" id="nf-tel" placeholder="47999999999" />
+      </div>
+      <div class="modal-campo">
+        <label>E-mail</label>
+        <input type="text" id="nf-email" placeholder="contato@empresa.com" />
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-campo">
+        <label>Via</label>
+        <select id="nf-via">
+          <option value="whatsapp">WhatsApp</option>
+          <option value="email">E-mail</option>
+        </select>
+      </div>
+      <div class="modal-campo">
+        <label>Status</label>
+        <select id="nf-status">
+          <option value="aguardando">Aguardando reunião</option>
+          <option value="contatado">Contatado</option>
+          <option value="pendente">Pendente</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-acoes">
+      <button class="btn-modal-cancelar" onclick="fecharModalFornecedor()">Cancelar</button>
+      <button class="btn-modal-salvar" onclick="salvarNovoFornecedor()">Adicionar fornecedor</button>
+    </div>
+  </div>
+</div>
 
-  function carregarFornecedoresExtras() {
-    try { const r = localStorage.getItem(FORNECEDORES_EXTRAS_KEY); return r ? JSON.parse(r) : []; } catch(e) { return []; }
+<!-- Modal novo cliente -->
+<div class="modal-overlay" id="modal-novo-cliente">
+  <div class="modal-box">
+    <div class="modal-titulo">Novo Cliente</div>
+    <div class="modal-campo">
+      <label>Nome do cliente *</label>
+      <input type="text" id="nc-nome" placeholder="Ex: Bosch" />
+    </div>
+    <div class="modal-campo">
+      <label>CNPJ</label>
+      <input type="text" id="nc-cnpj" placeholder="Ex: 00.000.000/0000-00" />
+    </div>
+    <div class="modal-campo">
+      <label>Data de início *</label>
+      <input type="date" id="nc-data" />
+    </div>
+    <div class="modal-row">
+      <div class="modal-campo">
+        <label>Vidas alocadas</label>
+        <input type="number" id="nc-vidas" value="0" min="0" />
+      </div>
+      <div class="modal-campo">
+        <label>Aderência atual (%)</label>
+        <input type="number" id="nc-aderencia" value="0" step="0.01" min="0" max="100" />
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-campo">
+        <label>Meta vidas Faixa 1 *</label>
+        <input type="number" id="nc-meta-f1" value="100" min="1" />
+      </div>
+      <div class="modal-campo">
+        <label>Meta vidas Faixa 2 (opcional)</label>
+        <input type="number" id="nc-meta-f2" placeholder="Deixe vazio se não houver" min="1" />
+      </div>
+    </div>
+    <div class="modal-campo">
+      <label>Meta aderência (%)</label>
+      <input type="number" id="nc-meta-ad" value="50" step="0.1" min="0" max="100" />
+    </div>
+    <div class="modal-acoes">
+      <button class="btn-modal-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-modal-salvar" onclick="salvarNovoCliente()">Adicionar cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="dados.js"></script>
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+  const READ_ONLY = true;
+  const OVERRIDES_KEY   = 'wehandle_contacts_v2';
+  const WA_POSICAO_KEY  = 'wehandle_wa_ultimo';
+  const WA_ENVIADOS_KEY = 'wehandle_wa_enviados_v1';
+  let overrides = {};
+  let isLoading = false;
+
+  function carregarWaEnviados() {
+    try { const r = localStorage.getItem(WA_ENVIADOS_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; }
+  }
+  function salvarWaEnviados(dados) {
+    try { localStorage.setItem(WA_ENVIADOS_KEY, JSON.stringify(dados)); } catch(e) {}
+  }
+  function registrarWaEnviado(cnpj, clienteId, razaoSocial, tel) {
+    const enviados = carregarWaEnviados();
+    enviados[cnpj] = { data: new Date().toISOString().slice(0, 10), clienteId, razaoSocial, tel };
+    salvarWaEnviados(enviados);
+    atualizarBadgeSemResposta();
+  }
+  function contarSemResposta() {
+    const enviados = carregarWaEnviados();
+    let total = 0;
+    for (const cnpj of Object.keys(enviados)) {
+      const f = (() => {
+        for (const c of todosClientes()) {
+          const base = (c.fornecedores || []).find(x => x.cnpj === cnpj);
+          if (base) return getFornecedor(base);
+          const extra = carregarFornecedoresExtras().find(x => x.cnpj === cnpj);
+          if (extra) return getFornecedor(extra);
+        }
+        return null;
+      })();
+      if (f && f.status === 'pendente') total++;
+    }
+    return total;
+  }
+  function atualizarBadgeSemResposta() {
+    const badge = document.getElementById('badge-sem-resposta');
+    if (!badge) return;
+    const n = contarSemResposta();
+    badge.textContent = n;
+    badge.style.display = n > 0 ? 'inline-flex' : 'none';
   }
 
-  function getMetricasOverride(clienteId) {
-    try { const r = localStorage.getItem(METRICAS_KEY); return (r ? JSON.parse(r) : {})[clienteId] || {}; } catch(e) { return {}; }
+  function salvarUltimaPosicaoWA(cnpj, razaoSocial, clienteId) {
+    try { localStorage.setItem(WA_POSICAO_KEY, JSON.stringify({ cnpj, razaoSocial, clienteId, ts: Date.now() })); } catch(e) {}
+  }
+  function getUltimaPosicaoWA() {
+    try { const r = localStorage.getItem(WA_POSICAO_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; }
+  }
+
+  const ZAPI_INSTANCE = '3F471ACD490D91828E3446A9DBFF3471';
+  const ZAPI_TOKEN    = '1643D733DF3F68964093AB5F';
+
+  function eFixo(tel) {
+    if (!tel) return false;
+    const d = tel.replace(/\D/g, '');
+    if (d.length === 10) return !['6','7','8','9'].includes(d[2]);
+    if (d.length === 11) return d[2] !== '9';
+    return false;
   }
 
   const STATUS_OPTS = [
-    { value: 'contatado',  label: 'Contatado',          cls: 'pill-sim'        },
-    { value: 'aguardando', label: 'Aguardando reunião',  cls: 'pill-aguardando' },
-    { value: 'pendente',   label: 'Pendente',            cls: 'pill-nao'        },
+    { value: 'contatado',  label: 'Contatado',         cls: 'pill-sim'       },
+    { value: 'aguardando', label: 'Aguardando reunião', cls: 'pill-aguardando'},
+    { value: 'pendente',   label: 'Pendente',           cls: 'pill-nao'       },
   ];
   const VIA_OPTS = [
     { value: 'whatsapp', label: 'WhatsApp', cls: 'pill-wa'    },
     { value: 'email',    label: 'E-mail',   cls: 'pill-email' },
   ];
 
-  function carregarOverrides() {
-    try { const r = localStorage.getItem(OVERRIDES_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; }
+  function enviarWhatsAppFornecedor(cnpj, tel, razaoSocial, clienteId) {
+    const cliente = WEHANDLE_DADOS.clientes.find(c => c.id === clienteId);
+    const nomeCliente = cliente ? cliente.nome : clienteId;
+    let nums = tel.replace(/\D/g, '');
+    if (nums.startsWith('0')) nums = nums.slice(1);
+    if (!nums.startsWith('55')) nums = '55' + nums;
+    if (nums.length < 12 || nums.length > 13) {
+      mostrarToast('⚠ Telefone inválido: ' + tel);
+      return;
+    }
+    const mensagem =
+      'Olá, tudo bem?\n\n' +
+      'Meu nome é Thais e sou responsável pela operação e pelo engajamento dos fornecedores na plataforma da wehandle.\n\n' +
+      'Estou entrando em contato para apoiar vocês neste início com a *' + nomeCliente + '*, auxiliando no cadastro de colaboradores, aderência e conformidade da documentação e explicando o funcionamento da plataforma e orientando da melhor forma possível.\n\n' +
+      'Para cadastrar os colaboradores, preparei o material abaixo:\n' +
+      '🎥 Vídeo — como fazer a carga em massa: https://jam.dev/c/9a03faff-2aa2-4132-a505-31ef7e50abc5\n\n' +
+      'Caso precise, também tenho uma planilha modelo para a carga em massa de colaboradores — deseja que eu envie?';
+    registrarWaEnviado(cnpj, clienteId, razaoSocial, tel);
+    window.open('whatsapp://send?phone=' + nums + '&text=' + encodeURIComponent(mensagem), '_blank');
   }
 
-  function getFornecedor(f, overrides) {
+  function exportarPendentesXLSX(clienteId) {
+    if (typeof XLSX === 'undefined') { mostrarToast('⚠ Aguarde o carregamento da página...'); return; }
+    const cliente = todosClientes().find(c => c.id === clienteId);
+    if (!cliente) { mostrarToast('⚠ Cliente não encontrado'); return; }
+    const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === clienteId);
+    const forn = [
+      ...(cliente.fornecedores || []).map(f => getFornecedor(f)),
+      ...extrasCliente.map(f => getFornecedor(f))
+    ];
+    const pendentes = forn.filter(f => f.status === 'pendente');
+    if (!pendentes.length) { mostrarToast('Nenhum fornecedor pendente'); return; }
+    const VIA_LABELS = { whatsapp: 'WhatsApp', email: 'E-mail', ligacao: 'Ligação', carta: 'Carta' };
+    const dados = [
+      ['Empresa', 'CNPJ', 'Telefone', 'E-mail', 'Via de Contato', 'Contrato'],
+      ...pendentes.map(f => [
+        f.razaoSocial || '',
+        f.cnpj        || '',
+        f.tel         || '',
+        f.email       || '',
+        VIA_LABELS[f.via] || f.via || '',
+        f.contrato    || ''
+      ])
+    ];
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(dados);
+    ws['!cols'] = [{ wch: 45 }, { wch: 20 }, { wch: 16 }, { wch: 32 }, { wch: 14 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Pendentes');
+    const hoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    XLSX.writeFile(wb, 'Pendentes_' + cliente.nome + '_' + hoje + '.xlsx');
+    mostrarToast('✓ Planilha baixada!');
+  }
+
+
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function calcPrazo(dataInicio) {
+    const inicio = new Date(dataInicio + 'T00:00:00');
+    const prazo  = new Date(inicio);
+    prazo.setDate(prazo.getDate() + 45);
+    prazo.setHours(0, 0, 0, 0);
+    return prazo;
+  }
+
+  function carregarOverrides() {
+    try {
+      const raw = localStorage.getItem(OVERRIDES_KEY);
+      if (raw) overrides = JSON.parse(raw);
+    } catch(e) { overrides = {}; }
+  }
+
+  function getFornecedor(f) {
     const o = overrides[f.cnpj] || {};
     return {
       ...f,
-      status: o.status || f.status,
-      via:    o.via    || f.via,
+      status: o.status ? o.status : f.status,
+      via:    o.via   || f.via,
       tel:    o.tel   !== undefined ? o.tel   : f.tel,
       email:  o.email !== undefined ? o.email : f.email,
       vidas:  o.vidas !== undefined ? o.vidas : f.vidas,
     };
   }
 
-  function calcPrazo(dataInicio) {
-    const d = new Date(dataInicio + 'T00:00:00');
-    d.setDate(d.getDate() + 45);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
+  const METRICAS_KEY = 'wehandle_metricas_v1';
 
-  function clienteEncerrado(c) {
-    if (!c.dataInicio) return false;
-    return calcPrazo(c.dataInicio) < new Date();
-  }
-
-  function todosClientes() {
+  function getMetricasOverride(clienteId) {
     try {
-      const raw = localStorage.getItem(CLIENTES_EXTRAS_KEY);
-      const extras = raw ? JSON.parse(raw) : [];
-      return [...WEHANDLE_DADOS.clientes, ...extras];
-    } catch(e) { return WEHANDLE_DADOS.clientes; }
+      const r    = localStorage.getItem(METRICAS_KEY);
+      const tudo = r ? JSON.parse(r) : {};
+      const o    = tudo[clienteId] || {};
+      const mv   = ((WEHANDLE_DADOS.metricasVersao || {})[clienteId]) || {};
+      const resultado = {};
+      if (o.vidas !== undefined && (o._mvV === undefined || !mv.vidas || o._mvV === mv.vidas)) resultado.vidas = o.vidas;
+      if (o.aderencia !== undefined && (o._mvA === undefined || !mv.aderencia || o._mvA === mv.aderencia)) resultado.aderencia = o.aderencia;
+      return resultado;
+    } catch(e) { return {}; }
   }
 
-  function calcDiasRestantes() {
-    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
-    let proxDiff = null, proxCliente = null, proxData = null;
-    todosClientes().forEach(c => {
-      if (!c.dataInicio) return;
-      const prazo = calcPrazo(c.dataInicio);
-      const diff  = Math.round((prazo - hoje) / 86400000);
-      if (diff < 0) return;
-      if (proxDiff === null || diff < proxDiff) { proxDiff = diff; proxCliente = c.nome; proxData = prazo; }
-    });
-    const prazoDisplay = document.getElementById('prazo-display');
-    if (prazoDisplay && proxData) prazoDisplay.textContent = proxData.toLocaleDateString('pt-BR');
-    const ts = document.getElementById('ultima-atualizacao');
-    if (ts) ts.textContent = 'Atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  function salvarMetricasOverride(clienteId, campos) {
+    try {
+      const raw  = localStorage.getItem(METRICAS_KEY);
+      const tudo = raw ? JSON.parse(raw) : {};
+      const mv   = ((WEHANDLE_DADOS.metricasVersao || {})[clienteId]) || {};
+      const extra = {};
+      if ('vidas'     in campos) extra._mvV = mv.vidas    || '';
+      if ('aderencia' in campos) extra._mvA = mv.aderencia || '';
+      tudo[clienteId] = Object.assign(tudo[clienteId] || {}, campos, extra);
+      localStorage.setItem(METRICAS_KEY, JSON.stringify(tudo));
+      try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+    } catch(e) {}
   }
 
-  function criarLinha(f) {
+  function persistir() {
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
+    const agora = new Date().toLocaleString('pt-BR');
+    document.getElementById('ultima-atualizacao').textContent = 'Salvo em ' + agora;
+    try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+  }
+
+  function updateOverride(cnpj, campos) {
+    if (isLoading) return;
+    if (!overrides[cnpj]) overrides[cnpj] = {};
+    Object.assign(overrides[cnpj], campos);
+    persistir();
+    mostrarToast('✓ Salvo');
+  }
+
+  function salvarDados() {
+    if (isLoading) return;
+    persistir();
+    mostrarToast('✅ Dados salvos!');
+  }
+
+  function atualizarMetricas(clienteId) {
+    const cliente = todosClientes().find(c => c.id === clienteId);
+    if (!cliente) return;
+
+    const vidasEl = document.getElementById(clienteId + '-vidas');
+    const aderEl  = document.getElementById(clienteId + '-aderencia');
+    if (!vidasEl || !aderEl) return;
+
+    const vidas     = parseFloat(vidasEl.value) || 0;
+    const aderencia = parseFloat(aderEl.value) || 0;
+    const metaF1    = cliente.metaVidasF1 || null;
+    const metaF2    = cliente.metaVidasF2 || null;
+    const metaAd    = cliente.metaAderencia || 50;
+
+    if (metaF1 === null) return;
+    const gapF1 = Math.max(metaF1 - vidas, 0);
+    const gapAd = metaAd - aderencia;
+
+    const adPct = Math.min((aderencia / metaAd) * 100, 100);
+    const f1Pct = Math.min((vidas / metaF1) * 100, 100);
+
+    const adLabel    = document.getElementById(clienteId + '-aderencia-label');
+    const adBar      = document.getElementById(clienteId + '-aderencia-bar');
+    const f1Label    = document.getElementById(clienteId + '-faixa1-label');
+    const f1Bar      = document.getElementById(clienteId + '-faixa1-bar');
+    const gF1        = document.getElementById(clienteId + '-gap-f1');
+    const gAd        = document.getElementById(clienteId + '-gap-ad');
+    const badgeVidas = document.getElementById('badge-vidas-' + clienteId);
+    const badgeAder  = document.getElementById('badge-ader-'  + clienteId);
+    const vDisp      = document.getElementById(clienteId + '-vidas-display');
+    const aDisp      = document.getElementById(clienteId + '-aderencia-display');
+
+    if (adLabel) adLabel.textContent = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',') + '%';
+    if (adBar)   { adBar.style.width = adPct + '%'; adBar.className = 'progress-fill ' + (gapAd <= 0 ? 'fill-green' : 'fill-orange'); }
+    if (f1Label) f1Label.textContent = vidas + ' / ' + metaF1;
+    if (f1Bar)   f1Bar.style.width = f1Pct + '%';
+    if (gF1)     { gF1.textContent = gapF1 === 0 ? '✓ Faixa 1 atingida' : gapF1 + ' vidas'; gF1.className = 'gap-value ' + (gapF1 === 0 ? 'ok' : 'alerta'); }
+    if (gAd)     { gAd.textContent = gapAd <= 0 ? '✓ Meta atingida' : gapAd.toFixed(1).replace('.', ',') + ' p.p.'; gAd.className = 'gap-value ' + (gapAd <= 0 ? 'ok' : 'alerta'); }
+    if (badgeVidas) { badgeVidas.textContent = vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico'; badgeVidas.className = 'status-badge ' + (vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico'); }
+    if (badgeAder)  { badgeAder.textContent  = aderencia >= metaAd ? 'Aderência OK' : aderencia >= metaAd - 5 ? 'Aderência: Atenção' : 'Aderência: Crítico'; badgeAder.className = 'status-badge ' + (aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico'); }
+    if (vDisp)   vDisp.textContent = vidas;
+    if (aDisp)   aDisp.textContent = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
+
+    if (metaF2) {
+      const gapF2  = Math.max(metaF2 - vidas, 0);
+      const f2Label = document.getElementById(clienteId + '-faixa2-label');
+      const f2Bar   = document.getElementById(clienteId + '-faixa2-bar');
+      const gF2     = document.getElementById(clienteId + '-gap-f2');
+      if (f2Label) f2Label.textContent = vidas + ' / ' + metaF2;
+      if (f2Bar)   f2Bar.style.width = Math.min((vidas / metaF2) * 100, 100) + '%';
+      if (gF2)     { gF2.textContent = gapF2 === 0 ? '✓ Faixa 2 atingida' : gapF2 + ' vidas'; gF2.className = 'gap-value ' + (gapF2 === 0 ? 'ok' : 'alerta'); }
+    }
+
+    renderPainelBonus();
+  }
+
+  function atualizarSecaoPendentes(clienteId) {
+    const secao  = document.getElementById('secao-pendentes-' + clienteId);
+    const tbodyP = document.getElementById('tbody-' + clienteId + '-pendentes');
+    const tbodyC = document.getElementById('tbody-' + clienteId + '-contatados');
+    const tbodyA = document.getElementById('tbody-' + clienteId + '-aguardando');
+    const nP = tbodyP ? tbodyP.querySelectorAll('tr').length : 0;
+    const nC = tbodyC ? tbodyC.querySelectorAll('tr').length : 0;
+    const nA = tbodyA ? tbodyA.querySelectorAll('tr').length : 0;
+    if (secao) secao.style.display = nP > 0 ? '' : 'none';
+    const cP = document.getElementById('count-pendentes-'  + clienteId);
+    const cC = document.getElementById('count-contatados-' + clienteId);
+    const cA = document.getElementById('count-aguardando-' + clienteId);
+    if (cP) cP.textContent = nP;
+    if (cC) cC.textContent = nC;
+    if (cA) cA.textContent = nA;
+  }
+
+  function criarLinha(f, clienteId) {
     const curStatus = STATUS_OPTS.find(o => o.value === f.status) || STATUS_OPTS[0];
     const curVia    = VIA_OPTS.find(o => o.value === f.via)       || VIA_OPTS[0];
+
     const tr = document.createElement('tr');
-    if (f.status === 'aguardando') tr.className = 'row-aguardando';
-    if (f.status === 'pendente')   tr.className = 'row-pendente';
-    const td1 = document.createElement('td'); td1.textContent = f.razaoSocial;
-    const td2 = document.createElement('td'); td2.className = 'cnpj'; td2.textContent = f.cnpj;
-    const td3 = document.createElement('td'); td3.className = 'center';
+    tr.dataset.cnpj    = f.cnpj;
+    tr.dataset.cliente = clienteId;
+    if (f.status === 'pendente')        tr.className = 'row-pendente';
+    else if (f.status === 'aguardando') tr.className = 'row-aguardando';
+
+    // 1 — Razão social
+    const td1 = document.createElement('td');
+    td1.style.cssText = 'display:flex;align-items:center;gap:5px';
+    const nomeSpan = document.createElement('span');
+    nomeSpan.textContent = f.razaoSocial;
+    td1.appendChild(nomeSpan);
+    if (f.dataEntrada) {
+      const diasDesdeCadastro = (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000;
+      if (diasDesdeCadastro <= 7) {
+        const badgeNovo = document.createElement('span');
+        badgeNovo.className = 'badge-novo';
+        badgeNovo.textContent = 'NOVO';
+        td1.appendChild(badgeNovo);
+      }
+    }
+    if (f.extra) {
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn-remover-forn';
+      btnDel.textContent = '×';
+      btnDel.title = 'Remover fornecedor';
+      btnDel.onclick = (e) => { e.stopPropagation(); if (confirm('Remover "' + f.razaoSocial + '"?')) removerFornecedorExtra(f.cnpj); };
+      td1.appendChild(btnDel);
+    }
+
+    // 2 — CNPJ
+    const td2 = document.createElement('td');
+    td2.className = 'cnpj';
+    td2.textContent = f.cnpj;
+
+    // 3 — Contrato
+    const td3 = document.createElement('td');
+    td3.className = 'center';
     const pCon = document.createElement('span');
     pCon.className = 'pill ' + (f.contrato === 'subcontratado' ? 'pill-sub' : 'pill-sim');
     pCon.textContent = f.contrato === 'subcontratado' ? 'Subcontratado' : 'Contratado';
     td3.appendChild(pCon);
+
+    // 4 — Tel / E-mail
     const td4 = document.createElement('td');
+    const telIn = document.createElement('input');
+    telIn.type = 'text'; telIn.className = 'contato-input tel-input';
+    telIn.value = f.tel || ''; telIn.placeholder = 'Telefone';
+    const emailIn = document.createElement('input');
+    emailIn.type = 'text'; emailIn.className = 'contato-input email-input';
+    emailIn.value = f.email || ''; emailIn.placeholder = 'E-mail';
     const telDisp = document.createElement('div');
-    telDisp.style.fontSize = '11px'; telDisp.textContent = f.tel || '—';
+    telDisp.className = 'contato-display'; telDisp.style.cssText = 'font-size:11px;display:flex;align-items:center;gap:3px';
+    const telTexto = document.createElement('span');
+    telTexto.textContent = f.tel || '—';
+    telDisp.appendChild(telTexto);
+    if (eFixo(f.tel)) {
+      const bFixo = document.createElement('span');
+      bFixo.className = 'badge-fixo';
+      bFixo.textContent = '📞 Fixo';
+      telDisp.appendChild(bFixo);
+    }
     const emailDisp = document.createElement('div');
-    emailDisp.style.cssText = 'font-size:10px;color:#718096'; emailDisp.textContent = f.email || '—';
-    td4.append(telDisp, emailDisp);
-    const td5 = document.createElement('td'); td5.className = 'center';
+    emailDisp.className = 'contato-display'; emailDisp.style.cssText = 'font-size:10px;color:#718096';
+    emailDisp.textContent = f.email || '—';
+    telIn.addEventListener('input',  () => { telTexto.textContent  = telIn.value   || '—'; updateOverride(f.cnpj, { tel:   telIn.value }); });
+    emailIn.addEventListener('input', () => { emailDisp.textContent = emailIn.value || '—'; updateOverride(f.cnpj, { email: emailIn.value }); });
+    td4.append(telIn, emailIn, telDisp, emailDisp);
+
+    // 5 — Via
+    const td5 = document.createElement('td');
+    td5.className = 'center';
+    const viaSel = document.createElement('select');
+    viaSel.className = 'via-select';
+    VIA_OPTS.forEach(o => {
+      const op = document.createElement('option');
+      op.value = o.value; op.textContent = o.label;
+      if (o.value === f.via) op.selected = true;
+      viaSel.appendChild(op);
+    });
     const viaDisp = document.createElement('span');
-    viaDisp.className = 'pill ' + curVia.cls; viaDisp.textContent = curVia.label;
-    td5.appendChild(viaDisp);
-    const td6 = document.createElement('td'); td6.className = 'center';
+    viaDisp.className = 'via-display pill ' + curVia.cls;
+    viaDisp.textContent = curVia.label;
+    viaSel.addEventListener('change', () => {
+      const o = VIA_OPTS.find(x => x.value === viaSel.value);
+      viaDisp.className = 'via-display pill ' + o.cls;
+      viaDisp.textContent = o.label;
+      updateOverride(f.cnpj, { via: viaSel.value });
+    });
+    td5.append(viaSel, viaDisp);
+
+    // 6 — Status
+    const td6 = document.createElement('td');
+    td6.className = 'center';
+    const statusSel = document.createElement('select');
+    statusSel.className = 'status-select';
+    STATUS_OPTS.forEach(o => {
+      const op = document.createElement('option');
+      op.value = o.value; op.textContent = o.label;
+      if (o.value === f.status) op.selected = true;
+      statusSel.appendChild(op);
+    });
     const statusDisp = document.createElement('span');
-    statusDisp.className = 'pill ' + curStatus.cls; statusDisp.textContent = curStatus.label;
-    td6.appendChild(statusDisp);
-    tr.append(td1, td2, td3, td4, td5, td6);
+    statusDisp.className = 'status-display pill ' + curStatus.cls;
+    statusDisp.textContent = curStatus.label;
+    statusSel.addEventListener('change', () => {
+      const o = STATUS_OPTS.find(x => x.value === statusSel.value);
+      statusDisp.className = 'status-display pill ' + o.cls;
+      statusDisp.textContent = o.label;
+      tr.className = statusSel.value === 'pendente' ? 'row-pendente' : statusSel.value === 'aguardando' ? 'row-aguardando' : '';
+      const alvoSufixo = statusSel.value === 'contatado' ? 'contatados' : statusSel.value === 'aguardando' ? 'aguardando' : 'pendentes';
+      const alvo = document.getElementById('tbody-' + clienteId + '-' + alvoSufixo);
+      if (alvo) alvo.appendChild(tr);
+      updateOverride(f.cnpj, { status: statusSel.value, __ver: WEHANDLE_DADOS.versao });
+      atualizarSecaoPendentes(clienteId);
+    });
+    td6.append(statusSel, statusDisp);
+
+    // 7 — WhatsApp
+    const td7 = document.createElement('td');
+    td7.className = 'center rl-oculto';
+    const tel = (f.tel || '').replace(/\D/g, '');
+    if (tel && !eFixo(f.tel)) {
+      const btnWa = document.createElement('button');
+      btnWa.title = 'Enviar mensagem WhatsApp';
+      btnWa.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+      btnWa.style.cssText = 'background:#25D366;color:#fff;border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:flex;align-items:center';
+      btnWa.onclick = () => {
+        salvarUltimaPosicaoWA(f.cnpj, f.razaoSocial, clienteId);
+        enviarWhatsAppFornecedor(f.cnpj, tel, f.razaoSocial, clienteId);
+        // Atualiza DOM imediatamente — remove marcador anterior e adiciona no novo
+        document.querySelectorAll('.wa-ultimo-row').forEach(r => {
+          r.classList.remove('wa-ultimo-row');
+          r.querySelectorAll('.wa-marker').forEach(m => m.remove());
+        });
+        tr.classList.add('wa-ultimo-row');
+        const mk = document.createElement('span');
+        mk.className = 'wa-marker';
+        mk.textContent = '📍 última posição';
+        nomeSpan.appendChild(mk);
+      };
+      td7.appendChild(btnWa);
+    }
+
+    // Marker for last WA position
+    const ultima = getUltimaPosicaoWA();
+    if (ultima && ultima.cnpj === f.cnpj) {
+      tr.classList.add('wa-ultimo-row');
+      const marker = document.createElement('span');
+      marker.className = 'wa-marker';
+      marker.textContent = '📍 última posição';
+      nomeSpan.after(marker);
+    }
+
+    tr.append(td1, td2, td3, td4, td5, td6, td7);
     return tr;
   }
 
-  function criarCard(cliente, overrides) {
-    const mOv       = getMetricasOverride(cliente.id);
-    const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
-    const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
-    const metaF1    = cliente.metaVidasF1  != null ? cliente.metaVidasF1  : null;
-    const metaF2    = cliente.metaVidasF2  != null ? cliente.metaVidasF2  : null;
+  function criarCard(cliente) {
+    const vidas     = cliente.vidas;
+    const aderencia = cliente.aderencia;
+    const metaF1    = cliente.metaVidasF1  || null;
+    const metaF2    = cliente.metaVidasF2  || null;
     const metaAd    = cliente.metaAderencia || 50;
-    const gapF1     = metaF1 != null ? Math.max(metaF1 - vidas, 0) : null;
+    const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
     const gapAd     = metaAd - aderencia;
-    const adPct     = Math.min((aderencia / metaAd) * 100, 100);
-    const f1Pct     = metaF1 != null ? Math.min((vidas / metaF1) * 100, 100) : 0;
-    const adDispStr = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 2).replace('.', ',') : '—';
 
-    const badgeVidasCls = metaF1 == null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
-    const badgeVidasTxt = metaF1 == null ? 'Aguardando meta' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico';
+    const badgeVidasCls = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
+    const badgeVidasTxt = metaF1 === null ? 'Sem meta'        : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Vidas: Atenção' : 'Vidas: Crítico';
     const badgeAderCls  = aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico';
     const badgeAderTxt  = aderencia >= metaAd ? 'Aderência OK' : aderencia >= metaAd - 5 ? 'Aderência: Atenção' : 'Aderência: Crítico';
 
     const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === cliente.id);
-    const forn       = [...(cliente.fornecedores || []).map(f => getFornecedor(f, overrides)), ...extrasCliente.map(f => getFornecedor(f, overrides))];
+    const forn = [...cliente.fornecedores.map(f => getFornecedor(f)), ...extrasCliente.map(f => getFornecedor(f))];
     const contatados = forn.filter(f => f.status === 'contatado');
     const aguardando = forn.filter(f => f.status === 'aguardando');
     const pendentes  = forn.filter(f => f.status === 'pendente');
-    const total      = forn.length;
+    const total = forn.length;
 
     const card = document.createElement('div');
     card.className = 'card';
-    card.id = 'card-' + cliente.id;
+
+    const adPct    = Math.min((aderencia / metaAd) * 100, 100);
+    const adDispStr = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
 
     card.innerHTML = `
       <div class="card-header">
@@ -414,228 +1058,391 @@
           ${cliente.cnpj ? `<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">${cliente.cnpj}</div>` : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span class="status-badge ${badgeVidasCls}">${badgeVidasTxt}</span>
-          <span class="status-badge ${badgeAderCls}">${badgeAderTxt}</span>
+          <span class="status-badge ${badgeVidasCls}" id="badge-vidas-${cliente.id}">${badgeVidasTxt}</span>
+          <span class="status-badge ${badgeAderCls}"  id="badge-ader-${cliente.id}">${badgeAderTxt}</span>
         </div>
       </div>
       ${cliente.dataInicio ? (() => {
         const prazo = calcPrazo(cliente.dataInicio);
-        const hojeCard = new Date(); hojeCard.setHours(0,0,0,0);
-        const dias  = Math.round((prazo - hojeCard) / 86400000);
+        const dias  = Math.ceil((prazo - new Date()) / 86400000);
         const prazoStr = prazo.toLocaleDateString('pt-BR');
         const urgente  = dias <= 15;
         return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:${urgente?'#fff0f3':'#f7f8fa'};border:1px solid ${urgente?'#feb2b2':'#e2e6ef'};border-radius:10px;padding:10px 14px;font-size:12px;">
           <span style="font-size:22px;font-weight:800;color:${urgente?'#c53030':'#1e2b4a'}">${Math.max(dias,0)}</span>
-          <span style="color:#718096">dias restantes · prazo <strong style="color:${urgente?'#c53030':'#1e2b4a'}">${prazoStr}</strong> · início ${new Date(cliente.dataInicio+'T00:00:00').toLocaleDateString('pt-BR')}</span>
+          <span style="color:#718096">dias restantes · prazo <strong style="color:${urgente?'#c53030':'#1e2b4a'}">${prazoStr}</strong> · início ${new Date(cliente.dataInicio+'T12:00:00').toLocaleDateString('pt-BR')}</span>
         </div>`;
       })() : ''}
       <div class="metric-row">
         <div class="metric-box">
           <div class="metric-label">Vidas alocadas</div>
-          <div class="metric-value"><span style="font-size:28px;font-weight:800">${vidas}</span></div>
+          <div class="metric-value">
+            <input type="number" id="${cliente.id}-vidas" value="${vidas}" min="0" />
+            <span class="valor-display" id="${cliente.id}-vidas-display">${vidas}</span>
+          </div>
           <div class="metric-sub">atual</div>
         </div>
         <div class="metric-box">
           <div class="metric-label">Aderência</div>
-          <div class="metric-value"><span style="font-size:28px;font-weight:800">${adDispStr}</span>%</div>
+          <div class="metric-value">
+            <input type="number" id="${cliente.id}-aderencia" value="${aderencia}" step="0.01" min="0" max="100" />
+            <span class="valor-display" id="${cliente.id}-aderencia-display">${adDispStr}</span>%
+          </div>
           <div class="metric-sub">atual</div>
         </div>
       </div>
       <div class="progress-section">
-        <div class="progress-label"><span>Aderência — Meta ${metaAd}%</span><span>${adDispStr}%</span></div>
-        <div class="progress-bar"><div class="progress-fill ${gapAd <= 0 ? 'fill-green' : 'fill-orange'}" style="width:${adPct}%"></div></div>
+        <div class="progress-label">
+          <span>Aderência — Meta ${metaAd}%</span>
+          <span id="${cliente.id}-aderencia-label">${adDispStr}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill ${gapAd <= 0 ? 'fill-green' : 'fill-orange'}" id="${cliente.id}-aderencia-bar" style="width:${adPct}%"></div>
+        </div>
       </div>
-      ${metaF1 != null ? `<div class="progress-section">
-        <div class="progress-label"><span>Faixa 1 — Meta ${metaF1} vidas</span><span>${vidas} / ${metaF1}</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${f1Pct}%"></div></div>
-      </div>` : '<div class="gap-box"><span class="gap-label">Faixa 1</span><span class="gap-value alerta">Aguardando definição de meta</span></div>'}
-      ${metaF2 != null ? `<div class="progress-section">
-        <div class="progress-label"><span>Faixa 2 — Meta ${metaF2} vidas</span><span>${vidas} / ${metaF2}</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-pink" style="width:${Math.min((vidas/metaF2)*100,100)}%"></div></div>
+      ${metaF1 !== null ? `
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>Faixa 1 — Meta ${metaF1} vidas</span>
+          <span id="${cliente.id}-faixa1-label">${vidas} / ${metaF1}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill fill-pink" id="${cliente.id}-faixa1-bar" style="width:${Math.min((vidas/metaF1)*100,100)}%"></div>
+        </div>
+      </div>
+      ${metaF2 ? `
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>Faixa 2 — Meta ${metaF2} vidas</span>
+          <span id="${cliente.id}-faixa2-label">${vidas} / ${metaF2}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill fill-pink" id="${cliente.id}-faixa2-bar" style="width:${Math.min((vidas/metaF2)*100,100)}%"></div>
+        </div>
       </div>` : ''}
-      ${metaF1 != null ? `<div class="gap-box">
+      <div class="gap-box">
         <span class="gap-label">Gap para faixa 1 (${metaF1} vidas)</span>
-        <span class="gap-value ${gapF1 === 0 ? 'ok' : 'alerta'}">${gapF1 === 0 ? '✓ Faixa 1 atingida' : gapF1 + ' vidas'}</span>
-      </div>` : ''}
-      ${metaF2 != null ? `<div class="gap-box">
+        <span class="gap-value ${gapF1 === 0 ? 'ok' : 'alerta'}" id="${cliente.id}-gap-f1">${gapF1 === 0 ? '✓ Faixa 1 atingida' : gapF1 + ' vidas'}</span>
+      </div>
+      ${metaF2 ? `<div class="gap-box">
         <span class="gap-label">Gap para faixa 2 (${metaF2} vidas)</span>
-        <span class="gap-value alerta">${Math.max(metaF2 - vidas, 0)} vidas</span>
+        <span class="gap-value alerta" id="${cliente.id}-gap-f2">${Math.max(metaF2 - vidas, 0)} vidas</span>
       </div>` : ''}
       <div class="gap-box">
         <span class="gap-label">Gap de aderência para ${metaAd}%</span>
-        <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}">${gapAd <= 0 ? '✓ Meta atingida' : Number(gapAd).toFixed(1).replace('.', ',') + ' p.p.'}</span>
-      </div>
+        <span class="gap-value ${gapAd <= 0 ? 'ok' : 'alerta'}" id="${cliente.id}-gap-ad">${gapAd <= 0 ? '✓ Meta atingida' : gapAd.toFixed(1).replace('.', ',') + ' p.p.'}</span>
+      </div>` : `
+      <div class="gap-box" style="background:#fffbeb;border-color:#fbd38d">
+        <span class="gap-label">⏳ Aguardando início — metas não configuradas</span>
+        <span class="gap-value" style="color:#b7791f">A iniciar</span>
+      </div>`}
 
-      ${clienteEncerrado(cliente) ? `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
-        <div class="section-title" style="margin:0">Contatos realizados</div>
-        <button id="btn-forn-${cliente.id}" onclick="toggleFornecedores('${cliente.id}')" style="background:#f7f8fa;border:1px solid #e2e6ef;color:#718096;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">▲ Minimizar</button>
-      </div>
-      <div id="forn-section-${cliente.id}">
-      <div style="display:flex;gap:16px;flex-wrap:wrap;background:#f7f8fa;border:1px solid #e2e6ef;border-radius:10px;padding:16px;align-items:center">
-        <div style="display:flex;align-items:center;gap:12px;flex:1">
-          <span style="font-size:36px;font-weight:800;color:#276749;line-height:1">${contatados.length}</span>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#1e2b4a">fornecedores contatados</div>
-            <div style="font-size:11px;color:#718096">de ${total} cadastrados</div>
-          </div>
-        </div>
-        ${aguardando.length > 0 ? `<span style="background:#fefcbf;color:#744210;border:1px solid #f6e05e;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${aguardando.length} aguardando reunião</span>` : ''}
-        ${pendentes.length > 0 ? `<span style="background:#fff0f3;color:#c53030;border:1px solid #feb2b2;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">${pendentes.length} sem retorno</span>` : ''}
-      </div>
-      </div>
-      ` : `
+      ${(cliente.historico && cliente.historico.length > 0) ? `
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px;margin-top:4px">
+        <button class="btn-evolucao" onclick="abrirEvolucao('${cliente.id}')">📈 Ver Evolução</button>
+      </div>` : ''}
+
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;margin-bottom:10px">
         <div class="section-title" style="margin:0">Fornecedores ${cliente.nome} <span style="color:#a0aec0;font-weight:400">(${total} total)</span></div>
         <button id="btn-forn-${cliente.id}" onclick="toggleFornecedores('${cliente.id}')" style="background:#f7f8fa;border:1px solid #e2e6ef;color:#718096;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">▲ Minimizar</button>
       </div>
       <div id="forn-section-${cliente.id}">
-      <div class="section-sub sub-verde">✓ Já contatados (${contatados.length})</div>
+
+      <div class="section-sub sub-verde">✓ Já contatados (<span id="count-contatados-${cliente.id}">${contatados.length}</span>)</div>
       <div class="table-wrap" style="margin-bottom:12px">
-        <table class="fornecedor-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+        <table class="fornecedor-table fp-table">
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
           <tbody id="tbody-${cliente.id}-contatados"></tbody>
         </table>
       </div>
-      <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (${aguardando.length})</div>
+
+      <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (<span id="count-aguardando-${cliente.id}">${aguardando.length}</span>)</div>
       <div class="table-wrap" style="margin-bottom:12px">
-        <table class="fornecedor-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+        <table class="fornecedor-table fp-table">
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
           <tbody id="tbody-${cliente.id}-aguardando"></tbody>
         </table>
       </div>
-      ${pendentes.length > 0 ? `<div style="margin-top:8px">
-        <div class="section-sub sub-laranja">⏳ Pendentes de contato (${pendentes.length})</div>
+
+      <div id="secao-pendentes-${cliente.id}" style="display:${pendentes.length > 0 ? '' : 'none'};margin-top:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div class="section-sub sub-laranja" style="margin-bottom:0">⏳ Pendentes de contato (<span id="count-pendentes-${cliente.id}">${pendentes.length}</span>)</div>
+          <div style="display:flex;gap:8px" class="rl-oculto">
+            <button onclick="copiarContatos('tel','${cliente.id}')" style="background:#1e2b4a;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📞 Copiar telefones</button>
+            <button onclick="copiarContatos('email','${cliente.id}')" style="background:#e0296f;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">✉️ Copiar e-mails</button>
+            <button onclick="exportarPendentesXLSX('${cliente.id}')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">⬇ Exportar planilha</button>
+          </div>
+        </div>
         <div class="table-wrap" style="margin-top:8px">
-          <table class="fornecedor-table">
-            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+          <table class="fornecedor-table fp-table">
+            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
             <tbody id="tbody-${cliente.id}-pendentes"></tbody>
           </table>
         </div>
-      </div>` : ''}
       </div>
-      `}
+      </div>
     `;
 
     const tC = card.querySelector('#tbody-' + cliente.id + '-contatados');
     const tA = card.querySelector('#tbody-' + cliente.id + '-aguardando');
     const tP = card.querySelector('#tbody-' + cliente.id + '-pendentes');
-    if (tC) contatados.forEach(f => tC.appendChild(criarLinha(f)));
-    if (tA) aguardando.forEach(f => tA.appendChild(criarLinha(f)));
-    if (tP) pendentes.forEach(f => tP.appendChild(criarLinha(f)));
+    contatados.forEach(f => tC.appendChild(criarLinha(f, cliente.id)));
+    aguardando.forEach(f => tA.appendChild(criarLinha(f, cliente.id)));
+    pendentes.forEach( f => tP.appendChild(criarLinha(f, cliente.id)));
+
+    const vidasInput = card.querySelector('#' + cliente.id + '-vidas');
+    const aderInput  = card.querySelector('#' + cliente.id + '-aderencia');
+    if (vidasInput) vidasInput.addEventListener('input', () => {
+      salvarMetricasOverride(cliente.id, { vidas: parseFloat(vidasInput.value) || 0 });
+      atualizarMetricas(cliente.id);
+    });
+    if (aderInput) aderInput.addEventListener('input', () => {
+      salvarMetricasOverride(cliente.id, { aderencia: parseFloat(aderInput.value) || 0 });
+      atualizarMetricas(cliente.id);
+    });
 
     return card;
   }
 
+  // ── Compact card for main grid ────────────────────────────────
   function criarCardCompacto(cliente) {
-    const mOv       = getMetricasOverride(cliente.id);
-    const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
-    const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
-    const metaF1    = cliente.metaVidasF1 != null ? cliente.metaVidasF1 : null;
+    const vidas     = cliente.vidas;
+    const aderencia = cliente.aderencia;
+    const metaF1    = cliente.metaVidasF1  || null;
     const metaAd    = cliente.metaAderencia || 50;
+    const gapAd     = metaAd - aderencia;
     const adPct     = Math.min((aderencia / metaAd) * 100, 100);
-    const f1Pct     = metaF1 != null ? Math.min((vidas / metaF1) * 100, 100) : 0;
-    const adDispStr = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 1).replace('.', ',') : '—';
+    const f1Pct     = metaF1 ? Math.min((vidas / metaF1) * 100, 100) : 0;
+    const adStr     = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
 
-    const badgeVidasCls = metaF1 == null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
-    const badgeVidasTxt = metaF1 == null ? 'Meta pendente' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Atenção' : 'Crítico';
+    const badgeVidasCls = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1 * 0.75 ? 'status-atencao' : 'status-critico';
+    const badgeVidasTxt = metaF1 === null ? 'Sem meta' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1 * 0.75 ? 'Atenção' : 'Crítico';
     const badgeAderCls  = aderencia >= metaAd ? 'status-ok' : aderencia >= metaAd - 5 ? 'status-atencao' : 'status-critico';
-    const badgeAderTxt  = aderencia >= metaAd ? 'Ader. OK' : aderencia >= metaAd - 5 ? 'Ader. Atenção' : 'Ader. Crítico';
 
     const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === cliente.id);
-    const totalForn = (cliente.fornecedores || []).length + extrasCliente.length;
+    const totalForn = cliente.fornecedores.length + extrasCliente.length;
 
     let deadlineHtml = '';
     if (cliente.dataInicio) {
-      const prazo = calcPrazo(cliente.dataInicio);
-      const hoje  = new Date(); hoje.setHours(0,0,0,0);
-      const dias  = Math.round((prazo - hoje) / 86400000);
-      const urgente = dias <= 15;
-      deadlineHtml = `<span class="cc-deadline ${urgente ? 'urgente' : 'ok'}">${Math.max(dias,0)}d restantes</span>`;
+      const prazo    = calcPrazo(cliente.dataInicio);
+      const dias     = Math.ceil((prazo - new Date()) / 86400000);
+      const prazoStr = prazo.toLocaleDateString('pt-BR');
+      const urgente  = dias > 0 && dias <= 15;
+      const enc      = dias <= 0;
+      if (enc) {
+        deadlineHtml = `<div class="cc-deadline" style="background:#f0f0f0;color:#718096"><strong>Encerrado</strong> em ${prazoStr}</div>`;
+      } else {
+        deadlineHtml = `<div class="cc-deadline${urgente ? ' urgente' : ''}"><strong>${dias} dias</strong> restantes · prazo ${prazoStr}</div>`;
+      }
     }
 
-    const el = document.createElement('div');
-    el.className = 'compact-card';
-    el.dataset.clienteId = cliente.id;
-    el.innerHTML = `
+    const div = document.createElement('div');
+    div.className = 'compact-card' + (clienteEncerrado(cliente) ? ' encerrado' : '');
+    div.id = 'card-' + cliente.id;
+    div.dataset.clienteid = cliente.id;
+    div.innerHTML = `
       <div class="cc-header">
-        <div class="cc-name">${cliente.nome}</div>
-      </div>
-      <div class="cc-badges">
-        <span class="status-badge ${badgeVidasCls}">${badgeVidasTxt}</span>
-        <span class="status-badge ${badgeAderCls}">${badgeAderTxt}</span>
-      </div>
-      <div class="cc-metrics" style="margin-top:12px">
-        <div class="cc-metric">
-          <div class="cc-metric-lbl">Vidas</div>
-          <div class="cc-metric-val">${vidas}</div>
-          ${metaF1 != null ? `<div class="cc-metric-unit">meta ${metaF1}</div>` : ''}
+        <div>
+          <div class="cc-name">${cliente.nome}</div>
+          ${cliente.cnpj ? `<div class="cc-cnpj">${cliente.cnpj}</div>` : ''}
         </div>
-        <div class="cc-metric">
-          <div class="cc-metric-lbl">Aderência</div>
-          <div class="cc-metric-val">${adDispStr}</div>
-          <div class="cc-metric-unit">meta ${metaAd}%</div>
+        <div class="cc-badges">
+          <span class="status-badge ${badgeVidasCls}">${badgeVidasTxt}</span>
+          <span class="status-badge ${badgeAderCls}">${aderencia >= metaAd ? 'Ader. OK' : 'Aderência'}</span>
         </div>
       </div>
-      <div class="cc-progress">
-        <div class="cc-progress-label"><span>Aderência</span><span>${adDispStr}%</span></div>
-        <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:${adPct}%;background:${aderencia >= metaAd ? 'linear-gradient(90deg,#38a169,#68d391)' : 'linear-gradient(90deg,#dd6b20,#f6ad55)'}"></div></div>
+      <div class="cc-metrics">
+        <div class="cc-metric">
+          <div class="cc-metric-label">Vidas</div>
+          <div class="cc-metric-value ${metaF1 && vidas >= metaF1 ? 'ok' : ''}">${vidas}</div>
+          <div class="cc-metric-sub">${metaF1 ? 'meta: ' + metaF1 : 'sem meta'}</div>
+        </div>
+        <div class="cc-metric">
+          <div class="cc-metric-label">Aderência</div>
+          <div class="cc-metric-value ${aderencia >= metaAd ? 'ok' : ''}">${adStr}%</div>
+          <div class="cc-metric-sub">meta: ${metaAd}%</div>
+        </div>
       </div>
-      ${metaF1 != null ? `<div class="cc-progress">
-        <div class="cc-progress-label"><span>Vidas (F1)</span><span>${vidas}/${metaF1}</span></div>
-        <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:${f1Pct}%;background:linear-gradient(90deg,#d4326d,#e8679a)"></div></div>
+      <div class="cc-prog">
+        <div class="cc-prog-label"><span>Aderência</span><span>${adStr}% / ${metaAd}%</span></div>
+        <div class="cc-prog-bar"><div class="cc-prog-fill ${gapAd <= 0 ? 'cc-fill-green' : 'cc-fill-orange'}" style="width:${adPct}%"></div></div>
+      </div>
+      ${metaF1 ? `<div class="cc-prog">
+        <div class="cc-prog-label"><span>Faixa 1</span><span>${vidas} / ${metaF1}</span></div>
+        <div class="cc-prog-bar"><div class="cc-prog-fill cc-fill-pink" style="width:${f1Pct}%"></div></div>
       </div>` : ''}
+      ${deadlineHtml}
       <div class="cc-footer">
-        <span class="cc-forn-count">${totalForn} fornecedor${totalForn !== 1 ? 'es' : ''}</span>
-        ${deadlineHtml}
-        <button class="btn-ver-forn" onclick="abrirDetalhe('${cliente.id}')">Ver fornecedores →</button>
+        <span class="cc-fornecedores">${totalForn} fornecedor${totalForn !== 1 ? 'es' : ''}</span>
+        <button class="btn-ver-forn" onclick="event.stopPropagation();abrirDetalhe('${cliente.id}')">Ver fornecedores →</button>
       </div>
     `;
-    el.addEventListener('click', function(e) {
-      if (e.target.classList.contains('btn-ver-forn')) return;
-      abrirDetalhe(cliente.id);
-    });
-    return el;
+    div.addEventListener('click', () => abrirDetalhe(cliente.id));
+    return div;
   }
 
+  // ── Tela navigation ──────────────────────────────────────────
   function abrirDetalhe(clienteId) {
-    const overrides = carregarOverrides();
-    const cliente   = todosClientes().find(c => c.id === clienteId);
+    const cliente = todosClientes().find(c => c.id === clienteId);
     if (!cliente) return;
     const content = document.getElementById('detalhe-content');
     content.innerHTML = '';
-    content.appendChild(criarCard(cliente, overrides));
-    document.getElementById('detalhe-breadcrumb-nome').textContent = cliente.nome;
+    content.appendChild(criarCard(cliente));
+    document.getElementById('detalhe-nome-cliente').textContent = cliente.nome;
     document.getElementById('topbar-title').textContent = cliente.nome;
     document.getElementById('tela-painel').classList.remove('ativa');
     document.getElementById('tela-detalhe').classList.add('ativa');
     window.scrollTo(0, 0);
-  }
-
-  function voltarPainel() {
-    document.getElementById('tela-detalhe').classList.remove('ativa');
-    document.getElementById('tela-relatorios').classList.remove('ativa');
-    document.getElementById('tela-painel').classList.add('ativa');
-    document.getElementById('topbar-title').textContent = 'Rampagem de Vidas — Visão Executiva';
-    document.getElementById('nav-relatorios').classList.remove('ativo');
-    document.getElementById('nav-painel').classList.add('ativo');
-    renderizarClientes();
-    window.scrollTo(0, 0);
+    const ultima = getUltimaPosicaoWA();
+    if (ultima && ultima.clienteId === clienteId) {
+      setTimeout(() => {
+        const row = content.querySelector('.wa-ultimo-row');
+        if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'center' }); mostrarToast('📍 Última posição: ' + ultima.razaoSocial); }
+      }, 200);
+    }
   }
 
   function irParaRelatorios() {
     document.getElementById('tela-painel').classList.remove('ativa');
     document.getElementById('tela-detalhe').classList.remove('ativa');
     document.getElementById('tela-relatorios').classList.add('ativa');
+    document.getElementById('tela-sem-resposta').classList.remove('ativa');
     document.getElementById('topbar-title').textContent = 'Relatórios';
     document.getElementById('nav-painel').classList.remove('ativo');
+    document.getElementById('nav-sem-resposta').classList.remove('ativo');
     document.getElementById('nav-relatorios').classList.add('ativo');
     renderRelatorios();
     window.scrollTo(0, 0);
   }
 
+  function irParaSemResposta() {
+    document.getElementById('tela-painel').classList.remove('ativa');
+    document.getElementById('tela-detalhe').classList.remove('ativa');
+    document.getElementById('tela-relatorios').classList.remove('ativa');
+    document.getElementById('tela-sem-resposta').classList.add('ativa');
+    document.getElementById('topbar-title').textContent = 'Sem Resposta';
+    document.getElementById('nav-painel').classList.remove('ativo');
+    document.getElementById('nav-relatorios').classList.remove('ativo');
+    document.getElementById('nav-sem-resposta').classList.add('ativo');
+    renderSemResposta();
+    window.scrollTo(0, 0);
+  }
+
+  function voltarPainel() {
+    document.getElementById('tela-detalhe').classList.remove('ativa');
+    document.getElementById('tela-relatorios').classList.remove('ativa');
+    document.getElementById('tela-sem-resposta').classList.remove('ativa');
+    document.getElementById('tela-painel').classList.add('ativa');
+    document.getElementById('topbar-title').textContent = 'Painel de Rampagem';
+    document.getElementById('nav-relatorios').classList.remove('ativo');
+    document.getElementById('nav-sem-resposta').classList.remove('ativo');
+    document.getElementById('nav-painel').classList.add('ativo');
+    renderizarClientes();
+    window.scrollTo(0, 0);
+  }
+
+  function renderSemResposta() {
+    const div = document.getElementById('sem-resposta-content');
+    const enviados = carregarWaEnviados();
+    const clientes = todosClientes();
+    const extras = carregarFornecedoresExtras();
+
+    // Monta lista de pendentes sem resposta
+    const itens = [];
+    for (const [cnpj, reg] of Object.entries(enviados)) {
+      let fornBase = null;
+      let clienteObj = null;
+      for (const c of clientes) {
+        const b = (c.fornecedores || []).find(x => x.cnpj === cnpj);
+        if (b) { fornBase = b; clienteObj = c; break; }
+        const e = extras.find(x => x.cnpj === cnpj);
+        if (e) { fornBase = e; clienteObj = c; break; }
+      }
+      if (!fornBase || !clienteObj) {
+        const e = extras.find(x => x.cnpj === cnpj);
+        if (e) { fornBase = e; clienteObj = clientes.find(c => c.id === e.clienteId); }
+      }
+      if (!fornBase) continue;
+      const f = getFornecedor(fornBase);
+      if (f.status !== 'pendente') continue;
+      const diasMs  = Date.now() - new Date(reg.data + 'T12:00:00').getTime();
+      const dias    = Math.floor(diasMs / 86400000);
+      itens.push({ cnpj, razaoSocial: reg.razaoSocial || f.razaoSocial, tel: reg.tel || f.tel, clienteNome: clienteObj ? clienteObj.nome : reg.clienteId, clienteId: reg.clienteId, dias, data: reg.data });
+    }
+
+    if (!itens.length) {
+      div.innerHTML = '<div style="text-align:center;padding:60px 0;color:#a0aec0"><div style="font-size:40px;margin-bottom:12px">✅</div><div style="font-size:15px;font-weight:600">Nenhum fornecedor aguardando resposta</div><div style="font-size:12px;margin-top:6px">Quando você enviar uma mensagem pelo painel, os fornecedores que não responderem aparecerão aqui.</div></div>';
+      return;
+    }
+
+    // Ordena pelos mais antigos primeiro
+    itens.sort((a, b) => a.dias - b.dias);
+
+    // Conta por prazo
+    const urgentes = itens.filter(i => i.dias >= 7).length;
+
+    let html = '';
+    if (urgentes > 0) {
+      html += `<div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px"><span style="font-size:20px">⚠️</span><span style="font-size:13px;color:#c53030;font-weight:600">${urgentes} fornecedor${urgentes > 1 ? 'es' : ''} sem resposta há mais de 7 dias — prioridade para reenvio.</span></div>`;
+    }
+
+    html += `<div style="margin-bottom:14px;font-size:13px;color:#4a5568">${itens.length} fornecedor${itens.length > 1 ? 'es' : ''} aguardando resposta</div>`;
+    html += '<div style="display:flex;flex-direction:column;gap:10px">';
+
+    for (const item of itens) {
+      const corDias = item.dias >= 7 ? '#c53030' : item.dias >= 3 ? '#c05621' : '#276749';
+      const bgDias  = item.dias >= 7 ? '#fff5f5' : item.dias >= 3 ? '#fffaf0' : '#f0fff4';
+      const dataBR  = item.data.split('-').reverse().join('/');
+      html += `
+        <div style="background:#fff;border:1px solid #e8eaf0;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:180px">
+            <div style="font-size:13px;font-weight:700;color:#1a2340">${item.razaoSocial}</div>
+            <div style="font-size:11px;color:#718096;margin-top:2px">📋 ${item.clienteNome} &nbsp;·&nbsp; Enviado em ${dataBR}</div>
+          </div>
+          <div style="background:${bgDias};color:${corDias};border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;white-space:nowrap">
+            ${item.dias === 0 ? 'Hoje' : item.dias === 1 ? '1 dia sem resposta' : item.dias + ' dias sem resposta'}
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0">
+            <button onclick="reenviarWa('${item.cnpj}','${item.tel}','${item.razaoSocial.replace(/'/g,"\\'")}','${item.clienteId}')"
+              style="background:#25D366;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">
+              🔁 Reenviar
+            </button>
+            <button onclick="marcarRespondeu('${item.cnpj}','${item.clienteId}')"
+              style="background:#f0fff4;color:#276749;border:1px solid #9ae6b4;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">
+              ✓ Respondeu
+            </button>
+          </div>
+        </div>`;
+    }
+    html += '</div>';
+    div.innerHTML = html;
+  }
+
+  function reenviarWa(cnpj, tel, razaoSocial, clienteId) {
+    let nums = tel.replace(/\D/g, '');
+    if (nums.startsWith('0')) nums = nums.slice(1);
+    if (!nums.startsWith('55')) nums = '55' + nums;
+    if (nums.length < 12 || nums.length > 13) { mostrarToast('⚠ Telefone inválido'); return; }
+    const mensagem =
+      'Olá! Passei anteriormente para falar sobre o cadastro dos colaboradores na plataforma *wehandle* e ainda não tive retorno.\n\n' +
+      'Quero garantir que o processo seja simples para vocês — temos um vídeo passo a passo e posso ajudar com qualquer dúvida.\n\n' +
+      'Quando tiver um momento, me avisa para darmos andamento juntos?';
+    registrarWaEnviado(cnpj, clienteId, razaoSocial, tel);
+    window.open('whatsapp://send?phone=' + nums + '&text=' + encodeURIComponent(mensagem), '_blank');
+  }
+
+  function marcarRespondeu(cnpj, clienteId) {
+    updateOverride(cnpj, { status: 'contatado' });
+    // Remove do registro de enviados para não reaparecer
+    const enviados = carregarWaEnviados();
+    delete enviados[cnpj];
+    salvarWaEnviados(enviados);
+    atualizarBadgeSemResposta();
+    renderSemResposta();
+    mostrarToast('✓ Marcado como contatado');
+  }
+
   function renderRelatorios() {
-    const overrides = carregarOverrides();
+    const overrides = carregarOverrides ? (() => { try { const r = localStorage.getItem(OVERRIDES_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; } })() : {};
     const lista = todosClientes();
     const rows = lista.map(c => {
       const mOv = getMetricasOverride(c.id);
@@ -645,13 +1452,14 @@
       const metaAd    = c.metaAderencia || 50;
       const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
       const gapAd     = (metaAd - aderencia).toFixed(1).replace('.', ',');
-      const adStr     = aderencia != null ? Number(aderencia).toFixed(Number(aderencia) % 1 === 0 ? 0 : 2).replace('.', ',') : '—';
+      const adStr     = aderencia.toFixed(aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
       const extrasC   = carregarFornecedoresExtras().filter(f => f.clienteId === c.id);
-      const forn      = [...(c.fornecedores || []).map(f => getFornecedor(f, overrides)),
-                         ...extrasC.map(f => getFornecedor(f, overrides))];
+      const forn      = [...(c.fornecedores || []).map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; }),
+                         ...extrasC.map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; })];
       const nCont = forn.filter(f => f.status === 'contatado').length;
       const nAgu  = forn.filter(f => f.status === 'aguardando').length;
       const nPend = forn.filter(f => f.status === 'pendente').length;
+      const nTot  = forn.length;
       let prazoStr = '—', diasStr = '—', diasCls = '';
       if (c.dataInicio) {
         const prazo = calcPrazo(c.dataInicio);
@@ -673,7 +1481,7 @@
         <td class="rel-ok">${nCont}</td>
         <td style="color:#b7791f;font-weight:${nAgu > 0 ? '700' : '400'}">${nAgu}</td>
         <td class="${nPend > 0 ? 'rel-alerta' : 'rel-neutro'}">${nPend}</td>
-        <td>${forn.length}</td>
+        <td>${nTot}</td>
         <td>${prazoStr}</td>
         <td class="${diasCls}">${diasStr}</td>
       </tr>`;
@@ -696,7 +1504,7 @@
   }
 
   function exportarRelatoriosCSV() {
-    const overrides = carregarOverrides();
+    const overrides = (() => { try { const r = localStorage.getItem(OVERRIDES_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; } })();
     const lista = todosClientes();
     const header = ['Cliente','CNPJ','Vidas','Meta F1','Gap F1','Aderência (%)','Meta Aderência (%)','Gap Aderência (p.p.)','Contatados','Aguardando','Pendentes','Total Fornecedores','Prazo','Dias Restantes'];
     const linhas = [header];
@@ -709,8 +1517,8 @@
       const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : '';
       const gapAd     = (metaAd - aderencia).toFixed(2);
       const extrasC   = carregarFornecedoresExtras().filter(f => f.clienteId === c.id);
-      const forn      = [...(c.fornecedores || []).map(f => getFornecedor(f, overrides)),
-                         ...extrasC.map(f => getFornecedor(f, overrides))];
+      const forn      = [...(c.fornecedores || []).map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; }),
+                         ...extrasC.map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; })];
       const nCont = forn.filter(f => f.status === 'contatado').length;
       const nAgu  = forn.filter(f => f.status === 'aguardando').length;
       const nPend = forn.filter(f => f.status === 'pendente').length;
@@ -721,7 +1529,7 @@
         prazoStr = prazo.toLocaleDateString('pt-BR');
         diasStr  = String(Math.round((prazo - hoje) / 86400000));
       }
-      linhas.push([c.nome, c.cnpj || '', vidas, metaF1 || '', gapF1, Number(aderencia).toFixed(2).replace('.',','), metaAd, gapAd.replace('.',','), nCont, nAgu, nPend, forn.length, prazoStr, diasStr]);
+      linhas.push([c.nome, c.cnpj || '', vidas, metaF1 || '', gapF1, aderencia.toFixed(2).replace('.',','), metaAd, gapAd.replace('.',','), nCont, nAgu, nPend, forn.length, prazoStr, diasStr]);
     });
     const csv  = linhas.map(r => r.join(';')).join('\r\n');
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
@@ -731,6 +1539,12 @@
     a.download = 'relatorio-rampagem-' + new Date().toISOString().slice(0,10) + '.csv';
     a.click();
     URL.revokeObjectURL(url);
+    mostrarToast('✓ CSV exportado!');
+  }
+
+  function clienteEncerrado(c) {
+    if (!c.dataInicio) return false;
+    return calcPrazo(c.dataInicio) < new Date();
   }
 
   function toggleFornecedores(id) {
@@ -748,18 +1562,78 @@
     label.textContent = aberto ? '▲ Ocultar clientes encerrados' : '▼ Ver clientes encerrados';
   }
 
+  function toggleBonus() {
+    const sec = document.getElementById('bonus-tabela');
+    const btn = document.getElementById('btn-bonus');
+    const visivel = sec.style.display !== 'none';
+    sec.style.display = visivel ? 'none' : '';
+    btn.textContent = visivel ? '▼ Expandir' : '▲ Minimizar';
+  }
+
+  function renderPainelBonus() {
+    const fmtBRL = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+    const clientes = todosClientes().filter(c => c.dataInicio).sort((a, b) => {
+      const aE = clienteEncerrado(a) ? 1 : 0, bE = clienteEncerrado(b) ? 1 : 0;
+      if (aE !== bE) return aE - bE;
+      return !aE ? new Date(b.dataInicio) - new Date(a.dataInicio) : 0;
+    });
+    let totalReceber = 0;
+    const rows = clientes.map(c => {
+      const prazo      = calcPrazo(c.dataInicio);
+      const periodoStr = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR') + ' a ' + prazo.toLocaleDateString('pt-BR');
+      if (!c.mrrFaixa1) {
+        return `<tr>
+          <td><div class="bp-td-nome">${c.nome}</div><div class="bp-td-periodo">${periodoStr}</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td>
+          <td class="bp-td-val aguardando">— a definir</td>
+        </tr>`;
+      }
+      const vidas  = c.vidas;
+      const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
+      const mrrF1  = c.mrrFaixa1,   mrrF2  = c.mrrFaixa2 || null;
+      const bonusF1 = Math.round(mrrF1 * 0.04);
+      const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
+      const faltaF1 = Math.max(metaF1 - vidas, 0);
+      const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
+      const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
+      totalReceber += aReceber;
+      const f1Tag = `<span class="${faltaF1 === 0 ? 'ok' : ''}">F1 ${fmtBRL(bonusF1)} ${faltaF1 === 0 ? '✓' : '(faltam ' + faltaF1 + 'v)'}</span>`;
+      const f2Tag = bonusF2 ? `<span class="${faltaF2 === 0 ? 'ok' : ''}">F2 +${fmtBRL(bonusF2)} ${faltaF2 === 0 ? '✓' : '(faltam ' + faltaF2 + 'v)'}</span>` : '';
+      return `<tr>
+        <td><div class="bp-td-nome">${c.nome}</div><div class="bp-td-periodo">${periodoStr}</div><div class="bp-td-faixas">${f1Tag}${f2Tag}</div></td>
+        <td class="bp-td-val ${aReceber > 0 ? '' : clienteEncerrado(c) ? 'aguardando' : 'andamento'}">${aReceber > 0 ? fmtBRL(aReceber) : clienteEncerrado(c) ? 'R$ 0' : '⏳ Em andamento'}</td>
+      </tr>`;
+    });
+    const bonusVisivel = document.getElementById('bonus-tabela') ? document.getElementById('bonus-tabela').style.display !== 'none' : false;
+    document.getElementById('painel-bonus').innerHTML = `<div class="bp-wrap">
+      <div class="bp-titulo" style="justify-content:space-between">
+        <span>💰 Bônus desta rampagem</span>
+        <button id="btn-bonus" onclick="toggleBonus()" style="background:#f7f8fa;border:1px solid #e2e6ef;color:#718096;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">${bonusVisivel ? '▲ Minimizar' : '▼ Expandir'}</button>
+      </div>
+      <div id="bonus-tabela" style="display:${bonusVisivel ? '' : 'none'}">
+      <table class="bp-table">
+        <thead><tr><th>Cliente</th><th>A receber</th></tr></thead>
+        <tbody>${rows.join('')}</tbody>
+        <tfoot><tr class="bp-total">
+          <td class="bp-td-nome">Total</td>
+          <td class="bp-td-val">${fmtBRL(totalReceber)}</td>
+        </tr></tfoot>
+      </table>
+      </div>
+    </div>`;
+  }
+
   function renderizarClientes() {
     const container  = document.getElementById('cards-container');
     const containerE = document.getElementById('cards-encerrados');
     container.innerHTML  = '';
     containerE.innerHTML = '';
+    const lista = todosClientes();
 
-    const lista      = todosClientes();
     const ativos     = lista.filter(c => !clienteEncerrado(c));
     const encerrados = lista.filter(c =>  clienteEncerrado(c));
 
     const filtroWrap = document.getElementById('filtro-wrap');
-    filtroWrap.innerHTML = '<span class="filtro-label">Cliente:</span><button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente(\'todos\')">Todos</button>';
+    filtroWrap.innerHTML = '<button class="filtro-btn ativo" data-cliente="todos" onclick="filtrarCliente(\'todos\')">Todos</button>';
     lista.forEach(c => {
       const btn = document.createElement('button');
       btn.className = 'filtro-btn';
@@ -769,7 +1643,7 @@
       filtroWrap.appendChild(btn);
     });
 
-    ativos.forEach(c     => container.appendChild(criarCardCompacto(c)));
+    ativos.forEach(c => container.appendChild(criarCardCompacto(c)));
     encerrados.forEach(c => containerE.appendChild(criarCardCompacto(c)));
 
     const secao = document.getElementById('secao-encerrados');
@@ -777,41 +1651,333 @@
     const count = document.getElementById('count-encerrados');
     if (count) count.textContent = encerrados.length + (encerrados.length === 1 ? ' cliente' : ' clientes');
 
-    document.getElementById('footer-data').textContent = new Date().toLocaleString('pt-BR');
+    document.getElementById('ultima-atualizacao').textContent =
+      'Dados carregados · ' + new Date().toLocaleString('pt-BR');
+    renderPainelBonus();
+  }
+
+  function toggleFiltroClientes() {
+    document.getElementById('filtro-container').classList.toggle('recolhido');
   }
 
   function filtrarCliente(id) {
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.toggle('ativo', b.dataset.cliente === id));
-    document.querySelectorAll('.compact-card').forEach(card => {
-      card.style.display = (id === 'todos' || card.dataset.clienteId === id) ? '' : 'none';
+    todosClientes().forEach(c => {
+      const card = document.getElementById('card-' + c.id);
+      if (card) card.style.display = (id === 'todos' || id === c.id) ? '' : 'none';
     });
+  }
+
+  function setModo(modo) {
+    if (modo === 'leitura') {
+      document.body.classList.add('leitura');
+      document.getElementById('btn-leitura').classList.add('ativo');
+      document.getElementById('btn-edicao').classList.remove('ativo');
+      const fd = document.getElementById('footer-data');
+      if (fd) fd.textContent = new Date().toLocaleDateString('pt-BR');
+      const fd2 = document.getElementById('footer-data-detalhe');
+      if (fd2) fd2.textContent = new Date().toLocaleDateString('pt-BR');
+    } else {
+      document.body.classList.remove('leitura');
+      document.getElementById('btn-edicao').classList.add('ativo');
+      document.getElementById('btn-leitura').classList.remove('ativo');
+    }
   }
 
   function pesquisarCliente(termo) {
     const t = termo.toLowerCase().trim();
-    let total = 0, encontrados = 0;
+    let encontrados = 0, total = 0;
     document.querySelectorAll('.compact-card').forEach(card => {
       total++;
       const nome = (card.querySelector('.cc-name')?.textContent || '').toLowerCase();
-      const match = !t || nome.includes(t);
+      const cnpj = (card.querySelector('.cc-cnpj')?.textContent || '').toLowerCase();
+      const match = !t || nome.includes(t) || cnpj.includes(t);
       card.style.display = match ? '' : 'none';
       if (match) encontrados++;
     });
     const info = document.getElementById('pesquisa-info');
-    if (t) { info.style.display = 'block'; info.textContent = encontrados + ' cliente(s) encontrado(s) de ' + total; }
+    if (t) { info.style.display = 'block'; info.textContent = encontrados + ' cliente(s) encontrado(s)'; }
     else   { info.style.display = 'none'; }
   }
 
-  try {
-    new BroadcastChannel('wehandle_painel').onmessage = () => {
-      renderizarClientes();
-      calcDiasRestantes();
-    };
-  } catch(e) {}
+  function copiarContatos(tipo, clienteId) {
+    const tbody = document.getElementById('tbody-' + clienteId + '-pendentes');
+    const linhas = [];
+    tbody.querySelectorAll('tr').forEach(tr => {
+      const nome = tr.querySelector('td:first-child').textContent.trim();
+      const inp  = tr.querySelector(tipo === 'tel' ? '.tel-input' : '.email-input');
+      const val  = inp ? inp.value.trim() : '';
+      if (val) linhas.push(nome + ': ' + val);
+    });
+    navigator.clipboard.writeText(linhas.join('\n')).then(() => {
+      mostrarToast('✓ ' + linhas.length + ' ' + (tipo === 'tel' ? 'telefones' : 'e-mails') + ' copiados!');
+    });
+  }
 
-  calcDiasRestantes();
+  // ── Novo Fornecedor ───────────────────────────────────────────
+  const FORNECEDORES_EXTRAS_KEY = 'wehandle_fornecedores_extras_v1';
+
+  function carregarFornecedoresExtras() {
+    try { const r = localStorage.getItem(FORNECEDORES_EXTRAS_KEY); return r ? JSON.parse(r) : []; } catch(e) { return []; }
+  }
+
+  function salvarFornecedoresExtras(lista) {
+    localStorage.setItem(FORNECEDORES_EXTRAS_KEY, JSON.stringify(lista));
+  }
+
+  function abrirModalFornecedor(clienteIdPre) {
+    const sel = document.getElementById('nf-cliente');
+    sel.innerHTML = '';
+    todosClientes().forEach(c => {
+      const op = document.createElement('option');
+      op.value = c.id; op.textContent = c.nome;
+      if (c.id === clienteIdPre) op.selected = true;
+      sel.appendChild(op);
+    });
+    document.getElementById('nf-nome').value     = '';
+    document.getElementById('nf-cnpj').value     = '';
+    document.getElementById('nf-tel').value      = '';
+    document.getElementById('nf-email').value    = '';
+    document.getElementById('nf-contrato').value = 'contratado';
+    document.getElementById('nf-via').value      = 'whatsapp';
+    document.getElementById('nf-status').value   = 'aguardando';
+    document.getElementById('modal-novo-fornecedor').classList.add('aberto');
+    document.getElementById('nf-nome').focus();
+  }
+
+  function fecharModalFornecedor() {
+    document.getElementById('modal-novo-fornecedor').classList.remove('aberto');
+  }
+
+  function salvarNovoFornecedor() {
+    const nome = document.getElementById('nf-nome').value.trim();
+    if (!nome) { document.getElementById('nf-nome').focus(); return; }
+    const clienteId = document.getElementById('nf-cliente').value;
+    let cnpj = document.getElementById('nf-cnpj').value.trim();
+    if (!cnpj) cnpj = 'extra-' + Date.now();
+    const extras = carregarFornecedoresExtras();
+    extras.push({
+      clienteId,
+      razaoSocial: nome,
+      cnpj,
+      contrato: document.getElementById('nf-contrato').value,
+      tel:      document.getElementById('nf-tel').value.trim(),
+      email:    document.getElementById('nf-email').value.trim(),
+      via:      document.getElementById('nf-via').value,
+      vidas:    0,
+      status:   document.getElementById('nf-status').value,
+      extra:    true,
+    });
+    salvarFornecedoresExtras(extras);
+    fecharModalFornecedor();
+    renderizarClientes();
+    mostrarToast('✓ Fornecedor "' + nome + '" adicionado!');
+    try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+  }
+
+  function removerFornecedorExtra(cnpj) {
+    const extras = carregarFornecedoresExtras().filter(f => f.cnpj !== cnpj);
+    salvarFornecedoresExtras(extras);
+    renderizarClientes();
+    mostrarToast('Fornecedor removido');
+    try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+  }
+
+  document.getElementById('modal-novo-fornecedor').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalFornecedor();
+  });
+
+  // ── Novo Cliente ──────────────────────────────────────────────
+  const CLIENTES_EXTRAS_KEY = 'wehandle_clientes_extras_v1';
+
+  function carregarClientesExtras() {
+    try {
+      const raw = localStorage.getItem(CLIENTES_EXTRAS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch(e) { return []; }
+  }
+
+  function salvarClientesExtras(lista) {
+    localStorage.setItem(CLIENTES_EXTRAS_KEY, JSON.stringify(lista));
+  }
+
+  function todosClientes() {
+    return [...WEHANDLE_DADOS.clientes, ...carregarClientesExtras()];
+  }
+
+  function abrirModal() {
+    document.getElementById('nc-nome').value      = '';
+    document.getElementById('nc-cnpj').value      = '';
+    document.getElementById('nc-data').value      = new Date().toISOString().slice(0,10);
+    document.getElementById('nc-vidas').value     = '0';
+    document.getElementById('nc-aderencia').value = '0';
+    document.getElementById('nc-meta-f1').value   = '100';
+    document.getElementById('nc-meta-f2').value   = '';
+    document.getElementById('nc-meta-ad').value   = '50';
+    document.getElementById('modal-novo-cliente').classList.add('aberto');
+    document.getElementById('nc-nome').focus();
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-novo-cliente').classList.remove('aberto');
+  }
+
+  function salvarNovoCliente() {
+    const nome = document.getElementById('nc-nome').value.trim();
+    const data = document.getElementById('nc-data').value;
+    const metaF1 = parseInt(document.getElementById('nc-meta-f1').value) || 100;
+    if (!nome) { document.getElementById('nc-nome').focus(); return; }
+    if (!data) { document.getElementById('nc-data').focus(); return; }
+
+    const id = nome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const extras = carregarClientesExtras();
+    extras.push({
+      id,
+      nome,
+      cnpj:          document.getElementById('nc-cnpj').value.trim(),
+      dataInicio:    data,
+      vidas:         parseFloat(document.getElementById('nc-vidas').value)     || 0,
+      aderencia:     parseFloat(document.getElementById('nc-aderencia').value) || 0,
+      metaVidasF1:   metaF1,
+      metaVidasF2:   parseInt(document.getElementById('nc-meta-f2').value)     || null,
+      metaAderencia: parseFloat(document.getElementById('nc-meta-ad').value)   || 50,
+      extra:         true,
+      fornecedores:  [],
+    });
+    salvarClientesExtras(extras);
+    fecharModal();
+    renderizarClientes();
+    mostrarToast('✓ Cliente "' + nome + '" adicionado!');
+  }
+
+  function removerClienteExtra(id) {
+    const extras = carregarClientesExtras().filter(c => c.id !== id);
+    salvarClientesExtras(extras);
+    voltarPainel();
+    mostrarToast('Cliente removido');
+  }
+
+  document.getElementById('modal-novo-cliente').addEventListener('click', function(e) {
+    if (e.target === this) fecharModal();
+  });
+
+  // ── Evolução ──────────────────────────────────────────────────
+  let _evolucaoClienteId = null;
+
+  function abrirEvolucao(clienteId) {
+    const cliente = todosClientes().find(c => c.id === clienteId);
+    if (!cliente || !cliente.historico || cliente.historico.length === 0) return;
+    _evolucaoClienteId = clienteId;
+
+    const metaF1 = cliente.metaVidasF1 || null;
+    const metaAd = cliente.metaAderencia || 50;
+    const hist   = [...cliente.historico].reverse();
+
+    document.getElementById('evolucao-titulo').textContent = 'Evolução — ' + cliente.nome;
+
+    const linhas = hist.map((h, i) => {
+      const dt      = new Date(h.data + 'T12:00:00').toLocaleDateString('pt-BR');
+      const gapV    = metaF1 !== null ? Math.max(metaF1 - h.vidas, 0) : null;
+      const gapA    = (metaAd - h.aderencia).toFixed(1).replace('.', ',');
+      const adStr   = h.aderencia.toFixed(h.aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
+      const gapVStr = gapV === null ? '—' : gapV === 0 ? '✓' : '+' + gapV + 'v';
+      const gapACls = parseFloat(h.aderencia) >= metaAd ? 'evol-ok' : 'evol-alerta';
+      const gapVCls = gapV === 0 ? 'evol-ok' : 'evol-alerta';
+      const latest  = i === 0 ? ' style="background:#f0f9ff"' : '';
+      return `<tr${latest}>
+        <td>${dt}${i === 0 ? ' <span style="font-size:10px;background:#e0f0ff;color:#2b6cb0;border-radius:4px;padding:1px 5px;font-weight:700">atual</span>' : ''}</td>
+        <td>${h.vidas}</td>
+        <td>${adStr}%</td>
+        <td class="${gapVCls}">${gapVStr}</td>
+        <td class="${gapACls}">${parseFloat(gapA) <= 0 ? '✓' : gapA + ' p.p.'}</td>
+      </tr>`;
+    });
+
+    document.getElementById('evolucao-corpo').innerHTML = `
+      <table class="evol-table">
+        <thead><tr>
+          <th>Data</th>
+          <th>Vidas</th>
+          <th>Aderência</th>
+          <th>Gap F1${metaF1 ? ' (' + metaF1 + 'v)' : ''}</th>
+          <th>Gap Ader. (${metaAd}%)</th>
+        </tr></thead>
+        <tbody>${linhas.join('')}</tbody>
+      </table>`;
+
+    document.getElementById('btn-exportar-csv').onclick = () => exportarCSV(clienteId);
+    document.getElementById('modal-evolucao').classList.add('aberto');
+  }
+
+  function fecharEvolucao() {
+    document.getElementById('modal-evolucao').classList.remove('aberto');
+    _evolucaoClienteId = null;
+  }
+
+  function exportarCSV(clienteId) {
+    const cliente = todosClientes().find(c => c.id === clienteId);
+    if (!cliente || !cliente.historico) return;
+    const metaF1 = cliente.metaVidasF1 || null;
+    const metaAd = cliente.metaAderencia || 50;
+    const linhas = [['Data', 'Vidas', 'Aderencia (%)', 'Gap Vidas F1', 'Gap Aderencia (p.p.)']];
+    [...cliente.historico].reverse().forEach(h => {
+      const dt   = new Date(h.data + 'T12:00:00').toLocaleDateString('pt-BR');
+      const gapV = metaF1 !== null ? Math.max(metaF1 - h.vidas, 0) : '';
+      const gapA = (metaAd - h.aderencia).toFixed(2);
+      linhas.push([dt, h.vidas, h.aderencia.toFixed(2).replace('.', ','), gapV, gapA.replace('.', ',')]);
+    });
+    const csv  = linhas.map(r => r.join(';')).join('\r\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'evolucao-' + cliente.nome.toLowerCase().replace(/\s+/g, '-') + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    mostrarToast('✓ CSV exportado!');
+  }
+
+  document.getElementById('modal-evolucao').addEventListener('click', function(e) {
+    if (e.target === this) fecharEvolucao();
+  });
+
+  // ── Logo upload ───────────────────────────────────────────────
+  (function() {
+    const LOGO_KEY = 'wehandle_logo';
+    const img = document.getElementById('sidebar-logo-img');
+    const input = document.getElementById('logo-upload-input');
+    const saved = localStorage.getItem(LOGO_KEY);
+    if (saved) { img.src = saved; img.style.opacity = '1'; img.style.display = ''; }
+    input.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = e.target.result;
+        img.src = data;
+        img.style.opacity = '1';
+        img.style.display = '';
+        localStorage.setItem(LOGO_KEY, data);
+        mostrarToast('✓ Logo atualizado!');
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+    });
+  })();
+
+  // ── Init ──────────────────────────────────────────────────────
+  isLoading = true;
+  carregarOverrides();
   renderizarClientes();
-  setInterval(calcDiasRestantes, 60000);
+  isLoading = false;
+  if (READ_ONLY) {
+    document.body.classList.add('leitura');
+  } else {
+    atualizarBadgeSemResposta();
+  }
+
+
 </script>
+
 </body>
 </html>
