@@ -118,7 +118,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 47,
-      aderencia: 57.74,
+      aderencia: 57.87,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -129,7 +129,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
         { data: '2026-06-10', vidas: 48, aderencia: 57.74 },
         { data: '2026-06-11', vidas: 47, aderencia: 57.74 },
-        { data: '2026-06-12', vidas: 47, aderencia: 57.74 }
+        { data: '2026-06-12', vidas: 47, aderencia: 57.87 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -176,7 +176,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'GRP TECHLAN COMERCIO E SERVICOS EM INSTALACOES DE TECNOLOGIA LTDA', cnpj: '23.478.851/0001-40', contrato: 'contratado', tel: '1532290020', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
