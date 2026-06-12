@@ -417,10 +417,11 @@
       const i=si(val);
       xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+' t="s"><v>'+i+'</v></c>');
     }
-    // G col — valor estático SIM/NÃO (remove fórmula incorreta do template)
+    // G col — valor estático SIM/NÃO usando shared string (preserva estilo original)
     function sG(ref,val) {
-      xml=xml.replace(cr(ref),val?'<c r="'+ref+'" s="17" t="str"><v>'+xe(val)+'</v></c>'
-                                  :'<c r="'+ref+'" s="17"/>');
+      if(!val){xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+'/>');return;}
+      const i=si(val);
+      xml=xml.replace(cr(ref),(_,a)=>'<c r="'+ref+'"'+sa(a)+' t="s"><v>'+i+'</v></c>');
     }
     // C col — limpa se sem F2
     function sC(ref,val) {
