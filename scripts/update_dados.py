@@ -197,7 +197,7 @@ def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
             email = f.get("email", "").strip() or ""
             tel   = f.get("tel",   "").strip() or ""
             razao = (f.get("razaoSocial") or cnpj_fmt).strip()
-            nova_linha = f"        {{ razaoSocial: '{razao}', cnpj: '{cnpj_fmt}', contrato: 'contratado', tel: '{tel}', email: '{email}', via: 'whatsapp', vidas: 0, status: 'pendente' }}"
+            nova_linha = f"        {{ razaoSocial: '{razao}', cnpj: '{cnpj_fmt}', contrato: 'contratado', tel: '{tel}', email: '{email}', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '{TODAY}' }}"
             novos.append(nova_linha)
 
     if not novos:

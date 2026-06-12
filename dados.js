@@ -174,9 +174,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'HELP MANUTENCAO / CONSTRUCAO CIVIL', cnpj: '06.240.916/0001-03', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'MOTOMAN ROBÓTICA DO BRASIL', cnpj: '08.515.495/0001-01', contrato: 'contratado', tel: '1143523002', email: 'fernando.souza@motoman.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'GRP TECHLAN COMERCIO E SERVICOS EM INSTALACOES DE TECNOLOGIA LTDA', cnpj: '23.478.851/0001-40', contrato: 'contratado', tel: '1532290020', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
+        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
+        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
         { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
