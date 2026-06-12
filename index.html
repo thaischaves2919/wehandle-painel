@@ -576,6 +576,15 @@
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
   const READ_ONLY = true;
+  const MB_SESSION = ''; // Preencher com token do Metabase — renovar quando expirar
+  const MB_URL     = 'https://mbwh.wehandle.com.br';
+  const MB_CARD_VIDAS = 7481;
+  const MB_CARDS = {
+    'netzsch':      { aderTipo: 'single', cardAder: 30553 },
+    'saint-gobain': { aderTipo: 'dual',   cardAd: 31360, cardNa: 31363 },
+    'gestamp':      { aderTipo: 'dual',   cardAd: 38145, cardNa: 38154 },
+    'grupo-zelo':   { aderTipo: 'breakdown', cardAder: 39958 },
+  };
   const OVERRIDES_KEY   = 'wehandle_contacts_v2';
   const WA_POSICAO_KEY  = 'wehandle_wa_ultimo';
   const WA_ENVIADOS_KEY = 'wehandle_wa_enviados_v1';
@@ -2130,6 +2139,77 @@
       atualizarBadgeSemResposta();
     } catch(e) {}
   }, 5000);
+
+  // ── Poll direto no Metabase a cada 2 minutos ──────────────────
+  async function _mbCard(cardId, params) {
+    const r = await fetch(MB_URL + '/api/card/' + cardId + '/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Metabase-Session': MB_SESSION },
+      body: JSON.stringify({ parameters: params || [] })
+    });
+    if (!r.ok) return null;
+    const data = (await r.json()).data || {};
+    const cols = (data.cols || []).map(c => c.name);
+    return (data.rows || []).map(row => Object.fromEntries(cols.map((k, i) => [k, row[i]])));
+  }
+
+  async function buscarMetricasMetabase() {
+    if (!MB_SESSION || READ_ONLY) return;
+    const hoje = new Date().toISOString().slice(0, 10);
+    let atualizado = false;
+    for (const c of WEHANDLE_DADOS.clientes) {
+      const cfg = MB_CARDS[c.id];
+      if (!cfg || !c.idempresa || !c.dataInicio) continue;
+      const prazo = new Date(c.dataInicio); prazo.setDate(prazo.getDate() + 45);
+      if (new Date() > prazo) continue;
+      try {
+        const rv = await _mbCard(MB_CARD_VIDAS, [
+          { type: 'number/=',    target: ['variable', ['template-tag', 'empresa']],     value: c.idempresa },
+          { type: 'date/single', target: ['variable', ['template-tag', 'data_inicio']], value: c.dataInicio },
+          { type: 'date/single', target: ['variable', ['template-tag', 'data_fim']],    value: hoje },
+        ]);
+        if (rv && rv[0] && parseInt(rv[0].final_periodo) > 0) { c.vidas = parseInt(rv[0].final_periodo); atualizado = true; }
+      } catch(e) {}
+      try {
+        if (cfg.aderTipo === 'single') {
+          const rows = await _mbCard(cfg.cardAder);
+          if (rows && rows.length) {
+            const p = rows[rows.length - 1].PORCENTAGEM_ADERENTE;
+            if (p != null) { c.aderencia = Math.round(parseFloat(String(p).replace(',','.')) * 10000) / 100; atualizado = true; }
+          }
+        } else if (cfg.aderTipo === 'dual') {
+          const [rAd, rNa] = await Promise.all([_mbCard(cfg.cardAd), _mbCard(cfg.cardNa)]);
+          if (rAd && rNa && rAd[0] && rNa[0]) {
+            const ad = parseInt(Object.values(rAd[0])[0] || 0), na = parseInt(Object.values(rNa[0])[0] || 0);
+            const tot = ad + na;
+            if (tot > 0) { c.aderencia = Math.round(ad / tot * 10000) / 100; atualizado = true; }
+          }
+        } else if (cfg.aderTipo === 'breakdown') {
+          const rows = await _mbCard(cfg.cardAder);
+          if (rows) {
+            let ad = 0, na = 0;
+            for (const row of rows) { const v = Object.values(row), cat = String(v[0]).toLowerCase(), q = parseInt(v[1]||0); if (cat.includes('não')||cat.includes('nao')) na+=q; else ad+=q; }
+            const tot = ad + na;
+            if (tot > 0) { c.aderencia = Math.round(ad / tot * 10000) / 100; atualizado = true; }
+          }
+        }
+      } catch(e) {}
+    }
+    if (!atualizado) return;
+    if (document.getElementById('tela-relatorios').classList.contains('ativa')) {
+      renderRelatorios();
+    } else if (document.getElementById('tela-detalhe').classList.contains('ativa') && _clienteDetalheAtivo) {
+      const cl = todosClientes().find(c => c.id === _clienteDetalheAtivo);
+      if (cl) { const cont = document.getElementById('detalhe-content'); cont.innerHTML = ''; cont.appendChild(criarCard(cl)); }
+    } else {
+      renderizarClientes();
+    }
+  }
+
+  if (MB_SESSION && !READ_ONLY) {
+    buscarMetricasMetabase();
+    setInterval(buscarMetricasMetabase, 120000);
+  }
 
 
 </script>
