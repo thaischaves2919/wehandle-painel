@@ -387,12 +387,12 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260521b"
     },
     "07.655.416/0001-97": {
-      "status": "pendente",
-      "__ver": "20260521b"
+      "status": "contatado",
+      "__ver": "20260612a"
     },
     "08.562.228/0001-87": {
-      "status": "pendente",
-      "__ver": "20260521b"
+      "status": "contatado",
+      "__ver": "20260612a"
     },
     "41.383.971/0001-45": {
       "status": "aguardando",
