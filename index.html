@@ -302,7 +302,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         <span>Painel</span>
       </div>
-      <div class="nav-item rl-oculto" onclick="abrirModalFornecedor()">
+      <div class="nav-item" onclick="abrirModalFornecedor()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>+ Novo Fornecedor</span>
       </div>
@@ -1042,7 +1042,7 @@
 
     // 7 — WhatsApp
     const td7 = document.createElement('td');
-    td7.className = 'center rl-oculto';
+    td7.className = 'center';
     const tel = (f.tel || '').replace(/\D/g, '');
     if (tel && !eFixo(f.tel)) {
       const btnWa = document.createElement('button');
@@ -1206,7 +1206,7 @@
       <div class="section-sub sub-verde">✓ Já contatados (<span id="count-contatados-${cliente.id}">${contatados.length}</span>)</div>
       <div class="table-wrap" style="margin-bottom:12px">
         <table class="fornecedor-table fp-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center">WA</th></tr></thead>
           <tbody id="tbody-${cliente.id}-contatados"></tbody>
         </table>
       </div>
@@ -1214,7 +1214,7 @@
       <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (<span id="count-aguardando-${cliente.id}">${aguardando.length}</span>)</div>
       <div class="table-wrap" style="margin-bottom:12px">
         <table class="fornecedor-table fp-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center">WA</th></tr></thead>
           <tbody id="tbody-${cliente.id}-aguardando"></tbody>
         </table>
       </div>
@@ -1222,7 +1222,7 @@
       <div id="secao-pendentes-${cliente.id}" style="display:${pendentes.length > 0 ? '' : 'none'};margin-top:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div class="section-sub sub-laranja" style="margin-bottom:0">⏳ Pendentes de contato (<span id="count-pendentes-${cliente.id}">${pendentes.length}</span>)</div>
-          <div style="display:flex;gap:8px" class="rl-oculto">
+          <div style="display:flex;gap:8px">
             <button onclick="copiarContatos('tel','${cliente.id}')" style="background:#1e2b4a;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📞 Copiar telefones</button>
             <button onclick="copiarContatos('email','${cliente.id}')" style="background:#e0296f;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">✉️ Copiar e-mails</button>
             <button onclick="exportarPendentesXLSX('${cliente.id}')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">⬇ Exportar planilha</button>
@@ -1230,7 +1230,7 @@
         </div>
         <div class="table-wrap" style="margin-top:8px">
           <table class="fornecedor-table fp-table">
-            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
+            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center">WA</th></tr></thead>
             <tbody id="tbody-${cliente.id}-pendentes"></tbody>
           </table>
         </div>
