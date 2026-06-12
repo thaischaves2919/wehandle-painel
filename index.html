@@ -1261,8 +1261,6 @@
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div class="section-sub sub-laranja" style="margin-bottom:0">⏳ Pendentes de contato (<span id="count-pendentes-${cliente.id}">${pendentes.length}</span>)</div>
           <div style="display:flex;gap:8px">
-            <button onclick="copiarContatos('tel','${cliente.id}')" style="background:#1e2b4a;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📞 Copiar telefones</button>
-            <button onclick="copiarContatos('email','${cliente.id}')" style="background:#e0296f;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">✉️ Copiar e-mails</button>
             <button onclick="enviarEmailMassa('${cliente.id}')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📧 E-mail em massa</button>
             <button onclick="exportarPendentesXLSX('${cliente.id}')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">⬇ Exportar planilha</button>
           </div>
