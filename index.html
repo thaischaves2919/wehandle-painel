@@ -510,7 +510,6 @@
       <div class="modal-campo">
         <label>Status</label>
         <select id="nf-status">
-          <option value="aguardando">Aguardando reunião</option>
           <option value="contatado">Contatado</option>
           <option value="pendente">Pendente</option>
         </select>
@@ -641,9 +640,8 @@
   }
 
   const STATUS_OPTS = [
-    { value: 'contatado',  label: 'Contatado',         cls: 'pill-sim'       },
-    { value: 'aguardando', label: 'Aguardando reunião', cls: 'pill-aguardando'},
-    { value: 'pendente',   label: 'Pendente',           cls: 'pill-nao'       },
+    { value: 'contatado', label: 'Contatado', cls: 'pill-sim' },
+    { value: 'pendente',  label: 'Pendente',  cls: 'pill-nao' },
   ];
   const VIA_OPTS = [
     { value: 'whatsapp', label: 'WhatsApp', cls: 'pill-wa'    },
@@ -692,7 +690,26 @@
       '📱 (19) 98711-8250'
     );
     window.open('mailto:?bcc=' + emails.join(',') + '&subject=' + assunto + '&body=' + corpo);
-    mostrarToast('✓ ' + emails.length + ' destinatário(s) prontos no e-mail!');
+    // Marca automaticamente como contatados quem tem e-mail
+    let marcados = 0;
+    tbody.querySelectorAll('tr').forEach(tr => {
+      const inp = tr.querySelector('.email-input');
+      const val = inp ? inp.value.trim() : '';
+      if (val && val.includes('@') && tr.dataset.cnpj) {
+        const cnpj = tr.dataset.cnpj;
+        if (!overrides[cnpj]) overrides[cnpj] = {};
+        Object.assign(overrides[cnpj], { status: 'contatado', __ver: WEHANDLE_DADOS.versao });
+        marcados++;
+      }
+    });
+    if (marcados > 0) {
+      persistir();
+      if (document.getElementById('tela-detalhe').classList.contains('ativa')) {
+        const cl = todosClientes().find(c => c.id === clienteId);
+        if (cl) { const cont = document.getElementById('detalhe-content'); cont.innerHTML = ''; cont.appendChild(criarCard(cl)); }
+      }
+    }
+    mostrarToast('✓ ' + emails.length + ' e-mail(s) · ' + marcados + ' marcados como contatados!');
   }
 
   function exportarPendentesXLSX(clienteId) {
@@ -914,17 +931,13 @@
     const secao  = document.getElementById('secao-pendentes-' + clienteId);
     const tbodyP = document.getElementById('tbody-' + clienteId + '-pendentes');
     const tbodyC = document.getElementById('tbody-' + clienteId + '-contatados');
-    const tbodyA = document.getElementById('tbody-' + clienteId + '-aguardando');
     const nP = tbodyP ? tbodyP.querySelectorAll('tr').length : 0;
     const nC = tbodyC ? tbodyC.querySelectorAll('tr').length : 0;
-    const nA = tbodyA ? tbodyA.querySelectorAll('tr').length : 0;
     if (secao) secao.style.display = nP > 0 ? '' : 'none';
     const cP = document.getElementById('count-pendentes-'  + clienteId);
     const cC = document.getElementById('count-contatados-' + clienteId);
-    const cA = document.getElementById('count-aguardando-' + clienteId);
     if (cP) cP.textContent = nP;
     if (cC) cC.textContent = nC;
-    if (cA) cA.textContent = nA;
   }
 
   function criarLinha(f, clienteId) {
@@ -934,8 +947,7 @@
     const tr = document.createElement('tr');
     tr.dataset.cnpj    = f.cnpj;
     tr.dataset.cliente = clienteId;
-    if (f.status === 'pendente')        tr.className = 'row-pendente';
-    else if (f.status === 'aguardando') tr.className = 'row-aguardando';
+    if (f.status === 'pendente') tr.className = 'row-pendente';
 
     // 1 — Razão social
     const td1 = document.createElement('td');
@@ -1040,8 +1052,8 @@
       const o = STATUS_OPTS.find(x => x.value === statusSel.value);
       statusDisp.className = 'status-display pill ' + o.cls;
       statusDisp.textContent = o.label;
-      tr.className = statusSel.value === 'pendente' ? 'row-pendente' : statusSel.value === 'aguardando' ? 'row-aguardando' : '';
-      const alvoSufixo = statusSel.value === 'contatado' ? 'contatados' : statusSel.value === 'aguardando' ? 'aguardando' : 'pendentes';
+      tr.className = statusSel.value === 'pendente' ? 'row-pendente' : '';
+      const alvoSufixo = statusSel.value === 'contatado' ? 'contatados' : 'pendentes';
       const alvo = document.getElementById('tbody-' + clienteId + '-' + alvoSufixo);
       if (alvo) alvo.appendChild(tr);
       updateOverride(f.cnpj, { status: statusSel.value, __ver: WEHANDLE_DADOS.versao });
@@ -1090,7 +1102,14 @@
       btnWa.style.cssText = 'background:#25D366;color:#fff;border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:flex;align-items:center';
       btnWa.onclick = () => {
         salvarUltimaPosicaoWA(f.cnpj, f.razaoSocial, clienteId);
-        enviarWhatsAppFornecedor(f.cnpj, tel, f.razaoSocial, clienteId);
+        if (f.status === 'pendente') {
+          enviarWhatsAppFornecedor(f.cnpj, tel, f.razaoSocial, clienteId);
+        } else {
+          let nums = tel.replace(/\D/g, '');
+          if (nums.startsWith('0')) nums = nums.slice(1);
+          if (!nums.startsWith('55')) nums = '55' + nums;
+          window.open('whatsapp://send?phone=' + nums, '_blank');
+        }
         document.querySelectorAll('.wa-ultimo-row').forEach(r => {
           r.classList.remove('wa-ultimo-row');
           r.querySelectorAll('.wa-marker').forEach(m => m.remove());
@@ -1134,8 +1153,7 @@
 
     const extrasCliente = carregarFornecedoresExtras().filter(f => f.clienteId === cliente.id);
     const forn = [...cliente.fornecedores.map(f => getFornecedor(f)), ...extrasCliente.map(f => getFornecedor(f))];
-    const contatados = forn.filter(f => f.status === 'contatado');
-    const aguardando = forn.filter(f => f.status === 'aguardando');
+    const contatados = forn.filter(f => f.status === 'contatado' || f.status === 'aguardando');
     const pendentes  = forn.filter(f => f.status === 'pendente');
     const total = forn.length;
 
@@ -1249,14 +1267,6 @@
         </table>
       </div>
 
-      <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (<span id="count-aguardando-${cliente.id}">${aguardando.length}</span>)</div>
-      <div class="table-wrap" style="margin-bottom:12px">
-        <table class="fornecedor-table fp-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th><th class="center rl-oculto">WA</th></tr></thead>
-          <tbody id="tbody-${cliente.id}-aguardando"></tbody>
-        </table>
-      </div>
-
       <div id="secao-pendentes-${cliente.id}" style="display:${pendentes.length > 0 ? '' : 'none'};margin-top:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div class="section-sub sub-laranja" style="margin-bottom:0">⏳ Pendentes de contato (<span id="count-pendentes-${cliente.id}">${pendentes.length}</span>)</div>
@@ -1276,10 +1286,8 @@
     `;
 
     const tC = card.querySelector('#tbody-' + cliente.id + '-contatados');
-    const tA = card.querySelector('#tbody-' + cliente.id + '-aguardando');
     const tP = card.querySelector('#tbody-' + cliente.id + '-pendentes');
     contatados.forEach(f => tC.appendChild(criarLinha(f, cliente.id)));
-    aguardando.forEach(f => tA.appendChild(criarLinha(f, cliente.id)));
     pendentes.forEach( f => tP.appendChild(criarLinha(f, cliente.id)));
 
     const vidasInput = card.querySelector('#' + cliente.id + '-vidas');
@@ -1544,7 +1552,6 @@
       const forn      = [...(c.fornecedores || []).map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; }),
                          ...extrasC.map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; })];
       const nCont = forn.filter(f => f.status === 'contatado').length;
-      const nAgu  = forn.filter(f => f.status === 'aguardando').length;
       const nPend = forn.filter(f => f.status === 'pendente').length;
       const nTot  = forn.length;
       let prazoStr = '—', diasStr = '—', diasCls = '';
@@ -1566,7 +1573,6 @@
         <td class="rel-neutro">${metaAd}%</td>
         <td class="${parseFloat(gapAd.replace(',','.')) <= 0 ? 'rel-ok' : 'rel-alerta'}">${parseFloat(gapAd.replace(',','.')) <= 0 ? '✓' : gapAd + ' p.p.'}</td>
         <td class="rel-ok">${nCont}</td>
-        <td style="color:#b7791f;font-weight:${nAgu > 0 ? '700' : '400'}">${nAgu}</td>
         <td class="${nPend > 0 ? 'rel-alerta' : 'rel-neutro'}">${nPend}</td>
         <td>${nTot}</td>
         <td>${prazoStr}</td>
@@ -1581,7 +1587,7 @@
               <th>Cliente</th>
               <th>Vidas</th><th>Meta F1</th><th>Gap F1</th>
               <th>Aderência</th><th>Meta Ad</th><th>Gap Ad</th>
-              <th>Contatos</th><th>Aguardando</th><th>Pendentes</th><th>Total Forn.</th>
+              <th>Contatos</th><th>Pendentes</th><th>Total Forn.</th>
               <th>Prazo</th><th>Dias</th>
             </tr></thead>
             <tbody>${rows.join('')}</tbody>
@@ -1593,7 +1599,7 @@
   function exportarRelatoriosCSV() {
     const overrides = (() => { try { const r = localStorage.getItem(OVERRIDES_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; } })();
     const lista = todosClientes();
-    const header = ['Cliente','CNPJ','Vidas','Meta F1','Gap F1','Aderência (%)','Meta Aderência (%)','Gap Aderência (p.p.)','Contatados','Aguardando','Pendentes','Total Fornecedores','Prazo','Dias Restantes'];
+    const header = ['Cliente','CNPJ','Vidas','Meta F1','Gap F1','Aderência (%)','Meta Aderência (%)','Gap Aderência (p.p.)','Contatados','Pendentes','Total Fornecedores','Prazo','Dias Restantes'];
     const linhas = [header];
     lista.forEach(c => {
       const mOv = getMetricasOverride(c.id);
@@ -1607,7 +1613,6 @@
       const forn      = [...(c.fornecedores || []).map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; }),
                          ...extrasC.map(f => { const o = overrides[f.cnpj] || {}; return { ...f, status: o.status || f.status }; })];
       const nCont = forn.filter(f => f.status === 'contatado').length;
-      const nAgu  = forn.filter(f => f.status === 'aguardando').length;
       const nPend = forn.filter(f => f.status === 'pendente').length;
       let prazoStr = '', diasStr = '';
       if (c.dataInicio) {
@@ -1616,7 +1621,7 @@
         prazoStr = prazo.toLocaleDateString('pt-BR');
         diasStr  = String(Math.round((prazo - hoje) / 86400000));
       }
-      linhas.push([c.nome, c.cnpj || '', vidas, metaF1 || '', gapF1, aderencia.toFixed(2).replace('.',','), metaAd, gapAd.replace('.',','), nCont, nAgu, nPend, forn.length, prazoStr, diasStr]);
+      linhas.push([c.nome, c.cnpj || '', vidas, metaF1 || '', gapF1, aderencia.toFixed(2).replace('.',','), metaAd, gapAd.replace('.',','), nCont, nPend, forn.length, prazoStr, diasStr]);
     });
     const csv  = linhas.map(r => r.join(';')).join('\r\n');
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
@@ -1829,7 +1834,7 @@
     document.getElementById('nf-email').value    = '';
     document.getElementById('nf-contrato').value = 'contratado';
     document.getElementById('nf-via').value      = 'whatsapp';
-    document.getElementById('nf-status').value   = 'aguardando';
+    document.getElementById('nf-status').value   = 'pendente';
     document.getElementById('modal-novo-fornecedor').classList.add('aberto');
     document.getElementById('nf-nome').focus();
   }
