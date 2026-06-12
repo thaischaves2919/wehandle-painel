@@ -671,6 +671,32 @@
     window.open('whatsapp://send?phone=' + nums + '&text=' + encodeURIComponent(mensagem), '_blank');
   }
 
+  function enviarEmailMassa(clienteId) {
+    const tbody = document.getElementById('tbody-' + clienteId + '-pendentes');
+    if (!tbody) { mostrarToast('⚠ Abra o cliente primeiro'); return; }
+    const emails = [];
+    tbody.querySelectorAll('tr').forEach(tr => {
+      const inp = tr.querySelector('.email-input');
+      const val = inp ? inp.value.trim() : '';
+      if (val && val.includes('@')) emails.push(val);
+    });
+    if (!emails.length) { mostrarToast('⚠ Nenhum e-mail cadastrado nos pendentes'); return; }
+    const cliente = todosClientes().find(c => c.id === clienteId);
+    const nomeCliente = cliente ? cliente.nome : clienteId;
+    const assunto = encodeURIComponent('Cadastro de colaboradores — wehandle / ' + nomeCliente);
+    const corpo = encodeURIComponent(
+      'Olá, tudo bem?\n\n' +
+      'Meu nome é Thais e sou responsável pela operação e pelo engajamento dos fornecedores na plataforma da wehandle.\n\n' +
+      'Estou entrando em contato para apoiar vocês neste início com a ' + nomeCliente + ', auxiliando no cadastro de colaboradores, aderência e conformidade da documentação e explicando o funcionamento da plataforma.\n\n' +
+      'Para cadastrar os colaboradores, preparei o material abaixo:\n' +
+      '🎥 Vídeo — como fazer a carga em massa: https://jam.dev/c/9a03faff-2aa2-4132-a505-31ef7e50abc5\n\n' +
+      'Caso precise, também tenho uma planilha modelo para a carga em massa de colaboradores — basta me solicitar!\n\n' +
+      'Atenciosamente,\nThais Chaves\nwehandle — CMS Engajamento'
+    );
+    window.open('mailto:?bcc=' + emails.join(',') + '&subject=' + assunto + '&body=' + corpo);
+    mostrarToast('✓ ' + emails.length + ' destinatário(s) prontos no e-mail!');
+  }
+
   function exportarPendentesXLSX(clienteId) {
     if (typeof XLSX === 'undefined') { mostrarToast('⚠ Aguarde o carregamento da página...'); return; }
     const cliente = todosClientes().find(c => c.id === clienteId);
@@ -1239,6 +1265,7 @@
           <div style="display:flex;gap:8px">
             <button onclick="copiarContatos('tel','${cliente.id}')" style="background:#1e2b4a;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📞 Copiar telefones</button>
             <button onclick="copiarContatos('email','${cliente.id}')" style="background:#e0296f;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">✉️ Copiar e-mails</button>
+            <button onclick="enviarEmailMassa('${cliente.id}')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">📧 E-mail em massa</button>
             <button onclick="exportarPendentesXLSX('${cliente.id}')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">⬇ Exportar planilha</button>
           </div>
         </div>
