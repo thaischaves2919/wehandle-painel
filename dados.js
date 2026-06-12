@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 12/06/2026 (manual)
+// Última atualização: 12/06/2026
 var WEHANDLE_DADOS = {
   versao: '20260612b',
   clientes: [
@@ -118,7 +118,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 52,
-      aderencia: 56.93,
+      aderencia: 56.94,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -129,7 +129,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
         { data: '2026-06-10', vidas: 48, aderencia: 57.74 },
         { data: '2026-06-11', vidas: 47, aderencia: 57.74 },
-        { data: '2026-06-12', vidas: 52, aderencia: 56.93 }
+        { data: '2026-06-12', vidas: 52, aderencia: 56.94 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -177,7 +177,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
         { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
         { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
+        { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' }
       ]
     },
     {
