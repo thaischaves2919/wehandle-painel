@@ -403,8 +403,8 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260521b"
     },
     "49.930.514/0364-07": {
-      "status": "contatado",
-      "__ver": "20260521b"
+      "status": "pendente",
+      "__ver": "20260612b"
     },
     "87.169.900/0001-45": {
       "status": "aguardando",
