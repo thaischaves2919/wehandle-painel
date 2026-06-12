@@ -55,7 +55,7 @@ def get_vidas(idempresa, data_inicio):
     ]
     rows = run_card(7481, params)
     if rows:
-        v = rows[0].get("final_periodo")
+        v = rows[0].get("total_periodo")
         if v is not None and int(v) > 0:
             return int(v)
     return None

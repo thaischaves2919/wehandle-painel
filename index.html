@@ -2168,7 +2168,7 @@
           { type: 'date/single', target: ['variable', ['template-tag', 'data_inicio']], value: c.dataInicio },
           { type: 'date/single', target: ['variable', ['template-tag', 'data_fim']],    value: hoje },
         ]);
-        if (rv && rv[0] && parseInt(rv[0].final_periodo) > 0) { c.vidas = parseInt(rv[0].final_periodo); atualizado = true; }
+        if (rv && rv[0] && parseInt(rv[0].total_periodo) > 0) { c.vidas = parseInt(rv[0].total_periodo); atualizado = true; }
       } catch(e) {}
       try {
         if (cfg.aderTipo === 'single') {
