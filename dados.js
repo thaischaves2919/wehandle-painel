@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 11/06/2026
+// Última atualização: 12/06/2026
 var WEHANDLE_DADOS = {
   versao: '20260611a',
   clientes: [
@@ -128,7 +128,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-26', vidas: 28, aderencia: 48.21 },
         { data: '2026-06-09', vidas: 45, aderencia: 56.53 },
         { data: '2026-06-10', vidas: 48, aderencia: 57.74 },
-        { data: '2026-06-11', vidas: 47, aderencia: 57.74 }
+        { data: '2026-06-11', vidas: 47, aderencia: 57.74 },
+        { data: '2026-06-12', vidas: 47, aderencia: 57.74 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -169,7 +170,13 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'Transforma Corporate', cnpj: '11.565.394/0001-41', contrato: 'contratado', tel: '', email: 'elaine@transformacorporate.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '1532228610', email: 'regiane@bomclimaarcondicionado.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'HELP MANUTENCAO / CONSTRUCAO CIVIL', cnpj: '06.240.916/0001-03', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'MOTOMAN ROBÓTICA DO BRASIL', cnpj: '08.515.495/0001-01', contrato: 'contratado', tel: '1143523002', email: 'fernando.souza@motoman.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'GRP TECHLAN COMERCIO E SERVICOS EM INSTALACOES DE TECNOLOGIA LTDA', cnpj: '23.478.851/0001-40', contrato: 'contratado', tel: '1532290020', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
@@ -183,7 +190,8 @@ var WEHANDLE_DADOS = {
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
-        { data: '2026-06-11', vidas: 28, aderencia: 2.03 }
+        { data: '2026-06-11', vidas: 28, aderencia: 2.03 },
+        { data: '2026-06-12', vidas: 28, aderencia: 2.03 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
