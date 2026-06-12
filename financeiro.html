@@ -89,6 +89,9 @@
   .evol-alerta { color: #b7791f; }
   .tag-atual { display: inline-block; background: #dbeafe; color: #1e40af; border-radius: 4px; padding: 0 5px; font-size: 9px; font-weight: 700; margin-left: 4px; }
   .tag-final { display: inline-block; background: #e2e6ef; color: #374151; border-radius: 4px; padding: 0 5px; font-size: 9px; font-weight: 700; margin-left: 4px; }
+  .btn-evol { background: #e8f0ff; color: #1a56db; border: 1.5px solid #c3d4f7; padding: 5px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+  .btn-evol:hover { background: #d0e1ff; }
+  .btn-evol.aberto { background: #1a56db; color: #fff; border-color: #1a56db; }
 
   .footer { text-align: center; padding: 24px; font-size: 12px; color: #a0aec0; }
 
@@ -278,7 +281,7 @@
           <div class="cliente-nome">${c.nome}</div>
           <div class="cliente-periodo">📅 ${periodoStr(c)} &nbsp;·&nbsp; ${enc ? 'Período encerrado' : 'Em andamento'}</div>
         </div>
-        <div class="cliente-badges">${encBadge}${adBadge}</div>
+        <div class="cliente-badges">${encBadge}${adBadge}${hist.length > 0 ? `<button class="btn-evol" onclick="toggleEvol('${c.id}',this)">📊 Evolução</button>` : ''}</div>
       </div>
       <div class="cliente-body">
         <div class="metricas-grid">
@@ -305,20 +308,30 @@
           <div class="bonus-valor ${bonusValCls}">${mrr1 ? bonusValStr : '—'}</div>
         </div>
         ${hist.length > 0 ? `
-        <div class="evol-secao-titulo">Evolução</div>
-        <table class="evol-table">
-          <thead><tr>
-            <th>Data</th><th>Vidas</th><th>Aderência</th>
-            <th>Gap F1</th><th>Gap Aderência</th>
-          </tr></thead>
-          <tbody>${histRows}</tbody>
-        </table>` : '<div style="color:#a0aec0;font-size:13px;margin-top:8px">Sem histórico de evolução disponível ainda.</div>'}
+        <div id="evol-${c.id}" style="display:none">
+          <div class="evol-secao-titulo" style="margin-top:16px">Evolução</div>
+          <table class="evol-table">
+            <thead><tr>
+              <th>Data</th><th>Vidas</th><th>Aderência</th>
+              <th>Gap F1</th><th>Gap Aderência</th>
+            </tr></thead>
+            <tbody>${histRows}</tbody>
+          </table>
+        </div>` : ''}
       </div>`;
 
     grid.appendChild(card);
   });
 
   document.getElementById('resumo-total').textContent = fmtBRL(totalReceber);
+
+  window.toggleEvol = function(id, btn) {
+    const el = document.getElementById('evol-' + id);
+    const abrir = el.style.display === 'none';
+    el.style.display = abrir ? '' : 'none';
+    btn.textContent = abrir ? '📊 Ocultar' : '📊 Evolução';
+    btn.classList.toggle('aberto', abrir);
+  };
   window.exportarExcel = function() {
     if (typeof XLSX === 'undefined') { alert('Biblioteca ainda carregando, tente novamente em instantes.'); return; }
     const wb = XLSX.utils.book_new();
