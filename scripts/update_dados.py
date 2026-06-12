@@ -317,9 +317,10 @@ def enviar_whatsapp(telefone, razao_social, nome_cliente):
 # ── 9. Notificação via ntfy.sh ────────────────────────────────────────────────
 def enviar_notificacao(titulo, mensagem):
     if not NTFY_TOPIC:
+        print("  ⚠ NTFY_TOPIC não configurado — notificação ignorada")
         return
     try:
-        requests.post(
+        r = requests.post(
             f"https://ntfy.sh/{NTFY_TOPIC}",
             data=mensagem.encode("utf-8"),
             headers={
@@ -329,7 +330,10 @@ def enviar_notificacao(titulo, mensagem):
             },
             timeout=10,
         )
-        print(f"  ✓ Notificação enviada → ntfy.sh/{NTFY_TOPIC}")
+        if r.status_code == 200:
+            print(f"  ✓ Notificação enviada → ntfy.sh/{NTFY_TOPIC}")
+        else:
+            print(f"  ⚠ Notificação falhou — HTTP {r.status_code}: {r.text[:200]}")
     except Exception as e:
         print(f"  ⚠ Notificação falhou: {e}")
 
