@@ -324,6 +324,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         <span>Salvar</span>
       </div>
+      <div class="nav-section-label rl-oculto">Sincronização</div>
+      <div class="nav-item rl-oculto" id="btn-publicar-chefe" onclick="publicarParaChefe()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        <span>Publicar para chefe</span>
+      </div>
       <div class="nav-section-label">Links Rápidos</div>
       <a class="nav-item" href="https://thaischaves2919.github.io/wehandle-painel/" target="_blank" rel="noopener" style="text-decoration:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -577,6 +582,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="dados.js"></script>
+<script src="overrides.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
   const READ_ONLY = true;
@@ -721,6 +727,10 @@
   }
 
   function carregarOverrides() {
+    if (READ_ONLY && window.WEHANDLE_OVERRIDES) {
+      overrides = window.WEHANDLE_OVERRIDES.contacts || {};
+      return;
+    }
     try {
       const raw = localStorage.getItem(OVERRIDES_KEY);
       if (raw) overrides = JSON.parse(raw);
@@ -742,6 +752,13 @@
   const METRICAS_KEY = 'wehandle_metricas_v1';
 
   function getMetricasOverride(clienteId) {
+    if (READ_ONLY && window.WEHANDLE_OVERRIDES) {
+      const o = (window.WEHANDLE_OVERRIDES.metricas || {})[clienteId] || {};
+      const r = {};
+      if (o.vidas     !== undefined) r.vidas     = o.vidas;
+      if (o.aderencia !== undefined) r.aderencia = o.aderencia;
+      return r;
+    }
     try {
       const r    = localStorage.getItem(METRICAS_KEY);
       const tudo = r ? JSON.parse(r) : {};
@@ -769,10 +786,49 @@
   }
 
   function persistir() {
+    if (READ_ONLY) return;
     localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
     const agora = new Date().toLocaleString('pt-BR');
     document.getElementById('ultima-atualizacao').textContent = 'Salvo em ' + agora;
     try { new BroadcastChannel('wehandle_painel').postMessage({ ts: Date.now() }); } catch(e) {}
+  }
+
+  async function publicarParaChefe() {
+    const btnEl  = document.getElementById('btn-publicar-chefe');
+    const spanEl = btnEl ? btnEl.querySelector('span') : null;
+    if (spanEl) spanEl.textContent = '⏳ Publicando...';
+    if (btnEl)  btnEl.style.pointerEvents = 'none';
+    try {
+      const PAT  = '';
+      const REPO = 'thaischaves2919/wehandle-painel';
+      const payload = {
+        contacts:          JSON.parse(localStorage.getItem(OVERRIDES_KEY)           || '{}'),
+        clientesExtras:    JSON.parse(localStorage.getItem(CLIENTES_EXTRAS_KEY)     || '[]'),
+        fornecedoresExtras:JSON.parse(localStorage.getItem(FORNECEDORES_EXTRAS_KEY) || '[]'),
+        metricas:          JSON.parse(localStorage.getItem(METRICAS_KEY)            || '{}')
+      };
+      const jsContent = 'window.WEHANDLE_OVERRIDES = ' + JSON.stringify(payload, null, 2) + ';\n';
+      const bytes = new TextEncoder().encode(jsContent);
+      const b64   = btoa(String.fromCharCode(...bytes));
+      const hdrs  = { 'Authorization': 'token ' + PAT, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+      const getR  = await fetch('https://api.github.com/repos/' + REPO + '/contents/overrides.js', { headers: hdrs });
+      const getJ  = await getR.json();
+      const putR  = await fetch('https://api.github.com/repos/' + REPO + '/contents/overrides.js', {
+        method: 'PUT', headers: hdrs,
+        body: JSON.stringify({ message: 'sync: publicar painel para chefe', content: b64, sha: getJ.sha })
+      });
+      if (putR.ok) {
+        mostrarToast('✓ Publicado! A chefe verá em ~1 minuto.');
+      } else {
+        const err = await putR.json();
+        mostrarToast('⚠ Erro: ' + (err.message || putR.status));
+      }
+    } catch(err) {
+      mostrarToast('⚠ Erro: ' + err.message);
+    } finally {
+      if (spanEl) spanEl.textContent = '☁ Publicar para chefe';
+      if (btnEl)  btnEl.style.pointerEvents = '';
+    }
   }
 
   function updateOverride(cnpj, campos) {
@@ -1718,6 +1774,7 @@
   const FORNECEDORES_EXTRAS_KEY = 'wehandle_fornecedores_extras_v1';
 
   function carregarFornecedoresExtras() {
+    if (READ_ONLY && window.WEHANDLE_OVERRIDES) return window.WEHANDLE_OVERRIDES.fornecedoresExtras || [];
     try { const r = localStorage.getItem(FORNECEDORES_EXTRAS_KEY); return r ? JSON.parse(r) : []; } catch(e) { return []; }
   }
 
@@ -1791,6 +1848,7 @@
   const CLIENTES_EXTRAS_KEY = 'wehandle_clientes_extras_v1';
 
   function carregarClientesExtras() {
+    if (READ_ONLY && window.WEHANDLE_OVERRIDES) return window.WEHANDLE_OVERRIDES.clientesExtras || [];
     try {
       const raw = localStorage.getItem(CLIENTES_EXTRAS_KEY);
       return raw ? JSON.parse(raw) : [];
