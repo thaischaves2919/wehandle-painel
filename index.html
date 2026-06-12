@@ -584,6 +584,7 @@
   let _publicandoChefe = false;
   let _publicacaoPendente = false;
   let _ultimaPublicacao = 0;
+  let _clienteDetalheAtivo = null;
 
   function carregarWaEnviados() {
     try { const r = localStorage.getItem(WA_ENVIADOS_KEY); return r ? JSON.parse(r) : {}; } catch(e) { return {}; }
@@ -1383,6 +1384,7 @@
 
   // ── Tela navigation ──────────────────────────────────────────
   function abrirDetalhe(clienteId) {
+    _clienteDetalheAtivo = clienteId;
     const cliente = todosClientes().find(c => c.id === clienteId);
     if (!cliente) return;
     const content = document.getElementById('detalhe-content');
@@ -1415,6 +1417,7 @@
   }
 
   function voltarPainel() {
+    _clienteDetalheAtivo = null;
     document.getElementById('tela-detalhe').classList.remove('ativa');
     document.getElementById('tela-relatorios').classList.remove('ativa');
     document.getElementById('tela-sem-resposta').classList.remove('ativa');
@@ -2097,7 +2100,7 @@
   }
 
   // ── Auto-refresh a cada 5 segundos ────────────────────────────
-  const _versaoCarregada = WEHANDLE_DADOS.versao || '';
+  let _versaoAtual = WEHANDLE_DADOS.versao || '';
   const _urlDados = READ_ONLY
     ? 'dados.js?_='
     : 'https://thaischaves2919.github.io/wehandle-painel/dados.js?_=';
@@ -2108,19 +2111,23 @@
       if (!r.ok) return;
       const txt = await r.text();
       const m = txt.match(/versao:\s*['"]([^'"]+)['"]/);
-      if (m && m[1] && m[1] !== _versaoCarregada) {
-        if (READ_ONLY) {
-          location.reload();
-        } else {
-          const toast = document.getElementById('toast');
-          if (toast && !toast.classList.contains('show')) {
-            toast.textContent = '🔄 Novos dados disponíveis — clique para recarregar';
-            toast.style.cursor = 'pointer';
-            toast.onclick = () => location.reload();
-            toast.classList.add('show');
-          }
-        }
+      if (!m || !m[1] || m[1] === _versaoAtual) return;
+      _versaoAtual = m[1];
+      // Re-executa dados.js para atualizar WEHANDLE_DADOS em memória
+      const s = document.createElement('script');
+      s.textContent = txt;
+      document.head.appendChild(s);
+      document.head.removeChild(s);
+      // Re-renderiza a tela ativa
+      if (document.getElementById('tela-relatorios').classList.contains('ativa')) {
+        renderRelatorios();
+      } else if (document.getElementById('tela-detalhe').classList.contains('ativa') && _clienteDetalheAtivo) {
+        const cl = todosClientes().find(c => c.id === _clienteDetalheAtivo);
+        if (cl) { const cont = document.getElementById('detalhe-content'); cont.innerHTML = ''; cont.appendChild(criarCard(cl)); }
+      } else {
+        renderizarClientes();
       }
+      atualizarBadgeSemResposta();
     } catch(e) {}
   }, 5000);
 
