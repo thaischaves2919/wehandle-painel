@@ -2034,6 +2034,34 @@
     atualizarBadgeSemResposta();
   }
 
+  // ── Auto-refresh a cada 5 segundos ────────────────────────────
+  const _versaoCarregada = WEHANDLE_DADOS.versao || '';
+  const _urlDados = READ_ONLY
+    ? 'dados.js?_='
+    : 'https://thaischaves2919.github.io/wehandle-painel/dados.js?_=';
+
+  setInterval(async () => {
+    try {
+      const r = await fetch(_urlDados + Date.now());
+      if (!r.ok) return;
+      const txt = await r.text();
+      const m = txt.match(/versao:\s*['"]([^'"]+)['"]/);
+      if (m && m[1] && m[1] !== _versaoCarregada) {
+        if (READ_ONLY) {
+          location.reload();
+        } else {
+          const toast = document.getElementById('toast');
+          if (toast && !toast.classList.contains('show')) {
+            toast.textContent = '🔄 Novos dados disponíveis — clique para recarregar';
+            toast.style.cursor = 'pointer';
+            toast.onclick = () => location.reload();
+            toast.classList.add('show');
+          }
+        }
+      }
+    } catch(e) {}
+  }, 5000);
+
 
 </script>
 
