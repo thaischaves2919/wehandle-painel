@@ -180,7 +180,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
         { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' }
+        { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
+        { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-13' }
       ]
     },
     {
