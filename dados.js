@@ -1,5 +1,5 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 13/06/2026
+// Última atualização: 14/06/2026
 var WEHANDLE_DADOS = {
   versao: '20260612b',
   clientes: [
@@ -130,7 +130,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-10', vidas: 48, aderencia: 57.74 },
         { data: '2026-06-11', vidas: 47, aderencia: 57.74 },
         { data: '2026-06-12', vidas: 52, aderencia: 57.01 },
-        { data: '2026-06-13', vidas: 52, aderencia: 57.01 }
+        { data: '2026-06-13', vidas: 52, aderencia: 57.01 },
+        { data: '2026-06-14', vidas: 52, aderencia: 57.01 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -197,7 +198,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-11', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-12', vidas: 28, aderencia: 2.03 },
-        { data: '2026-06-13', vidas: 28, aderencia: 2.03 }
+        { data: '2026-06-13', vidas: 28, aderencia: 2.03 },
+        { data: '2026-06-14', vidas: 28, aderencia: 2.03 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
