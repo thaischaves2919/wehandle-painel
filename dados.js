@@ -182,7 +182,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
         { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-13' }
+        { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-13' },
+        { razaoSocial: 'TREAL EQUIPAMENTOS ESPECIAIS LTDA', cnpj: '12.264.795/0001-24', contrato: 'contratado', tel: '1938090577', email: 'adm@treal.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-14' },
+        { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-14' }
       ]
     },
     {
