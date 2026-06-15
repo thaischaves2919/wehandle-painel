@@ -48,6 +48,23 @@
     /* ── Bônus ── */
     .bonus-card { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
     .bonus-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; }
+    .bp-wrap   { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .bp-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .bp-table  { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid #e2e6ef; border-radius: 10px; overflow: hidden; }
+    .bp-table th { text-align: left; padding: 9px 14px; font-size: 11px; font-weight: 600; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; background: #f7f8fa; border-bottom: 2px solid #e2e6ef; }
+    .bp-table th:not(:first-child) { text-align: right; }
+    .bp-table td { padding: 11px 14px; border-bottom: 1px solid #f7f8fa; vertical-align: middle; }
+    .bp-td-nome   { font-weight: 600; color: #1e2b4a; }
+    .bp-td-faixas { font-size: 11px; color: #a0aec0; margin-top: 3px; }
+    .bp-td-faixas span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+    .bp-td-faixas .ok { color: #276749; font-weight: 700; }
+    .bp-td-val { text-align: right; font-weight: 700; color: #1e2b4a; }
+    .bp-td-val.aguardando { color: #a0aec0; font-weight: 400; font-size: 12px; }
+    .bp-td-val.andamento  { color: #2b6cb0; font-weight: 600; font-size: 12px; }
+    .bp-td-periodo { font-size: 10px; color: #a0aec0; font-weight: 400; margin-top: 2px; }
+    .bp-total td { background: #1e2b4a; color: #fff; border-bottom: none; font-weight: 700; font-size: 14px; }
+    .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .bp-total .bp-td-val  { color: #4ade80; font-size: 18px; }
 
     /* ── Cliente cards ── */
     .section-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 4px; }
@@ -237,22 +254,42 @@
     main.innerHTML = '';
 
     // ── Bônus ──
-    let bonusPotencial = 0, bonusDesbloqueado = 0;
-    for (const c of clientesDoMembro) {
-      const r = resp[c.id] || {};
-      const mrr2 = c.mrrFaixa2 || 0;
-      bonusPotencial += mrr2 * 0.04;
-      if (r.f1Atingida) bonusDesbloqueado += mrr2 * 0.04;
-    }
-    const desbloqueado = bonusDesbloqueado > 0;
+    const fmtBRL = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+    const calcPrazoDt = dataInicio => { const d = new Date(dataInicio + 'T00:00:00'); d.setDate(d.getDate() + 45); return d; };
+    const encerrado   = c => calcPrazoDt(c.dataInicio) < new Date();
+
+    let totalReceber = 0;
+    const bpRows = clientesDoMembro.map(c => {
+      const prazo      = calcPrazoDt(c.dataInicio);
+      const periodoStr = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR') + ' a ' + prazo.toLocaleDateString('pt-BR');
+      if (!c.mrrFaixa1) {
+        return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
+      }
+      const vidas  = c.vidas || 0;
+      const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
+      const mrrF1  = c.mrrFaixa1,   mrrF2  = c.mrrFaixa2 || null;
+      const bonusF1 = Math.round(mrrF1 * 0.04);
+      const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
+      const faltaF1 = Math.max(metaF1 - vidas, 0);
+      const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
+      const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
+      totalReceber += aReceber;
+      const f1Tag = '<span class="' + (faltaF1 === 0 ? 'ok' : '') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1 === 0 ? '✓' : '(faltam ' + faltaF1 + 'v)') + '</span>';
+      const f2Tag = bonusF2 ? '<span class="' + (faltaF2 === 0 ? 'ok' : '') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2 === 0 ? '✓' : '(faltam ' + faltaF2 + 'v)') + '</span>' : '';
+      const valCls = aReceber > 0 ? '' : encerrado(c) ? 'aguardando' : 'andamento';
+      const valTxt = aReceber > 0 ? fmtBRL(aReceber) : encerrado(c) ? 'R$ 0' : '⏳ Em andamento';
+      return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
+    });
+
     const bonusDiv = document.createElement('div');
-    bonusDiv.className = 'bonus-card';
+    bonusDiv.className = 'bp-wrap';
     bonusDiv.innerHTML =
-      '<div class="bonus-titulo">Bônus de Rampagem</div>' +
-      '<div style="text-align:center;padding:12px 0 4px">' +
-        '<div style="font-size:32px;font-weight:800;color:' + (desbloqueado?'#276749':'#1e2b4a') + ';letter-spacing:-1px">R$ ' + bonusPotencial.toLocaleString('pt-BR',{minimumFractionDigits:2}) + '</div>' +
-        '<div style="font-size:12px;color:#a0aec0;margin-top:6px">' + (clientesDoMembro.length===0 ? 'Nenhum cliente atribuído ainda.' : desbloqueado ? 'Bônus liberado — Faixa 2 ativa' : 'Disponível ao atingir a Faixa 1') + '</div>' +
-      '</div>';
+      '<div class="bp-titulo">💰 Bônus desta rampagem</div>' +
+      '<table class="bp-table">' +
+        '<thead><tr><th>Cliente</th><th>A receber</th></tr></thead>' +
+        '<tbody>' + (bpRows.length ? bpRows.join('') : '<tr><td colspan="2" style="color:#a0aec0;text-align:center;padding:20px">Nenhum cliente atribuído ainda.</td></tr>') + '</tbody>' +
+        '<tfoot><tr class="bp-total"><td class="bp-td-nome">Total</td><td class="bp-td-val">' + fmtBRL(totalReceber) + '</td></tr></tfoot>' +
+      '</table>';
     main.appendChild(bonusDiv);
 
     if (clientesDoMembro.length > 0) {
