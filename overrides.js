@@ -499,14 +499,22 @@ window.WEHANDLE_OVERRIDES = {
     },
     "00.612.363/0001-88": {
       "via": "email"
+    },
+    "equipe": {
+      "membros": [
+        {
+          "id": "elenice_mqfccbfl",
+          "nome": "Elenice",
+          "pin": "1234",
+          "cor": "#ef4444",
+          "token": "tok_ddhl2381"
+        }
+      ],
+      "responsaveis": {}
     }
   },
   "clientesExtras": [],
   "fornecedoresExtras": [],
-  "equipe": {
-    "membros": [],
-    "responsaveis": {}
-  },
   "metricas": {
     "netzsch": {
       "aderencia": 44.1,
@@ -516,5 +524,17 @@ window.WEHANDLE_OVERRIDES = {
     "saint-gobain": {
       "vidas": 19
     }
+  },
+  "equipe": {
+    "membros": [
+      {
+        "id": "elenice_mqfccbfl",
+        "nome": "Elenice",
+        "pin": "1234",
+        "cor": "#ef4444",
+        "token": "tok_ddhl2381"
+      }
+    ],
+    "responsaveis": {}
   }
 };
