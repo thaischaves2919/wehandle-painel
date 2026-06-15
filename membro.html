@@ -305,24 +305,15 @@
     const fornAll = c.fornecedores || [];
     const adStr  = ader.toFixed(2).replace('.', ',');
     const pctAd  = Math.min(ader / metaAd * 100, 100);
-    // Barra de progresso de vidas aponta para a meta do membro
     const metaAlvo = f1Atingida ? metaF2 : metaF1;
     const pctAlvo  = metaAlvo ? Math.min(vidas / metaAlvo * 100, 100) : 0;
-    const enc    = encerradoFn(c);
-    const prazo  = calcPrazoDt(c.dataInicio);
-    const dias   = Math.ceil((prazo - new Date()) / 86400000);
+    // Período do membro: começa quando o prazo original termina, sem fim
+    const membroInicio = calcPrazoDt(c.dataInicio);
     const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c, f1Atingida);
-
-    let deadlineHtml;
-    if (enc) {
-      deadlineHtml = '<div class="cc-deadline">Encerrado em ' + prazo.toLocaleDateString('pt-BR') + '</div>';
-    } else {
-      const urgente = dias <= 15;
-      deadlineHtml = '<div class="cc-deadline' + (urgente ? ' urgente' : '') + '"><strong>' + dias + ' dias</strong> restantes · prazo ' + prazo.toLocaleDateString('pt-BR') + '</div>';
-    }
+    const deadlineHtml = '<div class="cc-deadline">Desde ' + membroInicio.toLocaleDateString('pt-BR') + ' · sem prazo definido</div>';
 
     const div = document.createElement('div');
-    div.className = 'compact-card' + (enc ? ' encerrado' : '');
+    div.className = 'compact-card';
     div.innerHTML =
       '<div class="cc-header">' +
         '<div>' +
@@ -359,10 +350,8 @@
     const pctAd  = Math.min(ader / metaAd * 100, 100);
     const gapAd  = metaAd - ader;
     const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c, f1Atingida);
-    const prazoDate = calcPrazoDt(c.dataInicio);
-    const dias = Math.ceil((prazoDate - new Date()) / 86400000);
-    const urgente = dias <= 15;
-    const enc = encerradoFn(c);
+    // Período do membro: começa quando o prazo original termina, sem fim
+    const membroInicio = calcPrazoDt(c.dataInicio);
     const fornAll    = c.fornecedores || [];
     const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
     const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
@@ -415,12 +404,9 @@
           '<span class="status-badge ' + bACls + '">' + bATxt + '</span>' +
         '</div>' +
       '</div>' +
-      (enc ?
-        '<div class="cc-deadline" style="margin-bottom:16px">Encerrado em ' + prazoDate.toLocaleDateString('pt-BR') + '</div>' :
-        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:' + (urgente?'#fff0f3':'#f7f8fa') + ';border:1px solid ' + (urgente?'#feb2b2':'#e2e6ef') + ';border-radius:10px;padding:10px 14px;font-size:12px">' +
-          '<span style="font-size:22px;font-weight:800;color:' + (urgente?'#c53030':'#1e2b4a') + '">' + Math.max(dias,0) + '</span>' +
-          '<span style="color:' + (urgente?'#c53030':'#718096') + '">dias restantes · prazo <strong style="color:' + (urgente?'#c53030':'#1e2b4a') + '">' + prazoDate.toLocaleDateString('pt-BR') + '</strong> · início ' + new Date(c.dataInicio+'T12:00:00').toLocaleDateString('pt-BR') + '</span>' +
-        '</div>') +
+      '<div style="background:#f7f8fa;border:1px solid #e2e6ef;border-radius:10px;padding:10px 14px;font-size:12px;color:#718096;margin-bottom:16px">' +
+        'Desde <strong style="color:#1e2b4a">' + membroInicio.toLocaleDateString('pt-BR') + '</strong> · sem prazo definido' +
+      '</div>' +
       '<div class="metric-row">' +
         '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (vidasOk?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta ' + vidasSub + '</div></div>' +
         '<div class="metric-box"><div class="metric-label">Aderência</div><div class="metric-value' + (ader>=metaAd?' ok':'') + '">' + ader.toFixed(1) + '%</div><div class="metric-sub">meta: ' + metaAd + '%</div></div>' +
@@ -508,8 +494,8 @@
     let totalReceber = 0;
     const bpRows = clientesDoMembro.map(c => {
       const f1Atingida = !!(resp[c.id] && resp[c.id].f1Atingida);
-      const prazo      = calcPrazoDt(c.dataInicio);
-      const periodoStr = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR') + ' a ' + prazo.toLocaleDateString('pt-BR');
+      const membroInicioBonus = calcPrazoDt(c.dataInicio);
+      const periodoStr = 'desde ' + membroInicioBonus.toLocaleDateString('pt-BR');
       const vidas  = c.vidas || 0;
       const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
       const mrrF1  = c.mrrFaixa1 || null, mrrF2 = c.mrrFaixa2 || null;
@@ -557,37 +543,14 @@
     viewCards.appendChild(bonusDiv);
 
     // Grid de cards (ativos vs encerrados)
-    const ativos     = clientesDoMembro.filter(c => !encerradoFn(c));
-    const encerrados = clientesDoMembro.filter(c =>  encerradoFn(c));
-
-    if (ativos.length > 0) {
+    if (clientesDoMembro.length > 0) {
       const grid = document.createElement('div');
       grid.className = 'clients-grid';
-      ativos.forEach(c => {
+      clientesDoMembro.forEach(c => {
         const f1A = !!(resp[c.id] && resp[c.id].f1Atingida);
         grid.appendChild(criarCardCompactoMembro(c, f1A));
       });
       viewCards.appendChild(grid);
-    }
-
-    if (encerrados.length > 0) {
-      const secEnc = document.createElement('div');
-      secEnc.innerHTML =
-        '<div class="secao-titulo">Período encerrado</div>' +
-        '<button class="btn-colapsar" onclick="toggleEncerradosMembro()">' +
-          '<span id="label-colapsar-membro">▲ Ocultar clientes encerrados</span>' +
-          '<span id="count-enc-membro" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px">' + encerrados.length + (encerrados.length===1?' cliente':' clientes') + '</span>' +
-        '</button>' +
-        '<div class="encerrado-wrap aberto" id="encerrado-wrap-membro"></div>';
-      viewCards.appendChild(secEnc);
-      const wrapEnc = secEnc.querySelector('#encerrado-wrap-membro');
-      const gridEnc = document.createElement('div');
-      gridEnc.className = 'clients-grid';
-      encerrados.forEach(c => {
-        const f1A = !!(resp[c.id] && resp[c.id].f1Atingida);
-        gridEnc.appendChild(criarCardCompactoMembro(c, f1A));
-      });
-      wrapEnc.appendChild(gridEnc);
     }
 
     if (clientesDoMembro.length === 0) {
