@@ -514,7 +514,15 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [],
+    "membros": [
+      {
+        "id": "elenice_mqfexi4f",
+        "nome": "Elenice",
+        "pin": "1234",
+        "cor": "#ef4444",
+        "token": "tok_lyahr0i4"
+      }
+    ],
     "responsaveis": {}
   }
 };
