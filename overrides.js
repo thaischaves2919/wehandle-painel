@@ -514,7 +514,15 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [],
+    "membros": [
+      {
+        "id": "elenice_mqffyply",
+        "nome": "Elenice",
+        "pin": "2919",
+        "cor": "#ef4444",
+        "token": "tok_0bgbnvua"
+      }
+    ],
     "responsaveis": {}
   }
 };
