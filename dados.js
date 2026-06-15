@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 15/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260615e',
+  versao: '20260615f',
   clientes: [
     {
       id: 'netzsch',
@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 194,
+      vidas: 200,
       aderencia: 77.38,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -24,7 +24,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-25', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-26', vidas: 120, aderencia: 64.0  },
         { data: '2026-06-06', vidas: 159, aderencia: 74.34 },
-        { data: '2026-06-15', vidas: 194, aderencia: 77.38 }
+        { data: '2026-06-15', vidas: 200, aderencia: 77.38 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -81,7 +81,13 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'COPE CIA LTDA',                                      cnpj: '91.678.342/0004-63', contrato: 'contratado',    tel: '',            email: 'ana.santarem@cope.ind.br',           via: 'email',    vidas: 0,  status: 'aguardando' },
         { razaoSocial: 'DIRECT SERVICE AUTOMAÇÃO E MANUTENÇÃO INDUSTRIAL LTDA', cnpj: '09.616.551/0001-59', contrato: 'contratado', tel: '5181777777',  email: 'directservice@directservice.biz',    via: 'email',    vidas: 0,  status: 'aguardando' },
         { razaoSocial: 'MARCOS ANTONIO DA SILVA',                            cnpj: '41.578.069/0001-84', contrato: 'contratado',    tel: '1298288300',  email: 'marcosazaleias300@gmail.com',        via: 'email',    vidas: 0,  status: 'aguardando' },
-        { razaoSocial: 'P3 Engenharia', cnpj: '06.964.752/0001-59', contrato: 'contratado', tel: '4733338077', email: 'pier.nunes@p3engenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
+        { razaoSocial: 'P3 Engenharia', cnpj: '06.964.752/0001-59', contrato: 'contratado', tel: '4733338077', email: 'pier.nunes@p3engenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'ProUPS SOLUÇÕES EM ENERGIA LTDA', cnpj: '10.942.926/0001-50', contrato: 'contratado', tel: '4730410808', email: 'garcia@proups.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'LOXAM DO BRASIL SA', cnpj: '57.764.763/0035-75', contrato: 'contratado', tel: '1239327799', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'SIMILAR', cnpj: '82.321.845/0001-43', contrato: 'contratado', tel: '4130740300', email: 'qualidade@similar.ind.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'HS AUTOMACAO E ROLAMENTOS LTDA', cnpj: '78.323.045/0001-94', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'ERZINGER INDUSTRIA MECANICA LTDA', cnpj: '80.986.581/0001-11', contrato: 'contratado', tel: '4721011305', email: 'samara@erzinger.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'TALLMANN MANUTENÇÃO ELÉTRICA LTDA.', cnpj: '10.773.592/0001-38', contrato: 'contratado', tel: '4733371774', email: 'tallmann@infratherm.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
       ]
     },
     {
@@ -121,7 +127,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 52,
-      aderencia: 56.75,
+      aderencia: 56.88,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -135,7 +141,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-12', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-13', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
-        { data: '2026-06-15', vidas: 52, aderencia: 56.75 }
+        { data: '2026-06-15', vidas: 52, aderencia: 56.88 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -198,7 +204,7 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 28,
-      aderencia: 2.03,
+      aderencia: 2.44,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -206,7 +212,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-12', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-13', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-14', vidas: 28, aderencia: 2.03 },
-        { data: '2026-06-15', vidas: 28, aderencia: 2.03 }
+        { data: '2026-06-15', vidas: 28, aderencia: 2.44 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
