@@ -1,4 +1,4 @@
-// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
+﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 15/06/2026
 var WEHANDLE_DADOS = {
   versao: '20260615a',
@@ -176,15 +176,15 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'HELP MANUTENCAO / CONSTRUCAO CIVIL', cnpj: '06.240.916/0001-03', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'MOTOMAN ROBÓTICA DO BRASIL', cnpj: '08.515.495/0001-01', contrato: 'contratado', tel: '1143523002', email: 'fernando.souza@motoman.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'GRP TECHLAN COMERCIO E SERVICOS EM INSTALACOES DE TECNOLOGIA LTDA', cnpj: '23.478.851/0001-40', contrato: 'contratado', tel: '1532290020', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
+        { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '1532277866', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '1140133760', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-12' },
-        { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-13' },
-        { razaoSocial: 'TREAL EQUIPAMENTOS ESPECIAIS LTDA', cnpj: '12.264.795/0001-24', contrato: 'contratado', tel: '1938090577', email: 'adm@treal.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-14' },
-        { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-14' }
+        { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'TREAL EQUIPAMENTOS ESPECIAIS LTDA', cnpj: '12.264.795/0001-24', contrato: 'contratado', tel: '1938090577', email: 'adm@treal.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
       ]
     },
     {
