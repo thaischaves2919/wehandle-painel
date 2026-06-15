@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 15/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260615d',
+  versao: '20260615e',
   clientes: [
     {
       id: 'netzsch',
@@ -80,7 +80,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'PERSIANAS CRISDAN LTDA',                             cnpj: '02.173.150/0001-22', contrato: 'contratado',    tel: '4733338888',  email: 'persianascrisdan@persianascrisdan.com.br', via: 'email', vidas: 0, status: 'aguardando' },
         { razaoSocial: 'COPE CIA LTDA',                                      cnpj: '91.678.342/0004-63', contrato: 'contratado',    tel: '',            email: 'ana.santarem@cope.ind.br',           via: 'email',    vidas: 0,  status: 'aguardando' },
         { razaoSocial: 'DIRECT SERVICE AUTOMAÇÃO E MANUTENÇÃO INDUSTRIAL LTDA', cnpj: '09.616.551/0001-59', contrato: 'contratado', tel: '5181777777',  email: 'directservice@directservice.biz',    via: 'email',    vidas: 0,  status: 'aguardando' },
-        { razaoSocial: 'MARCOS ANTONIO DA SILVA',                            cnpj: '41.578.069/0001-84', contrato: 'contratado',    tel: '1298288300',  email: 'marcosazaleias300@gmail.com',        via: 'email',    vidas: 0,  status: 'aguardando' }
+        { razaoSocial: 'MARCOS ANTONIO DA SILVA',                            cnpj: '41.578.069/0001-84', contrato: 'contratado',    tel: '1298288300',  email: 'marcosazaleias300@gmail.com',        via: 'email',    vidas: 0,  status: 'aguardando' },
+        { razaoSocial: 'P3 Engenharia', cnpj: '06.964.752/0001-59', contrato: 'contratado', tel: '4733338077', email: 'pier.nunes@p3engenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
       ]
     },
     {
