@@ -499,29 +499,6 @@ window.WEHANDLE_OVERRIDES = {
     },
     "00.612.363/0001-88": {
       "via": "email"
-    },
-    "equipe": {
-      "membros": [
-        {
-          "id": "elenice_mqfcelvm",
-          "nome": "Elenice",
-          "pin": "1234",
-          "cor": "#ef4444",
-          "token": "tok_irgy7vq3"
-        }
-      ],
-      "responsaveis": {
-        "netzsch": {
-          "membroId": "elenice_mqfcelvm",
-          "dataTransferencia": "2026-06-15",
-          "f1Atingida": true
-        },
-        "saint-gobain": {
-          "membroId": "elenice_mqfcelvm",
-          "dataTransferencia": "2026-06-15",
-          "f1Atingida": false
-        }
-      }
     }
   },
   "clientesExtras": [],
@@ -537,26 +514,7 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [
-      {
-        "id": "elenice_mqfcelvm",
-        "nome": "Elenice",
-        "pin": "1234",
-        "cor": "#ef4444",
-        "token": "tok_irgy7vq3"
-      }
-    ],
-    "responsaveis": {
-      "netzsch": {
-        "membroId": "elenice_mqfcelvm",
-        "dataTransferencia": "2026-06-15",
-        "f1Atingida": true
-      },
-      "saint-gobain": {
-        "membroId": "elenice_mqfcelvm",
-        "dataTransferencia": "2026-06-15",
-        "f1Atingida": false
-      }
-    }
+    "membros": [],
+    "responsaveis": {}
   }
 };
