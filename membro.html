@@ -87,6 +87,9 @@
     .status-sel { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
     .vidas-input { width: 52px; font-size: 11px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 3px 6px; text-align: center; color: #1a2340; outline: none; }
     .vidas-input:focus { border-color: #1a2340; }
+    .btn-wa { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #25d366; border-radius: 50%; text-decoration: none; transition: background 0.15s; }
+    .btn-wa:hover { background: #1da851; }
+    .btn-wa svg { width: 15px; height: 15px; fill: #fff; }
 
     /* ── Toast ── */
     .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2b4a; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 9999; }
@@ -133,6 +136,7 @@
   let _versaoDados = '';
   let _snapOverrides = null;
   let _contatosLocal = {};
+  let _ovContacts = {};
 
   function getToken() {
     const p = new URLSearchParams(location.search);
@@ -295,6 +299,10 @@
           const vidasAtual = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
           const isNovo = f.dataEntrada === hoje;
           const novoBadge = isNovo ? ' <span class="badge-novo">NOVO</span>' : '';
+          const tel = (_ovContacts[f.cnpj] && _ovContacts[f.cnpj].tel) ? _ovContacts[f.cnpj].tel.replace(/\D/g,'') : '';
+          const waBt = tel
+            ? '<a class="btn-wa" href="https://wa.me/55' + tel + '" target="_blank" rel="noopener" title="Abrir WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.533 5.854L.057 23.943l6.262-1.641A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.36-.213-3.716.975.993-3.624-.234-.373A9.817 9.817 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg></a>'
+            : '';
           rows +=
             '<tr>' +
             '<td><span class="forn-nome">' + (f.razaoSocial || '') + novoBadge + '</span></td>' +
@@ -307,11 +315,12 @@
               '</select>' +
             '</td>' +
             '<td><input class="vidas-input" type="number" min="0" value="' + vidasAtual + '" data-cnpj="' + f.cnpj + '" onchange="setFornVidas(\'' + f.cnpj + '\', this.value)" /></td>' +
+            '<td>' + waBt + '</td>' +
             '</tr>';
         }
         return '<div class="forn-section">' +
           '<span class="forn-section-titulo ' + cls + '">' + titulo + '</span>' +
-          '<table class="forn-table"><thead><tr><th>Fornecedor</th><th>Status</th><th>Vidas</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+          '<table class="forn-table"><thead><tr><th>Fornecedor</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>' +
           '</div>';
       }
 
@@ -383,6 +392,7 @@
       document.head.removeChild(s);
       const ov = window.WEHANDLE_OVERRIDES || {};
       _equipe = ov.equipe || { membros: [], responsaveis: {} };
+      _ovContacts = ov.contacts || {};
       return true;
     } catch(e) { return false; }
   }
@@ -519,6 +529,7 @@
         const s = document.createElement('script'); s.textContent = txt; document.head.appendChild(s); document.head.removeChild(s);
         const ov = window.WEHANDLE_OVERRIDES || {};
         _equipe = ov.equipe || { membros: [], responsaveis: {} };
+        _ovContacts = ov.contacts || {};
       }
     } catch(e) {}
 
