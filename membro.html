@@ -66,7 +66,47 @@
     .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
     .bp-total .bp-td-val  { color: #4ade80; font-size: 18px; }
 
-    /* ── Cliente cards ── */
+    /* ── Compact client cards ── */
+    .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .compact-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(26,35,64,0.05); cursor: pointer; transition: all 0.18s; }
+    .compact-card:hover { box-shadow: 0 6px 20px rgba(26,35,64,0.10); transform: translateY(-2px); border-color: #e0296f; }
+    .compact-card.encerrado { opacity: 0.6; filter: grayscale(30%); }
+    .compact-card.encerrado:hover { opacity: 0.9; filter: grayscale(0%); }
+    .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
+    .cc-name { font-size: 15px; font-weight: 700; color: #1a2340; }
+    .cc-cnpj { font-size: 10px; color: #a0aec0; font-family: monospace; margin-top: 2px; }
+    .cc-badges { display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0; }
+    .cc-metrics { display: flex; gap: 8px; margin-bottom: 12px; }
+    .cc-metric { flex: 1; background: #f7f8fc; border-radius: 9px; padding: 10px 8px; text-align: center; }
+    .cc-metric-label { font-size: 10px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .cc-metric-value { font-size: 22px; font-weight: 800; color: #1a2340; line-height: 1; }
+    .cc-metric-value.ok { color: #276749; }
+    .cc-metric-sub { font-size: 10px; color: #a0aec0; margin-top: 3px; }
+    .cc-prog { margin-bottom: 7px; }
+    .cc-prog-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 3px; }
+    .cc-prog-bar { height: 5px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .cc-prog-fill { height: 100%; border-radius: 99px; }
+    .cc-fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
+    .cc-fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+    .cc-fill-pink   { background: linear-gradient(90deg, #e0296f, #f472b6); }
+    .cc-deadline { font-size: 11px; color: #718096; margin: 10px 0 12px; padding: 7px 10px; background: #f7f8fc; border-radius: 7px; }
+    .cc-deadline.urgente { background: #fff0f3; color: #c53030; }
+    .cc-deadline strong { font-weight: 700; }
+    .cc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f7; }
+    .cc-fornecedores { font-size: 11px; color: #a0aec0; }
+    .btn-ver-forn { background: #1a2340; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .btn-ver-forn:hover { background: #e0296f; }
+    /* ── Encerrados / Navegação ── */
+    .secao-titulo { font-size: 12px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+    .secao-titulo::before, .secao-titulo::after { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
+    .btn-colapsar { background: #f7f8fa; border: 1px solid #e2e6ef; color: #718096; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin: 0 auto 16px; }
+    .btn-colapsar:hover { background: #edf2f7; }
+    .encerrado-wrap { display: none; }
+    .encerrado-wrap.aberto { display: block; }
+    .detalhe-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .btn-voltar { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #e8eaf0; color: #4a5568; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-voltar:hover { background: #f7f8fc; color: #1a2340; }
+    /* ── Cliente cards (detalhe) ── */
     .section-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 4px; }
     .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); margin-bottom: 20px; }
     .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
@@ -236,12 +276,186 @@
     return tr;
   }
 
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  const fmtBRL       = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+  const calcPrazoDt  = dataInicio => { const d = new Date(dataInicio + 'T00:00:00'); d.setDate(d.getDate() + 45); return d; };
+  const encerradoFn  = c => calcPrazoDt(c.dataInicio) < new Date();
+
+  function _badgesCliente(c) {
+    const metaF1 = c.metaVidasF1 || null;
+    const metaAd = c.metaAderencia || 50;
+    const vidas  = c.vidas || 0;
+    const ader   = c.aderencia || 0;
+    const bVCls  = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1*0.75 ? 'status-atencao' : 'status-critico';
+    const bVTxt  = metaF1 === null ? 'Sem meta' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1*0.75 ? 'Atenção' : 'Crítico';
+    const bACls  = ader >= metaAd ? 'status-ok' : ader >= metaAd-5 ? 'status-atencao' : 'status-critico';
+    const bATxt  = ader >= metaAd ? 'Ader. OK' : 'Aderência';
+    return { bVCls, bVTxt, bACls, bATxt };
+  }
+
+  function criarCardCompactoMembro(c) {
+    const metaF1 = c.metaVidasF1 || null;
+    const metaAd = c.metaAderencia || 50;
+    const vidas  = c.vidas || 0;
+    const ader   = c.aderencia || 0;
+    const fornAll = c.fornecedores || [];
+    const adStr  = ader.toFixed(2).replace('.', ',');
+    const pctAd  = Math.min(ader / metaAd * 100, 100);
+    const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+    const enc    = encerradoFn(c);
+    const prazo  = calcPrazoDt(c.dataInicio);
+    const dias   = Math.ceil((prazo - new Date()) / 86400000);
+    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c);
+
+    let deadlineHtml;
+    if (enc) {
+      deadlineHtml = '<div class="cc-deadline">Encerrado em ' + prazo.toLocaleDateString('pt-BR') + '</div>';
+    } else {
+      const urgente = dias <= 15;
+      deadlineHtml = '<div class="cc-deadline' + (urgente ? ' urgente' : '') + '"><strong>' + dias + ' dias</strong> restantes · prazo ' + prazo.toLocaleDateString('pt-BR') + '</div>';
+    }
+
+    const div = document.createElement('div');
+    div.className = 'compact-card' + (enc ? ' encerrado' : '');
+    div.innerHTML =
+      '<div class="cc-header">' +
+        '<div>' +
+          '<div class="cc-name">' + c.nome + '</div>' +
+          (c.cnpj ? '<div class="cc-cnpj">' + c.cnpj + '</div>' : '') +
+        '</div>' +
+        '<div class="cc-badges">' +
+          '<span class="status-badge ' + bVCls + '">' + bVTxt + '</span>' +
+          '<span class="status-badge ' + bACls + '">' + bATxt + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="cc-metrics">' +
+        '<div class="cc-metric"><div class="cc-metric-label">Vidas</div><div class="cc-metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="cc-metric-sub">' + (metaF1?'meta: '+metaF1:'sem meta') + '</div></div>' +
+        '<div class="cc-metric"><div class="cc-metric-label">Aderência</div><div class="cc-metric-value' + (ader>=metaAd?' ok':'') + '">' + adStr + '%</div><div class="cc-metric-sub">meta: ' + metaAd + '%</div></div>' +
+      '</div>' +
+      '<div class="cc-prog"><div class="cc-prog-label"><span>Aderência</span><span>' + adStr + '% / ' + metaAd + '%</span></div><div class="cc-prog-bar"><div class="cc-prog-fill ' + (pctAd>=100?'cc-fill-green':'cc-fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
+      (metaF1 ? '<div class="cc-prog"><div class="cc-prog-label"><span>Faixa 1</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="cc-prog-bar"><div class="cc-prog-fill cc-fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
+      deadlineHtml +
+      '<div class="cc-footer">' +
+        '<span class="cc-fornecedores">' + fornAll.length + ' fornecedor' + (fornAll.length !== 1 ? 'es' : '') + '</span>' +
+        '<button class="btn-ver-forn" onclick="event.stopPropagation();abrirDetalheMembro(\'' + c.id + '\')">Ver fornecedores →</button>' +
+      '</div>';
+    div.addEventListener('click', () => abrirDetalheMembro(c.id));
+    return div;
+  }
+
+  function criarCardDetalheMembro(c) {
+    const hoje = new Date().toISOString().slice(0,10);
+    const metaF1 = c.metaVidasF1 || null;
+    const metaF2 = c.metaVidasF2 || null;
+    const metaAd = c.metaAderencia || 50;
+    const vidas  = c.vidas || 0;
+    const ader   = c.aderencia || 0;
+    const pctAd  = Math.min(ader / metaAd * 100, 100);
+    const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+    const pctF2  = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
+    const gapF1  = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
+    const gapAd  = metaAd - ader;
+    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c);
+    const prazoDate = calcPrazoDt(c.dataInicio);
+    const dias = Math.ceil((prazoDate - new Date()) / 86400000);
+    const urgente = dias <= 15;
+    const enc = encerradoFn(c);
+    const fornAll    = c.fornecedores || [];
+    const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
+    const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
+    const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'pendente' || s === 'aguardando'; });
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="card-header">' +
+        '<div>' +
+          '<div class="card-title">' + c.nome + '</div>' +
+          (c.cnpj ? '<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">' + c.cnpj + '</div>' : '') +
+        '</div>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">' +
+          '<span class="status-badge ' + bVCls + '">' + bVTxt + '</span>' +
+          '<span class="status-badge ' + bACls + '">' + bATxt + '</span>' +
+        '</div>' +
+      '</div>' +
+      (enc ?
+        '<div class="cc-deadline" style="margin-bottom:16px">Encerrado em ' + prazoDate.toLocaleDateString('pt-BR') + '</div>' :
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:' + (urgente?'#fff0f3':'#f7f8fa') + ';border:1px solid ' + (urgente?'#feb2b2':'#e2e6ef') + ';border-radius:10px;padding:10px 14px;font-size:12px">' +
+          '<span style="font-size:22px;font-weight:800;color:' + (urgente?'#c53030':'#1e2b4a') + '">' + Math.max(dias,0) + '</span>' +
+          '<span style="color:' + (urgente?'#c53030':'#718096') + '">dias restantes · prazo <strong style="color:' + (urgente?'#c53030':'#1e2b4a') + '">' + prazoDate.toLocaleDateString('pt-BR') + '</strong> · início ' + new Date(c.dataInicio+'T12:00:00').toLocaleDateString('pt-BR') + '</span>' +
+        '</div>') +
+      '<div class="metric-row">' +
+        '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta F1: ' + (metaF1||'—') + (metaF2?' · F2: '+metaF2:'') + '</div></div>' +
+        '<div class="metric-box"><div class="metric-label">Aderência</div><div class="metric-value' + (ader>=metaAd?' ok':'') + '">' + ader.toFixed(1) + '%</div><div class="metric-sub">meta: ' + metaAd + '%</div></div>' +
+        '<div class="metric-box"><div class="metric-label">Fornec. c/ vidas</div><div class="metric-value">' + comVidas.length + '</div><div class="metric-sub">de ' + fornAll.length + '</div></div>' +
+      '</div>' +
+      '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
+      (metaF1 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 1 — Meta ' + metaF1 + ' vidas</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
+      (pctF2!==null ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '') +
+      (gapF1!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 1 (' + metaF1 + ' vidas)</span><span class="gap-value ' + (gapF1===0?'ok':'alerta') + '">' + (gapF1===0?'✓ Faixa 1 atingida':gapF1+' vidas') + '</span></div>' : '') +
+      (metaF2 ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value alerta">' + Math.max(metaF2-vidas,0) + ' vidas</span></div>' : '') +
+      '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px">' +
+        '<div class="section-title" style="margin:0">Fornecedores ' + c.nome + ' <span style="color:#a0aec0;font-weight:400">(' + fornAll.length + ' total)</span></div>' +
+        '<div style="display:flex;gap:6px">' +
+          '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
+          '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="section-sub sub-verde">✓ Já contatados (' + contatados.length + ')</div>' +
+      '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
+      (pendentes.length > 0 ?
+        '<div class="section-sub sub-laranja" style="margin-top:12px">⏳ Pendentes / Aguardando (' + pendentes.length + ')</div>' +
+        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
+        : '');
+
+    const tC = card.querySelector('#tc-' + c.id);
+    const tP = card.querySelector('#tp-' + c.id);
+    contatados.forEach(f => tC && tC.appendChild(buildFornRow(f, hoje)));
+    pendentes.forEach(f  => tP && tP.appendChild(buildFornRow(f, hoje)));
+    return card;
+  }
+
+  function abrirDetalheMembro(clienteId) {
+    if (!_dados) return;
+    const c = (_dados.clientes || []).find(x => x.id === clienteId);
+    if (!c) return;
+    const main = document.getElementById('app-main');
+    const viewCards = document.getElementById('view-cards-membro');
+    const viewDetalhe = document.getElementById('view-detalhe-membro');
+    const detalheContent = document.getElementById('detalhe-content-membro');
+    const detalheTitulo = document.getElementById('detalhe-titulo-membro');
+    if (!viewCards || !viewDetalhe) return;
+    viewCards.style.display = 'none';
+    viewDetalhe.style.display = '';
+    detalheTitulo.textContent = c.nome;
+    detalheContent.innerHTML = '';
+    detalheContent.appendChild(criarCardDetalheMembro(c));
+    window.scrollTo(0, 0);
+  }
+
+  function voltarCardsMembro() {
+    const viewCards = document.getElementById('view-cards-membro');
+    const viewDetalhe = document.getElementById('view-detalhe-membro');
+    if (!viewCards || !viewDetalhe) return;
+    viewDetalhe.style.display = 'none';
+    viewCards.style.display = '';
+    window.scrollTo(0, 0);
+  }
+
+  function toggleEncerradosMembro() {
+    const wrap  = document.getElementById('encerrado-wrap-membro');
+    const label = document.getElementById('label-colapsar-membro');
+    const count = document.getElementById('count-enc-membro');
+    if (!wrap) return;
+    const aberto = wrap.classList.toggle('aberto');
+    label.textContent = aberto ? '▲ Ocultar clientes encerrados' : '▼ Ver clientes encerrados';
+  }
+
   function renderApp() {
     if (!_membro || !_dados || !_equipe) return;
 
     const resp = _equipe.responsaveis || {};
-    const hoje = new Date().toISOString().slice(0,10);
-
     const clientesDoMembro = (_dados.clientes || []).filter(c =>
       c.dataInicio && resp[c.id] && resp[c.id].membroId === _membro.id
     );
@@ -253,11 +467,11 @@
     const main = document.getElementById('app-main');
     main.innerHTML = '';
 
-    // ── Bônus ──
-    const fmtBRL = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
-    const calcPrazoDt = dataInicio => { const d = new Date(dataInicio + 'T00:00:00'); d.setDate(d.getDate() + 45); return d; };
-    const encerrado   = c => calcPrazoDt(c.dataInicio) < new Date();
+    // ── View cards ──
+    const viewCards = document.createElement('div');
+    viewCards.id = 'view-cards-membro';
 
+    // Bônus
     let totalReceber = 0;
     const bpRows = clientesDoMembro.map(c => {
       const prazo      = calcPrazoDt(c.dataInicio);
@@ -265,135 +479,78 @@
       if (!c.mrrFaixa1) {
         return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
       }
-      const vidas  = c.vidas || 0;
-      const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
-      const mrrF1  = c.mrrFaixa1,   mrrF2  = c.mrrFaixa2 || null;
+      const vidas = c.vidas || 0, metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
+      const mrrF1 = c.mrrFaixa1, mrrF2 = c.mrrFaixa2 || null;
       const bonusF1 = Math.round(mrrF1 * 0.04);
       const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
       const faltaF1 = Math.max(metaF1 - vidas, 0);
       const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
       const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
       totalReceber += aReceber;
-      const f1Tag = '<span class="' + (faltaF1 === 0 ? 'ok' : '') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1 === 0 ? '✓' : '(faltam ' + faltaF1 + 'v)') + '</span>';
-      const f2Tag = bonusF2 ? '<span class="' + (faltaF2 === 0 ? 'ok' : '') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2 === 0 ? '✓' : '(faltam ' + faltaF2 + 'v)') + '</span>' : '';
-      const valCls = aReceber > 0 ? '' : encerrado(c) ? 'aguardando' : 'andamento';
-      const valTxt = aReceber > 0 ? fmtBRL(aReceber) : encerrado(c) ? 'R$ 0' : '⏳ Em andamento';
+      const f1Tag = '<span class="' + (faltaF1===0?'ok':'') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1===0?'✓':'(faltam '+faltaF1+'v)') + '</span>';
+      const f2Tag = bonusF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '';
+      const enc = encerradoFn(c);
+      const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
+      const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
       return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
     });
-
     const bonusDiv = document.createElement('div');
     bonusDiv.className = 'bp-wrap';
     bonusDiv.innerHTML =
       '<div class="bp-titulo">💰 Bônus desta rampagem</div>' +
-      '<table class="bp-table">' +
-        '<thead><tr><th>Cliente</th><th>A receber</th></tr></thead>' +
-        '<tbody>' + (bpRows.length ? bpRows.join('') : '<tr><td colspan="2" style="color:#a0aec0;text-align:center;padding:20px">Nenhum cliente atribuído ainda.</td></tr>') + '</tbody>' +
-        '<tfoot><tr class="bp-total"><td class="bp-td-nome">Total</td><td class="bp-td-val">' + fmtBRL(totalReceber) + '</td></tr></tfoot>' +
-      '</table>';
-    main.appendChild(bonusDiv);
+      '<table class="bp-table"><thead><tr><th>Cliente</th><th>A receber</th></tr></thead>' +
+      '<tbody>' + (bpRows.length ? bpRows.join('') : '<tr><td colspan="2" style="color:#a0aec0;text-align:center;padding:20px">Nenhum cliente atribuído ainda.</td></tr>') + '</tbody>' +
+      '<tfoot><tr class="bp-total"><td class="bp-td-nome">Total</td><td class="bp-td-val">' + fmtBRL(totalReceber) + '</td></tr></tfoot></table>';
+    viewCards.appendChild(bonusDiv);
 
-    if (clientesDoMembro.length > 0) {
-      const secTit = document.createElement('div');
-      secTit.className = 'section-titulo';
-      secTit.textContent = 'Seus Clientes (' + clientesDoMembro.length + ')';
-      main.appendChild(secTit);
+    // Grid de cards (ativos vs encerrados)
+    const ativos     = clientesDoMembro.filter(c => !encerradoFn(c));
+    const encerrados = clientesDoMembro.filter(c =>  encerradoFn(c));
+
+    if (ativos.length > 0) {
+      const grid = document.createElement('div');
+      grid.className = 'clients-grid';
+      ativos.forEach(c => grid.appendChild(criarCardCompactoMembro(c)));
+      viewCards.appendChild(grid);
     }
 
-    for (const c of clientesDoMembro) {
-      try {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const metaF1 = c.metaVidasF1 || null;
-        const metaF2 = c.metaVidasF2 || null;
-        const metaAd = c.metaAderencia || 50;
-        const vidas  = c.vidas || 0;
-        const ader   = c.aderencia || 0;
-        const pctAd  = Math.min(ader / metaAd * 100, 100);
-        const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
-        const pctF2  = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
-        const gapF1  = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
-        const gapAd  = metaAd - ader;
-
-        const badgeVidasCls = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1*0.75 ? 'status-atencao' : 'status-critico';
-        const badgeVidasTxt = metaF1 === null ? 'Sem meta'        : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1*0.75 ? 'Vidas: Atenção' : 'Crítico';
-        const badgeAderCls  = ader >= metaAd ? 'status-ok' : ader >= metaAd-5 ? 'status-atencao' : 'status-critico';
-        const badgeAderTxt  = ader >= metaAd ? 'Aderência OK'    : ader >= metaAd-5 ? 'Aderência: Atenção' : 'Aderência: Crítico';
-
-        const prazoDate = new Date(c.dataInicio + 'T00:00:00');
-        prazoDate.setDate(prazoDate.getDate() + 45);
-        const dias    = Math.ceil((prazoDate - new Date()) / 86400000);
-        const urgente = dias <= 15;
-        const prazoFmt = prazoDate.toLocaleDateString('pt-BR');
-        const inicioFmt = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR');
-
-        const fornAll    = c.fornecedores || [];
-        const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
-        const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
-        const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'pendente' || s === 'aguardando'; });
-
-        card.innerHTML =
-          // ── Header ──
-          '<div class="card-header">' +
-            '<div>' +
-              '<div class="card-title">' + c.nome + '</div>' +
-              (c.cnpj ? '<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">' + c.cnpj + '</div>' : '') +
-            '</div>' +
-            '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">' +
-              '<span class="status-badge ' + badgeVidasCls + '">' + badgeVidasTxt + '</span>' +
-              '<span class="status-badge ' + badgeAderCls  + '">' + badgeAderTxt  + '</span>' +
-            '</div>' +
-          '</div>' +
-          // ── Prazo ──
-          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:' + (urgente?'#fff0f3':'#f7f8fa') + ';border:1px solid ' + (urgente?'#feb2b2':'#e2e6ef') + ';border-radius:10px;padding:10px 14px;font-size:12px;">' +
-            '<span style="font-size:22px;font-weight:800;color:' + (urgente?'#c53030':'#1e2b4a') + '">' + Math.max(dias,0) + '</span>' +
-            '<span style="color:' + (urgente?'#c53030':'#718096') + '">dias restantes · prazo <strong style="color:' + (urgente?'#c53030':'#1e2b4a') + '">' + prazoFmt + '</strong> · início ' + inicioFmt + '</span>' +
-          '</div>' +
-          // ── Métricas ──
-          '<div class="metric-row">' +
-            '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta F1: ' + (metaF1||'—') + (metaF2?' · F2: '+metaF2:'') + '</div></div>' +
-            '<div class="metric-box"><div class="metric-label">Aderência</div><div class="metric-value' + (ader>=metaAd?' ok':'') + '">' + ader.toFixed(1) + '%</div><div class="metric-sub">meta: ' + metaAd + '%</div></div>' +
-            '<div class="metric-box"><div class="metric-label">Fornec. c/ vidas</div><div class="metric-value">' + comVidas.length + '</div><div class="metric-sub">de ' + fornAll.length + '</div></div>' +
-          '</div>' +
-          // ── Barras de progresso ──
-          '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
-          (metaF1 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 1 — Meta ' + metaF1 + ' vidas</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
-          (pctF2!==null ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '') +
-          // ── Gap boxes ──
-          (gapF1!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 1 (' + metaF1 + ' vidas)</span><span class="gap-value ' + (gapF1===0?'ok':'alerta') + '">' + (gapF1===0?'✓ Faixa 1 atingida':gapF1+' vidas') + '</span></div>' : '') +
-          (metaF2 ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value alerta">' + Math.max(metaF2-vidas,0) + ' vidas</span></div>' : '') +
-          '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>' +
-          // ── Fornecedores header ──
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px">' +
-            '<div class="section-title" style="margin:0">Fornecedores ' + c.nome + ' <span style="color:#a0aec0;font-weight:400">(' + fornAll.length + ' total)</span></div>' +
-            '<div style="display:flex;gap:6px">' +
-              '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
-              '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
-            '</div>' +
-          '</div>' +
-          // ── Tabelas (preenchidas abaixo via DOM) ──
-          '<div class="section-sub sub-verde">✓ Já contatados (' + contatados.length + ')</div>' +
-          '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
-          (pendentes.length>0 ?
-            '<div class="section-sub sub-laranja">⏳ Pendentes / Aguardando (' + pendentes.length + ')</div>' +
-            '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
-            : '');
-
-        const tC = card.querySelector('#tc-' + c.id);
-        const tP = card.querySelector('#tp-' + c.id);
-        contatados.forEach(f => tC && tC.appendChild(buildFornRow(f, hoje)));
-        pendentes.forEach(f  => tP && tP.appendChild(buildFornRow(f, hoje)));
-
-        main.appendChild(card);
-      } catch(e) { console.error('Erro ao renderizar cliente', c.id, e); }
+    if (encerrados.length > 0) {
+      const secEnc = document.createElement('div');
+      secEnc.innerHTML =
+        '<div class="secao-titulo">Período encerrado</div>' +
+        '<button class="btn-colapsar" onclick="toggleEncerradosMembro()">' +
+          '<span id="label-colapsar-membro">▲ Ocultar clientes encerrados</span>' +
+          '<span id="count-enc-membro" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px">' + encerrados.length + (encerrados.length===1?' cliente':' clientes') + '</span>' +
+        '</button>' +
+        '<div class="encerrado-wrap aberto" id="encerrado-wrap-membro"></div>';
+      viewCards.appendChild(secEnc);
+      const wrapEnc = secEnc.querySelector('#encerrado-wrap-membro');
+      const gridEnc = document.createElement('div');
+      gridEnc.className = 'clients-grid';
+      encerrados.forEach(c => gridEnc.appendChild(criarCardCompactoMembro(c)));
+      wrapEnc.appendChild(gridEnc);
     }
 
     if (clientesDoMembro.length === 0) {
       const empty = document.createElement('div');
       empty.style.cssText = 'text-align:center;padding:48px;color:#a0aec0;font-size:14px';
       empty.textContent = 'Nenhum cliente atribuído a você ainda.';
-      main.appendChild(empty);
+      viewCards.appendChild(empty);
     }
+
+    // ── View detalhe ──
+    const viewDetalhe = document.createElement('div');
+    viewDetalhe.id = 'view-detalhe-membro';
+    viewDetalhe.style.display = 'none';
+    viewDetalhe.innerHTML =
+      '<div class="detalhe-nav">' +
+        '<button class="btn-voltar" onclick="voltarCardsMembro()">← Voltar</button>' +
+        '<span style="font-size:14px;font-weight:700;color:#1e2b4a" id="detalhe-titulo-membro"></span>' +
+      '</div>' +
+      '<div id="detalhe-content-membro"></div>';
+
+    main.appendChild(viewCards);
+    main.appendChild(viewDetalhe);
   }
 
   // ── Auto-refresh dados.js ─────────────────────────────────────────────────
