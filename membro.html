@@ -862,13 +862,13 @@
       }
     }, 5000);
 
-    // Auto-refresh overrides a cada 60s
+    // Auto-refresh overrides a cada 5s (detecta adição/remoção de clientes imediatamente)
     setInterval(async () => {
       const changed = await carregarOverrides();
       if (changed) {
         renderApp();
       }
-    }, 60000);
+    }, 5000);
   }
 
   init();
