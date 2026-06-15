@@ -771,21 +771,24 @@
   }
 
   // ── Inicialização ─────────────────────────────────────────────────────────
+  let _initTentativas = 0;
+  const _INIT_MAX = 15; // 15 × 8s ≈ 2 minutos
+
   async function init() {
     const token = getToken();
-    const loginBox = document.getElementById('login-corpo');
 
     if (!token) {
-      loginBox.innerHTML = '<div class="login-token-erro">Link inválido. Solicite um novo link ao gestor.</div>';
+      document.getElementById('login-corpo').innerHTML = '<div class="login-token-erro">Link inválido. Solicite um novo link ao gestor.</div>';
       return;
     }
 
-    // Carregar dados e overrides
-    document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div class="login-sub">Carregando...</div>';
+    // Na primeira tentativa, mostra "Carregando..."
+    if (_initTentativas === 0) {
+      document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div class="login-sub">Carregando...</div>';
+    }
 
     try {
-      // Carregar dados
-      const rD = await fetch(DADOS_URL + Date.now());
+      const rD = await fetch(DADOS_URL + Date.now(), { cache: 'no-store' });
       if (rD.ok) {
         const txt = await rD.text();
         _versaoDados = (txt.match(/versao:\s*['"]([^'"]+)['"]/)||[])[1] || '';
@@ -793,8 +796,7 @@
         _dados = window.WEHANDLE_DADOS;
       }
 
-      // Carregar overrides
-      const rO = await fetch(OVERRIDES_URL + Date.now());
+      const rO = await fetch(OVERRIDES_URL + Date.now(), { cache: 'no-store' });
       if (rO.ok) {
         const txt = await rO.text();
         _snapOverrides = txt;
@@ -809,18 +811,33 @@
       document.getElementById('login-box').innerHTML =
         '<div class="login-logo">wehandle</div>' +
         '<div style="color:#c53030;font-size:13px;margin-top:10px">Erro ao carregar dados.</div>' +
-        '<button class="btn-entrar" onclick="init()" style="margin-top:16px">Tentar novamente</button>';
+        '<button class="btn-entrar" onclick="_initTentativas=0;init()" style="margin-top:16px">Tentar novamente</button>';
       return;
     }
 
     const membro = (_equipe.membros || []).find(m => m.token === token);
     if (!membro) {
-      document.getElementById('login-box').innerHTML =
-        '<div class="login-logo">wehandle</div>' +
-        '<div style="color:#c53030;font-size:13px;margin-top:10px;text-align:center">Token inválido ou expirado.<br>Solicite um novo link ao gestor.</div>' +
-        '<button class="btn-entrar" onclick="init()" style="margin-top:16px;background:#4a5568">Tentar novamente</button>';
+      _initTentativas++;
+      if (_initTentativas < _INIT_MAX) {
+        // Ainda pode ser propagação do CDN — retry automático
+        const tentando = _initTentativas;
+        document.getElementById('login-box').innerHTML =
+          '<div class="login-logo">wehandle</div>' +
+          '<div class="login-sub" style="color:#b7791f">Aguardando publicação do link...</div>' +
+          '<div style="font-size:12px;color:#a0aec0;margin-top:8px">Tentativa ' + tentando + ' de ' + _INIT_MAX + ' · próxima em 8s</div>' +
+          '<div style="width:180px;height:4px;background:#edf2f7;border-radius:99px;margin:12px auto 0"><div style="height:100%;border-radius:99px;background:#e0296f;width:' + Math.round(tentando/_INIT_MAX*100) + '%"></div></div>';
+        setTimeout(init, 8000);
+      } else {
+        _initTentativas = 0;
+        document.getElementById('login-box').innerHTML =
+          '<div class="login-logo">wehandle</div>' +
+          '<div style="color:#c53030;font-size:13px;margin-top:10px;text-align:center">Token inválido ou expirado.<br>Solicite um novo link ao gestor.</div>' +
+          '<button class="btn-entrar" onclick="_initTentativas=0;init()" style="margin-top:16px;background:#4a5568">Tentar novamente</button>';
+      }
       return;
     }
+
+    _initTentativas = 0;
 
     window._membroParaLogin = membro;
 
