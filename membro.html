@@ -213,38 +213,31 @@
     // ── Bônus ──
     const bonusDiv = document.createElement('div');
     bonusDiv.className = 'bonus-card';
-    let bonusTotal = 0;
-    let bonusLinhas = '';
 
+    let bonusPotencial = 0;
+    let bonusDesbloqueado = 0;
     for (const c of clientesDoMembro) {
       const r = resp[c.id] || {};
-      const f1ok = r.f1Atingida || false;
       const mrr2 = c.mrrFaixa2 || 0;
-      const bonus = f1ok ? (mrr2 * 0.04) : 0;
-      bonusTotal += bonus;
-      const f1badge = f1ok
-        ? '<span class="f1-badge f1-ok">F1 ✓</span>'
-        : '<span class="f1-badge f1-pend">F1 pendente</span>';
-      const valStr = f1ok
-        ? '<span class="bonus-val">R$ ' + bonus.toLocaleString('pt-BR', {minimumFractionDigits:2}) + '</span>'
-        : '<span class="bonus-bloqueado">Bloqueado — F1 não atingida</span>';
-      bonusLinhas += '<div class="bonus-row">' +
-        '<div>' +
-          '<div class="bonus-cliente">' + c.nome + f1badge + '</div>' +
-          '<div style="font-size:11px;color:#a0aec0;margin-top:2px">4% × MRR Faixa 2 (R$ ' + (mrr2||0).toLocaleString('pt-BR') + ')</div>' +
-        '</div>' +
-        valStr +
-        '</div>';
+      bonusPotencial += mrr2 * 0.04;
+      if (r.f1Atingida) bonusDesbloqueado += mrr2 * 0.04;
     }
 
-    if (clientesDoMembro.length === 0) {
-      bonusLinhas = '<div style="font-size:13px;color:#a0aec0;padding:8px 0">Nenhum cliente atribuído ainda.</div>';
-    }
-
+    const desbloqueado = bonusDesbloqueado > 0;
     bonusDiv.innerHTML =
-      '<div class="bonus-titulo">💰 Bônus de Rampagem</div>' +
-      bonusLinhas +
-      (clientesDoMembro.length > 0 ? '<div class="bonus-total"><span class="bonus-total-label">Total estimado</span><span class="bonus-total-val">R$ ' + bonusTotal.toLocaleString('pt-BR', {minimumFractionDigits:2}) + '</span></div>' : '');
+      '<div class="bonus-titulo">Bônus de Rampagem</div>' +
+      '<div style="text-align:center;padding:12px 0 4px">' +
+        '<div style="font-size:32px;font-weight:800;color:' + (desbloqueado ? '#276749' : '#1a2340') + ';letter-spacing:-1px">' +
+          'R$ ' + bonusPotencial.toLocaleString('pt-BR', {minimumFractionDigits:2}) +
+        '</div>' +
+        '<div style="font-size:12px;color:#a0aec0;margin-top:6px">' +
+          (clientesDoMembro.length === 0
+            ? 'Nenhum cliente atribuído ainda.'
+            : desbloqueado
+              ? 'Bônus liberado — Faixa 2 ativa'
+              : 'Disponível ao atingir a Faixa 1') +
+        '</div>' +
+      '</div>';
     main.appendChild(bonusDiv);
 
     // ── Clientes ──
