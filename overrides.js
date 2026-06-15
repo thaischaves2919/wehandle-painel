@@ -523,6 +523,12 @@ window.WEHANDLE_OVERRIDES = {
         "token": "tok_lyahr0i4"
       }
     ],
-    "responsaveis": {}
+    "responsaveis": {
+      "netzsch": {
+        "membroId": "elenice_mqfexi4f",
+        "dataTransferencia": "2026-06-15",
+        "f1Atingida": true
+      }
+    }
   }
 };
