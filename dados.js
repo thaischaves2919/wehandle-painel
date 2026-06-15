@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 15/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260615f',
+  versao: '20260615g',
   clientes: [
     {
       id: 'netzsch',
@@ -87,7 +87,13 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'SIMILAR', cnpj: '82.321.845/0001-43', contrato: 'contratado', tel: '4130740300', email: 'qualidade@similar.ind.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'HS AUTOMACAO E ROLAMENTOS LTDA', cnpj: '78.323.045/0001-94', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'ERZINGER INDUSTRIA MECANICA LTDA', cnpj: '80.986.581/0001-11', contrato: 'contratado', tel: '4721011305', email: 'samara@erzinger.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
-        { razaoSocial: 'TALLMANN MANUTENÇÃO ELÉTRICA LTDA.', cnpj: '10.773.592/0001-38', contrato: 'contratado', tel: '4733371774', email: 'tallmann@infratherm.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
+        { razaoSocial: 'TALLMANN MANUTENÇÃO ELÉTRICA LTDA.', cnpj: '10.773.592/0001-38', contrato: 'contratado', tel: '4733371774', email: 'tallmann@infratherm.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'SO PELICULAS - SOLUCOES PARA VIDROS', cnpj: '10.915.070/0001-23', contrato: 'contratado', tel: '4733221844', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'ORGANICA LABORATORIO DE ANALISES QUIMICAS LTDA', cnpj: '05.298.486/0001-00', contrato: 'contratado', tel: '4732761122', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'RDS MONTAGENS LTDA', cnpj: '42.731.670/0001-28', contrato: 'contratado', tel: '5199913528', email: 'ricardo1999santos@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'MILLS LOCACAO SERVICOS E LOGISTICA S.A.', cnpj: '27.093.558/0042-93', contrato: 'contratado', tel: '2121233700', email: 'adm@profrio.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'TERRA  MAR PARTICIPACOES', cnpj: '29.141.162/0001-21', contrato: 'contratado', tel: '4721032905', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'JB MARQUES TELECOM', cnpj: '13.520.771/0001-51', contrato: 'contratado', tel: '1934731027', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
       ]
     },
     {
@@ -194,7 +200,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'LTA PROJETOS  FACILITIES', cnpj: '38.233.266/0001-57', contrato: 'contratado', tel: '1532471301', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'TREAL EQUIPAMENTOS ESPECIAIS LTDA', cnpj: '12.264.795/0001-24', contrato: 'contratado', tel: '1938090577', email: 'adm@treal.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' }
+        { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
+        { razaoSocial: 'L. M. DIVISORIAS E FORROS', cnpj: '09.507.673/0001-07', contrato: 'contratado', tel: '1532132332', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
       ]
     },
     {
