@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>wehandle — Painel do Membro</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #1e2b4a; min-height: 100vh; }
+
+    /* ── Login ── */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-box { background: #fff; border-radius: 18px; padding: 40px 36px; width: 100%; max-width: 380px; box-shadow: 0 4px 24px rgba(26,35,64,0.12); text-align: center; }
+    .login-logo { font-size: 22px; font-weight: 800; color: #1a2340; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .login-sub { font-size: 13px; color: #a0aec0; margin-bottom: 28px; }
+    .login-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; margin: 0 auto 16px; }
+    .login-nome { font-size: 17px; font-weight: 700; color: #1a2340; margin-bottom: 4px; }
+    .login-hint { font-size: 12px; color: #718096; margin-bottom: 20px; }
+    .pin-input { font-size: 28px; font-weight: 800; letter-spacing: 12px; text-align: center; border: 2px solid #e8eaf0; border-radius: 12px; padding: 14px 16px; width: 100%; outline: none; color: #1a2340; background: #f7f8fc; }
+    .pin-input:focus { border-color: #1a2340; background: #fff; }
+    .btn-entrar { background: #1a2340; color: #fff; border: none; border-radius: 10px; padding: 13px 0; width: 100%; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: background 0.15s; }
+    .btn-entrar:hover { background: #e0296f; }
+    .login-erro { color: #c53030; font-size: 13px; margin-top: 10px; display: none; }
+    .login-token-erro { color: #c53030; font-size: 13px; padding: 40px; text-align: center; }
+
+    /* ── App ── */
+    .app-wrap { display: none; }
+    .topbar { background: #1a2340; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar-logo { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .topbar-user { display: flex; align-items: center; gap: 10px; }
+    .topbar-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+    .topbar-nome { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; }
+    .main { padding: 24px; max-width: 900px; margin: 0 auto; }
+
+    /* ── Bônus ── */
+    .bonus-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(26,35,64,0.06); }
+    .bonus-titulo { font-size: 14px; font-weight: 700; color: #1a2340; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .bonus-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f7f8fc; border-radius: 9px; margin-bottom: 8px; }
+    .bonus-cliente { font-size: 13px; font-weight: 600; color: #1a2340; }
+    .bonus-val { font-size: 14px; font-weight: 800; color: #276749; }
+    .bonus-bloqueado { font-size: 12px; color: #a0aec0; font-weight: 600; }
+    .bonus-total { background: #1a2340; color: #fff; border-radius: 9px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .bonus-total-label { font-size: 12px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; }
+    .bonus-total-val { font-size: 20px; font-weight: 800; color: #4ade80; }
+    .f1-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; margin-left: 8px; }
+    .f1-ok { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .f1-pend { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+
+    /* ── Cliente cards ── */
+    .section-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 4px; }
+    .cliente-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(26,35,64,0.05); }
+    .cliente-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .cliente-nome { font-size: 16px; font-weight: 700; color: #1a2340; }
+    .cliente-data { font-size: 11px; color: #a0aec0; margin-top: 2px; }
+    .metricas-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .metrica-box { flex: 1; background: #f7f8fc; border-radius: 9px; padding: 12px 8px; text-align: center; }
+    .metrica-label { font-size: 10px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .metrica-valor { font-size: 22px; font-weight: 800; color: #1a2340; line-height: 1; }
+    .metrica-valor.ok { color: #276749; }
+    .metrica-valor.alerta { color: #c53030; }
+    .prog-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 4px; margin-top: 10px; }
+    .prog-bar { height: 6px; background: #edf2f7; border-radius: 99px; overflow: hidden; margin-bottom: 10px; }
+    .prog-fill { height: 100%; border-radius: 99px; }
+    .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
+    .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+    .fill-pink   { background: linear-gradient(90deg, #e0296f, #f472b6); }
+
+    /* ── Fornecedores table ── */
+    .forn-section { margin-top: 14px; }
+    .forn-section-titulo { font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; display: inline-block; }
+    .bg-verde   { background: #276749; }
+    .bg-laranja { background: #b7791f; }
+    .forn-table { width: 100%; border-collapse: collapse; font-size: 11px; border: 1px solid #edf2f7; border-radius: 8px; overflow: hidden; }
+    .forn-table th { text-align: left; padding: 7px 10px; background: #f7f8fa; color: #a0aec0; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid #edf2f7; }
+    .forn-table td { padding: 7px 10px; border-bottom: 1px solid #f7f8fa; color: #4a5568; vertical-align: middle; }
+    .forn-table tr:last-child td { border-bottom: none; }
+    .forn-nome { font-weight: 600; color: #1a2340; display: flex; align-items: center; gap: 6px; }
+    .badge-novo { display: inline-block; background: #e0296f; color: #fff; border-radius: 4px; padding: 1px 5px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; animation: pulse-novo 1.8s infinite; }
+    @keyframes pulse-novo { 0%,100%{opacity:1} 50%{opacity:0.55} }
+    .status-sel { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
+    .vidas-input { width: 52px; font-size: 11px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 3px 6px; text-align: center; color: #1a2340; outline: none; }
+    .vidas-input:focus { border-color: #1a2340; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2b4a; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 9999; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .atualizado-badge { font-size: 11px; color: rgba(255,255,255,0.4); }
+  </style>
+</head>
+<body>
+
+<!-- Tela de login -->
+<div id="login-wrap" class="login-wrap">
+  <div id="login-box" class="login-box">
+    <div class="login-logo">wehandle</div>
+    <div class="login-sub">Painel do Membro</div>
+    <div id="login-corpo"></div>
+  </div>
+</div>
+
+<!-- App principal -->
+<div id="app-wrap" class="app-wrap">
+  <div class="topbar">
+    <div class="topbar-logo">wehandle</div>
+    <div class="topbar-user">
+      <div id="app-avatar" class="topbar-avatar"></div>
+      <div id="app-nome" class="topbar-nome"></div>
+      <span class="atualizado-badge" id="badge-atualizado"></span>
+    </div>
+  </div>
+  <div class="main" id="app-main"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const BASE_URL = 'https://thaischaves2919.github.io/wehandle-painel/';
+  const DADOS_URL = BASE_URL + 'dados.js?_=';
+  const OVERRIDES_URL = BASE_URL + 'overrides.js?_=';
+
+  let _membro = null;
+  let _equipe = null;
+  let _dados = null;
+  let _versaoDados = '';
+  let _snapOverrides = null;
+  let _contatosLocal = {};
+
+  function getToken() {
+    const p = new URLSearchParams(location.search);
+    return p.get('t') || '';
+  }
+
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function iniciais(nome) {
+    return nome.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+  }
+
+  function contatosKey(membroId) {
+    return 'wh_m_' + membroId + '_contacts_v1';
+  }
+
+  function carregarContatos(membroId) {
+    try {
+      const r = localStorage.getItem(contatosKey(membroId));
+      return r ? JSON.parse(r) : {};
+    } catch(e) { return {}; }
+  }
+
+  function salvarContatos(membroId, dados) {
+    try { localStorage.setItem(contatosKey(membroId), JSON.stringify(dados)); } catch(e) {}
+  }
+
+  function getFornStatus(cnpj) {
+    return (_contatosLocal[cnpj] && _contatosLocal[cnpj].status) || null;
+  }
+  function getFornVidas(cnpj) {
+    return (_contatosLocal[cnpj] && _contatosLocal[cnpj].vidas !== undefined) ? _contatosLocal[cnpj].vidas : null;
+  }
+
+  function setFornStatus(cnpj, status) {
+    if (!_contatosLocal[cnpj]) _contatosLocal[cnpj] = {};
+    _contatosLocal[cnpj].status = status;
+    salvarContatos(_membro.id, _contatosLocal);
+    mostrarToast('Status salvo');
+  }
+
+  function setFornVidas(cnpj, vidas) {
+    if (!_contatosLocal[cnpj]) _contatosLocal[cnpj] = {};
+    _contatosLocal[cnpj].vidas = parseInt(vidas) || 0;
+    salvarContatos(_membro.id, _contatosLocal);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+
+  function renderApp() {
+    if (!_membro || !_dados || !_equipe) return;
+
+    const resp = _equipe.responsaveis || {};
+    const hoje = new Date().toISOString().slice(0,10);
+
+    // Clientes atribuídos a este membro
+    const clientesDoMembro = (_dados.clientes || []).filter(c => {
+      return c.dataInicio && resp[c.id] && resp[c.id].membroId === _membro.id;
+    });
+
+    // Topbar
+    document.getElementById('app-avatar').style.background = _membro.cor || '#3b82f6';
+    document.getElementById('app-avatar').textContent = iniciais(_membro.nome);
+    document.getElementById('app-nome').textContent = _membro.nome;
+
+    const main = document.getElementById('app-main');
+    main.innerHTML = '';
+
+    // ── Bônus ──
+    const bonusDiv = document.createElement('div');
+    bonusDiv.className = 'bonus-card';
+    let bonusTotal = 0;
+    let bonusLinhas = '';
+
+    for (const c of clientesDoMembro) {
+      const r = resp[c.id] || {};
+      const f1ok = r.f1Atingida || false;
+      const mrr2 = c.mrrFaixa2 || 0;
+      const bonus = f1ok ? (mrr2 * 0.04) : 0;
+      bonusTotal += bonus;
+      const f1badge = f1ok
+        ? '<span class="f1-badge f1-ok">F1 ✓</span>'
+        : '<span class="f1-badge f1-pend">F1 pendente</span>';
+      const valStr = f1ok
+        ? '<span class="bonus-val">R$ ' + bonus.toLocaleString('pt-BR', {minimumFractionDigits:2}) + '</span>'
+        : '<span class="bonus-bloqueado">Bloqueado — F1 não atingida</span>';
+      bonusLinhas += '<div class="bonus-row">' +
+        '<div>' +
+          '<div class="bonus-cliente">' + c.nome + f1badge + '</div>' +
+          '<div style="font-size:11px;color:#a0aec0;margin-top:2px">4% × MRR Faixa 2 (R$ ' + (mrr2||0).toLocaleString('pt-BR') + ')</div>' +
+        '</div>' +
+        valStr +
+        '</div>';
+    }
+
+    if (clientesDoMembro.length === 0) {
+      bonusLinhas = '<div style="font-size:13px;color:#a0aec0;padding:8px 0">Nenhum cliente atribuído ainda.</div>';
+    }
+
+    bonusDiv.innerHTML =
+      '<div class="bonus-titulo">💰 Bônus de Rampagem</div>' +
+      bonusLinhas +
+      (clientesDoMembro.length > 0 ? '<div class="bonus-total"><span class="bonus-total-label">Total estimado</span><span class="bonus-total-val">R$ ' + bonusTotal.toLocaleString('pt-BR', {minimumFractionDigits:2}) + '</span></div>' : '');
+    main.appendChild(bonusDiv);
+
+    // ── Clientes ──
+    if (clientesDoMembro.length > 0) {
+      const secTit = document.createElement('div');
+      secTit.className = 'section-titulo';
+      secTit.textContent = 'Seus Clientes (' + clientesDoMembro.length + ')';
+      main.appendChild(secTit);
+    }
+
+    for (const c of clientesDoMembro) {
+      const card = document.createElement('div');
+      card.className = 'cliente-card';
+
+      const metaF1 = c.metaVidasF1 || null;
+      const metaF2 = c.metaVidasF2 || null;
+      const metaAd = c.metaAderencia || 50;
+      const vidas = c.vidas || 0;
+      const ader  = c.aderencia || 0;
+      const pctF1 = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+      const pctF2 = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
+      const pctAd = Math.min(ader / metaAd * 100, 100);
+      const vidasCls = metaF1 && vidas >= metaF1 ? 'ok' : vidas >= (metaF1||0)*0.7 ? '' : 'alerta';
+      const aderCls  = ader >= metaAd ? 'ok' : ader >= metaAd*0.7 ? '' : 'alerta';
+
+      const dataFmt = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR');
+      const prazo = new Date(c.dataInicio + 'T00:00:00');
+      prazo.setDate(prazo.getDate() + 45);
+      const diasRestantes = Math.ceil((prazo - new Date()) / 86400000);
+      const prazoStr = diasRestantes > 0 ? diasRestantes + ' dias restantes' : 'Prazo encerrado';
+
+      // Fornecedores
+      const fornAll = (c.fornecedores || []);
+      const comVidas = fornAll.filter(f => {
+        const v = getFornVidas(f.cnpj);
+        return v !== null ? v > 0 : (f.vidas || 0) > 0;
+      });
+      const pendentes = fornAll.filter(f => {
+        const s = getFornStatus(f.cnpj) || f.status;
+        return s === 'pendente' || s === 'aguardando';
+      });
+      const contatados = fornAll.filter(f => {
+        const s = getFornStatus(f.cnpj) || f.status;
+        return s === 'contatado';
+      });
+
+      function buildFornTable(lista, titulo, cls) {
+        if (!lista.length) return '';
+        let rows = '';
+        for (const f of lista) {
+          const statusAtual = getFornStatus(f.cnpj) || f.status || 'pendente';
+          const vidasAtual = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
+          const isNovo = f.dataEntrada === hoje;
+          const novoBadge = isNovo ? ' <span class="badge-novo">NOVO</span>' : '';
+          rows +=
+            '<tr>' +
+            '<td><span class="forn-nome">' + (f.razaoSocial || '') + novoBadge + '</span></td>' +
+            '<td>' +
+              '<select class="status-sel" data-cnpj="' + f.cnpj + '" onchange="setFornStatus(\'' + f.cnpj + '\', this.value); this.style.color=this.value===\'contatado\'?\'#276749\':\'#c53030\'"' +
+              ' style="color:' + (statusAtual==='contatado'?'#276749':'#c53030') + '">' +
+                '<option value="contatado"' + (statusAtual==='contatado'?' selected':'') + '>Contatado</option>' +
+                '<option value="pendente"' + (statusAtual==='pendente'?' selected':'') + '>Pendente</option>' +
+                '<option value="aguardando"' + (statusAtual==='aguardando'?' selected':'') + '>Aguardando</option>' +
+              '</select>' +
+            '</td>' +
+            '<td><input class="vidas-input" type="number" min="0" value="' + vidasAtual + '" data-cnpj="' + f.cnpj + '" onchange="setFornVidas(\'' + f.cnpj + '\', this.value)" /></td>' +
+            '</tr>';
+        }
+        return '<div class="forn-section">' +
+          '<span class="forn-section-titulo ' + cls + '">' + titulo + '</span>' +
+          '<table class="forn-table"><thead><tr><th>Fornecedor</th><th>Status</th><th>Vidas</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+          '</div>';
+      }
+
+      const tabContatados = buildFornTable(contatados, 'Contatados (' + contatados.length + ')', 'bg-verde');
+      const tabPendentes  = buildFornTable(pendentes,  'Pendentes / Aguardando (' + pendentes.length + ')', 'bg-laranja');
+
+      card.innerHTML =
+        '<div class="cliente-card-header">' +
+          '<div>' +
+            '<div class="cliente-nome">' + c.nome + '</div>' +
+            '<div class="cliente-data">Início: ' + dataFmt + ' · ' + prazoStr + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="metricas-row">' +
+          '<div class="metrica-box"><div class="metrica-label">Vidas</div><div class="metrica-valor ' + vidasCls + '">' + vidas + '</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">meta F1: ' + (metaF1||'—') + (metaF2 ? ' · F2: '+metaF2 : '') + '</div></div>' +
+          '<div class="metrica-box"><div class="metrica-label">Aderência</div><div class="metrica-valor ' + aderCls + '">' + ader.toFixed(1) + '%</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">meta: ' + metaAd + '%</div></div>' +
+          '<div class="metrica-box"><div class="metrica-label">Fornec. c/ vidas</div><div class="metrica-valor">' + comVidas.length + '</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">de ' + fornAll.length + '</div></div>' +
+        '</div>' +
+        '<div class="prog-label"><span>Progresso vidas F1</span><span>' + vidas + ' / ' + (metaF1||'—') + '</span></div>' +
+        '<div class="prog-bar"><div class="prog-fill ' + (pctF1>=100?'fill-green':'fill-orange') + '" style="width:' + pctF1 + '%"></div></div>' +
+        (pctF2 !== null ?
+          '<div class="prog-label"><span>Progresso vidas F2</span><span>' + vidas + ' / ' + metaF2 + '</span></div>' +
+          '<div class="prog-bar"><div class="prog-fill fill-pink" style="width:' + pctF2 + '%"></div></div>'
+          : '') +
+        '<div class="prog-label"><span>Aderência</span><span>' + ader.toFixed(1) + '% / ' + metaAd + '%</span></div>' +
+        '<div class="prog-bar"><div class="prog-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div>' +
+        tabContatados +
+        tabPendentes;
+
+      main.appendChild(card);
+    }
+
+    if (clientesDoMembro.length === 0) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:48px;color:#a0aec0;font-size:14px';
+      empty.textContent = 'Nenhum cliente atribuído a você ainda.';
+      main.appendChild(empty);
+    }
+  }
+
+  // ── Auto-refresh dados.js ─────────────────────────────────────────────────
+  async function carregarDados() {
+    try {
+      const r = await fetch(DADOS_URL + Date.now());
+      if (!r.ok) return;
+      const txt = await r.text();
+      const m = txt.match(/versao:\s*['"]([^'"]+)['"]/);
+      if (!m || !m[1] || m[1] === _versaoDados) return false;
+      _versaoDados = m[1];
+      const s = document.createElement('script');
+      s.textContent = txt;
+      document.head.appendChild(s);
+      document.head.removeChild(s);
+      _dados = window.WEHANDLE_DADOS;
+      return true;
+    } catch(e) { return false; }
+  }
+
+  async function carregarOverrides() {
+    try {
+      const r = await fetch(OVERRIDES_URL + Date.now());
+      if (!r.ok) return false;
+      const txt = await r.text();
+      if (txt === _snapOverrides) return false;
+      _snapOverrides = txt;
+      const s = document.createElement('script');
+      s.textContent = txt;
+      document.head.appendChild(s);
+      document.head.removeChild(s);
+      const ov = window.WEHANDLE_OVERRIDES || {};
+      _equipe = ov.equipe || { membros: [], responsaveis: {} };
+      return true;
+    } catch(e) { return false; }
+  }
+
+  // ── Inicialização ─────────────────────────────────────────────────────────
+  async function init() {
+    const token = getToken();
+    const loginBox = document.getElementById('login-corpo');
+
+    if (!token) {
+      loginBox.innerHTML = '<div class="login-token-erro">Link inválido. Solicite um novo link ao gestor.</div>';
+      return;
+    }
+
+    // Carregar dados e overrides
+    document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div class="login-sub">Carregando...</div>';
+
+    try {
+      // Carregar dados
+      const rD = await fetch(DADOS_URL + Date.now());
+      if (rD.ok) {
+        const txt = await rD.text();
+        _versaoDados = (txt.match(/versao:\s*['"]([^'"]+)['"]/)||[])[1] || '';
+        const s = document.createElement('script'); s.textContent = txt; document.head.appendChild(s); document.head.removeChild(s);
+        _dados = window.WEHANDLE_DADOS;
+      }
+
+      // Carregar overrides
+      const rO = await fetch(OVERRIDES_URL + Date.now());
+      if (rO.ok) {
+        const txt = await rO.text();
+        _snapOverrides = txt;
+        const s = document.createElement('script'); s.textContent = txt; document.head.appendChild(s); document.head.removeChild(s);
+        const ov = window.WEHANDLE_OVERRIDES || {};
+        _equipe = ov.equipe || { membros: [], responsaveis: {} };
+      }
+    } catch(e) {}
+
+    if (!_equipe) {
+      document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div style="color:#c53030;font-size:13px;margin-top:10px">Erro ao carregar dados. Tente novamente.</div>';
+      return;
+    }
+
+    const membro = (_equipe.membros || []).find(m => m.token === token);
+    if (!membro) {
+      document.getElementById('login-box').innerHTML =
+        '<div class="login-logo">wehandle</div><div style="color:#c53030;font-size:13px;margin-top:10px;text-align:center">Token inválido ou expirado.<br>Solicite um novo link ao gestor.</div>';
+      return;
+    }
+
+    // Mostrar tela de PIN
+    const corMembro = membro.cor || '#3b82f6';
+    const loginWrap = document.getElementById('login-wrap');
+    loginWrap.style.display = 'flex';
+    document.getElementById('login-box').innerHTML =
+      '<div class="login-logo">wehandle</div>' +
+      '<div class="login-sub">Painel do Membro</div>' +
+      '<div class="login-avatar" style="background:' + corMembro + '">' + iniciais(membro.nome) + '</div>' +
+      '<div class="login-nome">' + membro.nome + '</div>' +
+      '<div class="login-hint">Digite seu PIN para entrar</div>' +
+      '<input class="pin-input" id="pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autofocus />' +
+      '<button class="btn-entrar" onclick="tentarLogin()">Entrar</button>' +
+      '<div class="login-erro" id="login-erro">PIN incorreto. Tente novamente.</div>';
+
+    document.getElementById('pin-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') tentarLogin();
+    });
+
+    window._membroParaLogin = membro;
+  }
+
+  function tentarLogin() {
+    const membro = window._membroParaLogin;
+    if (!membro) return;
+    const pin = document.getElementById('pin-input').value.trim();
+    if (pin !== membro.pin) {
+      document.getElementById('login-erro').style.display = 'block';
+      document.getElementById('pin-input').value = '';
+      document.getElementById('pin-input').focus();
+      return;
+    }
+    // PIN correto
+    _membro = membro;
+    _contatosLocal = carregarContatos(membro.id);
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('app-wrap').style.display = 'block';
+    renderApp();
+    iniciarPolls();
+  }
+
+  function iniciarPolls() {
+    // Auto-refresh dados a cada 5s
+    setInterval(async () => {
+      const changed = await carregarDados();
+      if (changed) {
+        document.getElementById('badge-atualizado').textContent = 'Atualizado ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+        renderApp();
+      }
+    }, 5000);
+
+    // Auto-refresh overrides a cada 60s
+    setInterval(async () => {
+      const changed = await carregarOverrides();
+      if (changed) {
+        renderApp();
+      }
+    }, 60000);
+  }
+
+  init();
+</script>
+
+</body>
+</html>

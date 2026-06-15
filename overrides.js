@@ -503,6 +503,10 @@ window.WEHANDLE_OVERRIDES = {
   },
   "clientesExtras": [],
   "fornecedoresExtras": [],
+  "equipe": {
+    "membros": [],
+    "responsaveis": {}
+  },
   "metricas": {
     "netzsch": {
       "aderencia": 44.1,
