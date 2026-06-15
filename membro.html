@@ -595,14 +595,19 @@
     } catch(e) {}
 
     if (!_equipe) {
-      document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div style="color:#c53030;font-size:13px;margin-top:10px">Erro ao carregar dados. Tente novamente.</div>';
+      document.getElementById('login-box').innerHTML =
+        '<div class="login-logo">wehandle</div>' +
+        '<div style="color:#c53030;font-size:13px;margin-top:10px">Erro ao carregar dados.</div>' +
+        '<button class="btn-entrar" onclick="init()" style="margin-top:16px">Tentar novamente</button>';
       return;
     }
 
     const membro = (_equipe.membros || []).find(m => m.token === token);
     if (!membro) {
       document.getElementById('login-box').innerHTML =
-        '<div class="login-logo">wehandle</div><div style="color:#c53030;font-size:13px;margin-top:10px;text-align:center">Token inválido ou expirado.<br>Solicite um novo link ao gestor.</div>';
+        '<div class="login-logo">wehandle</div>' +
+        '<div style="color:#c53030;font-size:13px;margin-top:10px;text-align:center">Token inválido ou expirado.<br>Solicite um novo link ao gestor.</div>' +
+        '<button class="btn-entrar" onclick="init()" style="margin-top:16px;background:#4a5568">Tentar novamente</button>';
       return;
     }
 
