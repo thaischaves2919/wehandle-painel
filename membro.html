@@ -249,7 +249,9 @@
     }
 
     for (const c of clientesDoMembro) {
-      const card = document.createElement('div');
+      let card;
+      try {
+      card = document.createElement('div');
       card.className = 'cliente-card';
 
       const metaF1 = c.metaVidasF1 || null;
@@ -344,6 +346,7 @@
         tabPendentes;
 
       main.appendChild(card);
+      } catch(e) { console.error('Erro ao renderizar cliente', c.id, e); }
     }
 
     if (clientesDoMembro.length === 0) {
