@@ -281,31 +281,37 @@
   const calcPrazoDt  = dataInicio => { const d = new Date(dataInicio + 'T00:00:00'); d.setDate(d.getDate() + 45); return d; };
   const encerradoFn  = c => calcPrazoDt(c.dataInicio) < new Date();
 
-  function _badgesCliente(c) {
+  function _badgesCliente(c, f1Atingida) {
     const metaF1 = c.metaVidasF1 || null;
+    const metaF2 = c.metaVidasF2 || null;
     const metaAd = c.metaAderencia || 50;
     const vidas  = c.vidas || 0;
     const ader   = c.aderencia || 0;
-    const bVCls  = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1*0.75 ? 'status-atencao' : 'status-critico';
-    const bVTxt  = metaF1 === null ? 'Sem meta' : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1*0.75 ? 'Atenção' : 'Crítico';
+    // Se a F1 já foi atingida pelo responsável anterior, a meta do membro é a F2
+    const metaAlvo = f1Atingida ? metaF2 : metaF1;
+    const bVCls  = metaAlvo === null ? 'status-atencao' : vidas >= metaAlvo ? 'status-ok' : vidas >= metaAlvo*0.75 ? 'status-atencao' : 'status-critico';
+    const bVTxt  = metaAlvo === null ? (f1Atingida ? 'Sem F2' : 'Sem meta') : vidas >= metaAlvo ? 'Vidas OK' : vidas >= metaAlvo*0.75 ? 'Atenção' : 'Crítico';
     const bACls  = ader >= metaAd ? 'status-ok' : ader >= metaAd-5 ? 'status-atencao' : 'status-critico';
     const bATxt  = ader >= metaAd ? 'Ader. OK' : 'Aderência';
     return { bVCls, bVTxt, bACls, bATxt };
   }
 
-  function criarCardCompactoMembro(c) {
+  function criarCardCompactoMembro(c, f1Atingida) {
     const metaF1 = c.metaVidasF1 || null;
+    const metaF2 = c.metaVidasF2 || null;
     const metaAd = c.metaAderencia || 50;
     const vidas  = c.vidas || 0;
     const ader   = c.aderencia || 0;
     const fornAll = c.fornecedores || [];
     const adStr  = ader.toFixed(2).replace('.', ',');
     const pctAd  = Math.min(ader / metaAd * 100, 100);
-    const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+    // Barra de progresso de vidas aponta para a meta do membro
+    const metaAlvo = f1Atingida ? metaF2 : metaF1;
+    const pctAlvo  = metaAlvo ? Math.min(vidas / metaAlvo * 100, 100) : 0;
     const enc    = encerradoFn(c);
     const prazo  = calcPrazoDt(c.dataInicio);
     const dias   = Math.ceil((prazo - new Date()) / 86400000);
-    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c);
+    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c, f1Atingida);
 
     let deadlineHtml;
     if (enc) {
@@ -329,11 +335,11 @@
         '</div>' +
       '</div>' +
       '<div class="cc-metrics">' +
-        '<div class="cc-metric"><div class="cc-metric-label">Vidas</div><div class="cc-metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="cc-metric-sub">' + (metaF1?'meta: '+metaF1:'sem meta') + '</div></div>' +
+        '<div class="cc-metric"><div class="cc-metric-label">Vidas</div><div class="cc-metric-value' + (metaAlvo&&vidas>=metaAlvo?' ok':'') + '">' + vidas + '</div><div class="cc-metric-sub">' + (metaAlvo ? (f1Atingida?'meta F2: ':'meta: ') + metaAlvo : 'sem meta') + '</div></div>' +
         '<div class="cc-metric"><div class="cc-metric-label">Aderência</div><div class="cc-metric-value' + (ader>=metaAd?' ok':'') + '">' + adStr + '%</div><div class="cc-metric-sub">meta: ' + metaAd + '%</div></div>' +
       '</div>' +
       '<div class="cc-prog"><div class="cc-prog-label"><span>Aderência</span><span>' + adStr + '% / ' + metaAd + '%</span></div><div class="cc-prog-bar"><div class="cc-prog-fill ' + (pctAd>=100?'cc-fill-green':'cc-fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
-      (metaF1 ? '<div class="cc-prog"><div class="cc-prog-label"><span>Faixa 1</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="cc-prog-bar"><div class="cc-prog-fill cc-fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
+      (metaAlvo ? '<div class="cc-prog"><div class="cc-prog-label"><span>' + (f1Atingida?'Faixa 2':'Faixa 1') + '</span><span>' + vidas + ' / ' + metaAlvo + '</span></div><div class="cc-prog-bar"><div class="cc-prog-fill cc-fill-pink" style="width:' + pctAlvo + '%"></div></div></div>' : '') +
       deadlineHtml +
       '<div class="cc-footer">' +
         '<span class="cc-fornecedores">' + fornAll.length + ' fornecedor' + (fornAll.length !== 1 ? 'es' : '') + '</span>' +
@@ -343,7 +349,7 @@
     return div;
   }
 
-  function criarCardDetalheMembro(c) {
+  function criarCardDetalheMembro(c, f1Atingida) {
     const hoje = new Date().toISOString().slice(0,10);
     const metaF1 = c.metaVidasF1 || null;
     const metaF2 = c.metaVidasF2 || null;
@@ -351,11 +357,8 @@
     const vidas  = c.vidas || 0;
     const ader   = c.aderencia || 0;
     const pctAd  = Math.min(ader / metaAd * 100, 100);
-    const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
-    const pctF2  = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
-    const gapF1  = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
     const gapAd  = metaAd - ader;
-    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c);
+    const { bVCls, bVTxt, bACls, bATxt } = _badgesCliente(c, f1Atingida);
     const prazoDate = calcPrazoDt(c.dataInicio);
     const dias = Math.ceil((prazoDate - new Date()) / 86400000);
     const urgente = dias <= 15;
@@ -364,6 +367,40 @@
     const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
     const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
     const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'pendente' || s === 'aguardando'; });
+
+    // Barras e gaps dependem da meta do membro (F2 se f1Atingida, senão F1 + F2)
+    let barrasHTML = '';
+    let gapsHTML   = '';
+    if (f1Atingida) {
+      // Membro começa da F2
+      const pctF2 = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : 0;
+      const gapF2 = metaF2 !== null ? Math.max(metaF2 - vidas, 0) : null;
+      barrasHTML =
+        '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
+        (metaF2 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '');
+      gapsHTML =
+        '<div class="gap-box" style="background:#f0fff4;border-color:#9ae6b4"><span class="gap-label">Faixa 1 atingida antes da transferência</span><span class="gap-value ok">✓</span></div>' +
+        (gapF2!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value ' + (gapF2===0?'ok':'alerta') + '">' + (gapF2===0?'✓ Faixa 2 atingida':gapF2+' vidas') + '</span></div>' : '') +
+        '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>';
+    } else {
+      // Membro começa da F1
+      const pctF1 = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+      const pctF2 = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
+      const gapF1 = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
+      barrasHTML =
+        '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
+        (metaF1 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 1 — Meta ' + metaF1 + ' vidas</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
+        (pctF2!==null ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '');
+      gapsHTML =
+        (gapF1!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 1 (' + metaF1 + ' vidas)</span><span class="gap-value ' + (gapF1===0?'ok':'alerta') + '">' + (gapF1===0?'✓ Faixa 1 atingida':gapF1+' vidas') + '</span></div>' : '') +
+        (metaF2 ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value alerta">' + Math.max(metaF2-vidas,0) + ' vidas</span></div>' : '') +
+        '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>';
+    }
+
+    // Sub do metric box de vidas: mostra a meta relevante
+    const metaAlvo = f1Atingida ? metaF2 : metaF1;
+    const vidasOk  = metaAlvo !== null && vidas >= metaAlvo;
+    const vidasSub = metaF1 ? 'F1: ' + metaF1 + (metaF2 ? ' · F2: ' + metaF2 : '') : '—';
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -385,16 +422,12 @@
           '<span style="color:' + (urgente?'#c53030':'#718096') + '">dias restantes · prazo <strong style="color:' + (urgente?'#c53030':'#1e2b4a') + '">' + prazoDate.toLocaleDateString('pt-BR') + '</strong> · início ' + new Date(c.dataInicio+'T12:00:00').toLocaleDateString('pt-BR') + '</span>' +
         '</div>') +
       '<div class="metric-row">' +
-        '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta F1: ' + (metaF1||'—') + (metaF2?' · F2: '+metaF2:'') + '</div></div>' +
+        '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (vidasOk?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta ' + vidasSub + '</div></div>' +
         '<div class="metric-box"><div class="metric-label">Aderência</div><div class="metric-value' + (ader>=metaAd?' ok':'') + '">' + ader.toFixed(1) + '%</div><div class="metric-sub">meta: ' + metaAd + '%</div></div>' +
         '<div class="metric-box"><div class="metric-label">Fornec. c/ vidas</div><div class="metric-value">' + comVidas.length + '</div><div class="metric-sub">de ' + fornAll.length + '</div></div>' +
       '</div>' +
-      '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
-      (metaF1 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 1 — Meta ' + metaF1 + ' vidas</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
-      (pctF2!==null ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '') +
-      (gapF1!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 1 (' + metaF1 + ' vidas)</span><span class="gap-value ' + (gapF1===0?'ok':'alerta') + '">' + (gapF1===0?'✓ Faixa 1 atingida':gapF1+' vidas') + '</span></div>' : '') +
-      (metaF2 ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value alerta">' + Math.max(metaF2-vidas,0) + ' vidas</span></div>' : '') +
-      '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>' +
+      barrasHTML +
+      gapsHTML +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px">' +
         '<div class="section-title" style="margin:0">Fornecedores ' + c.nome + ' <span style="color:#a0aec0;font-weight:400">(' + fornAll.length + ' total)</span></div>' +
         '<div style="display:flex;gap:6px">' +
@@ -417,20 +450,20 @@
   }
 
   function abrirDetalheMembro(clienteId) {
-    if (!_dados) return;
+    if (!_dados || !_equipe) return;
     const c = (_dados.clientes || []).find(x => x.id === clienteId);
     if (!c) return;
-    const main = document.getElementById('app-main');
     const viewCards = document.getElementById('view-cards-membro');
     const viewDetalhe = document.getElementById('view-detalhe-membro');
     const detalheContent = document.getElementById('detalhe-content-membro');
     const detalheTitulo = document.getElementById('detalhe-titulo-membro');
     if (!viewCards || !viewDetalhe) return;
+    const f1Atingida = !!(_equipe.responsaveis && _equipe.responsaveis[clienteId] && _equipe.responsaveis[clienteId].f1Atingida);
     viewCards.style.display = 'none';
     viewDetalhe.style.display = '';
     detalheTitulo.textContent = c.nome;
     detalheContent.innerHTML = '';
-    detalheContent.appendChild(criarCardDetalheMembro(c));
+    detalheContent.appendChild(criarCardDetalheMembro(c, f1Atingida));
     window.scrollTo(0, 0);
   }
 
@@ -474,25 +507,45 @@
     // Bônus
     let totalReceber = 0;
     const bpRows = clientesDoMembro.map(c => {
+      const f1Atingida = !!(resp[c.id] && resp[c.id].f1Atingida);
       const prazo      = calcPrazoDt(c.dataInicio);
       const periodoStr = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR') + ' a ' + prazo.toLocaleDateString('pt-BR');
-      if (!c.mrrFaixa1) {
-        return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
+      const vidas  = c.vidas || 0;
+      const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
+      const mrrF1  = c.mrrFaixa1 || null, mrrF2 = c.mrrFaixa2 || null;
+      const enc    = encerradoFn(c);
+
+      if (f1Atingida) {
+        // Membro começa da F2 — F1 pertence ao responsável anterior
+        if (!mrrF2 || !metaF2) {
+          return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#276749">F1 ✓ (anterior) · sem F2 definida</div></td><td class="bp-td-val aguardando">— sem F2</td></tr>';
+        }
+        const bonusF2 = Math.round(mrrF2 * 0.01);
+        const faltaF2 = Math.max(metaF2 - vidas, 0);
+        const aReceber = vidas >= metaF2 ? bonusF2 : 0;
+        totalReceber += aReceber;
+        const f2Tag = '<span class="' + (faltaF2===0?'ok':'') + '">F2 ' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>';
+        const anteriorTag = '<span style="color:#276749;font-weight:700">F1 ✓ (anterior)</span>';
+        const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
+        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
+        return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + anteriorTag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
+      } else {
+        // Membro começa da F1 — responsável anterior não atingiu F1
+        if (!mrrF1) {
+          return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
+        }
+        const bonusF1 = Math.round(mrrF1 * 0.04);
+        const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
+        const faltaF1 = Math.max(metaF1 - vidas, 0);
+        const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
+        const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
+        totalReceber += aReceber;
+        const f1Tag = '<span class="' + (faltaF1===0?'ok':'') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1===0?'✓':'(faltam '+faltaF1+'v)') + '</span>';
+        const f2Tag = bonusF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '';
+        const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
+        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
+        return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
       }
-      const vidas = c.vidas || 0, metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
-      const mrrF1 = c.mrrFaixa1, mrrF2 = c.mrrFaixa2 || null;
-      const bonusF1 = Math.round(mrrF1 * 0.04);
-      const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
-      const faltaF1 = Math.max(metaF1 - vidas, 0);
-      const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
-      const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
-      totalReceber += aReceber;
-      const f1Tag = '<span class="' + (faltaF1===0?'ok':'') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1===0?'✓':'(faltam '+faltaF1+'v)') + '</span>';
-      const f2Tag = bonusF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '';
-      const enc = encerradoFn(c);
-      const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
-      const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
-      return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
     });
     const bonusDiv = document.createElement('div');
     bonusDiv.className = 'bp-wrap';
@@ -510,7 +563,10 @@
     if (ativos.length > 0) {
       const grid = document.createElement('div');
       grid.className = 'clients-grid';
-      ativos.forEach(c => grid.appendChild(criarCardCompactoMembro(c)));
+      ativos.forEach(c => {
+        const f1A = !!(resp[c.id] && resp[c.id].f1Atingida);
+        grid.appendChild(criarCardCompactoMembro(c, f1A));
+      });
       viewCards.appendChild(grid);
     }
 
@@ -527,7 +583,10 @@
       const wrapEnc = secEnc.querySelector('#encerrado-wrap-membro');
       const gridEnc = document.createElement('div');
       gridEnc.className = 'clients-grid';
-      encerrados.forEach(c => gridEnc.appendChild(criarCardCompactoMembro(c)));
+      encerrados.forEach(c => {
+        const f1A = !!(resp[c.id] && resp[c.id].f1Atingida);
+        gridEnc.appendChild(criarCardCompactoMembro(c, f1A));
+      });
       wrapEnc.appendChild(gridEnc);
     }
 
