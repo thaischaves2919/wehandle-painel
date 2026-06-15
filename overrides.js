@@ -510,7 +510,13 @@ window.WEHANDLE_OVERRIDES = {
           "token": "tok_ddhl2381"
         }
       ],
-      "responsaveis": {}
+      "responsaveis": {
+        "netzsch": {
+          "membroId": "elenice_mqfccbfl",
+          "dataTransferencia": "2026-06-15",
+          "f1Atingida": true
+        }
+      }
     }
   },
   "clientesExtras": [],
@@ -535,6 +541,12 @@ window.WEHANDLE_OVERRIDES = {
         "token": "tok_ddhl2381"
       }
     ],
-    "responsaveis": {}
+    "responsaveis": {
+      "netzsch": {
+        "membroId": "elenice_mqfccbfl",
+        "dataTransferencia": "2026-06-15",
+        "f1Atingida": true
+      }
+    }
   }
 };
