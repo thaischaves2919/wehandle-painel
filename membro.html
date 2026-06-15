@@ -499,10 +499,9 @@
       const vidas  = c.vidas || 0;
       const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
       const mrrF1  = c.mrrFaixa1 || null, mrrF2 = c.mrrFaixa2 || null;
-      const enc    = encerradoFn(c);
+      // Membros não têm encerramento — período é indeterminado
 
       if (f1Atingida) {
-        // Membro começa da F2 — F1 pertence ao responsável anterior
         if (!mrrF2 || !metaF2) {
           return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#276749">F1 ✓ (anterior) · sem F2 definida</div></td><td class="bp-td-val aguardando">— sem F2</td></tr>';
         }
@@ -512,11 +511,10 @@
         totalReceber += aReceber;
         const f2Tag = '<span class="' + (faltaF2===0?'ok':'') + '">F2 ' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>';
         const anteriorTag = '<span style="color:#276749;font-weight:700">F1 ✓ (anterior)</span>';
-        const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
-        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
+        const valCls = aReceber > 0 ? '' : 'andamento';
+        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : '⏳ Em andamento';
         return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + anteriorTag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
       } else {
-        // Membro começa da F1 — responsável anterior não atingiu F1
         if (!mrrF1) {
           return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
         }
@@ -528,8 +526,8 @@
         totalReceber += aReceber;
         const f1Tag = '<span class="' + (faltaF1===0?'ok':'') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1===0?'✓':'(faltam '+faltaF1+'v)') + '</span>';
         const f2Tag = bonusF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '';
-        const valCls = aReceber > 0 ? '' : enc ? 'aguardando' : 'andamento';
-        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : enc ? 'R$ 0' : '⏳ Em andamento';
+        const valCls = aReceber > 0 ? '' : 'andamento';
+        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : '⏳ Em andamento';
         return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
       }
     });
