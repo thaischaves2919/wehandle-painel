@@ -39,49 +39,53 @@
     .topbar-nome { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; }
     .main { padding: 24px; max-width: 900px; margin: 0 auto; }
 
+    /* ── Status badges ── */
+    .status-badge   { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
+    .status-critico { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .status-ok      { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+    .status-atencao { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+
     /* ── Bônus ── */
-    .bonus-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(26,35,64,0.06); }
-    .bonus-titulo { font-size: 14px; font-weight: 700; color: #1a2340; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .bonus-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f7f8fc; border-radius: 9px; margin-bottom: 8px; }
-    .bonus-cliente { font-size: 13px; font-weight: 600; color: #1a2340; }
-    .bonus-val { font-size: 14px; font-weight: 800; color: #276749; }
-    .bonus-bloqueado { font-size: 12px; color: #a0aec0; font-weight: 600; }
-    .bonus-total { background: #1a2340; color: #fff; border-radius: 9px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-    .bonus-total-label { font-size: 12px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; }
-    .bonus-total-val { font-size: 20px; font-weight: 800; color: #4ade80; }
-    .f1-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; margin-left: 8px; }
-    .f1-ok { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-    .f1-pend { background: #fff0f3; color: #c53030; border: 1px solid #feb2b2; }
+    .bonus-card { background: #fff; border: 1px solid #e2e6ef; border-radius: 14px; padding: 18px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
+    .bonus-titulo { font-size: 14px; font-weight: 700; color: #1e2b4a; margin-bottom: 14px; }
 
     /* ── Cliente cards ── */
     .section-titulo { font-size: 13px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 4px; }
-    .cliente-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(26,35,64,0.05); }
-    .cliente-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .cliente-nome { font-size: 16px; font-weight: 700; color: #1a2340; }
-    .cliente-data { font-size: 11px; color: #a0aec0; margin-top: 2px; }
-    .metricas-row { display: flex; gap: 10px; margin-bottom: 14px; }
-    .metrica-box { flex: 1; background: #f7f8fc; border-radius: 9px; padding: 12px 8px; text-align: center; }
-    .metrica-label { font-size: 10px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
-    .metrica-valor { font-size: 22px; font-weight: 800; color: #1a2340; line-height: 1; }
-    .metrica-valor.ok { color: #276749; }
-    .metrica-valor.alerta { color: #c53030; }
-    .prog-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 4px; margin-top: 10px; }
-    .prog-bar { height: 6px; background: #edf2f7; border-radius: 99px; overflow: hidden; margin-bottom: 10px; }
-    .prog-fill { height: 100%; border-radius: 99px; }
+    .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); margin-bottom: 20px; }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+    .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
+    .metric-row  { display: flex; gap: 12px; margin-bottom: 16px; }
+    .metric-box  { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
+    .metric-label { font-size: 11px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .metric-value { font-size: 28px; font-weight: 800; color: #1e2b4a; line-height: 1; }
+    .metric-value.ok     { color: #276749; }
+    .metric-value.alerta { color: #c53030; }
+    .metric-sub  { font-size: 11px; color: #a0aec0; margin-top: 4px; }
+    .progress-section { margin-bottom: 12px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 5px; }
+    .progress-bar   { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+    .progress-fill  { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
     .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
     .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
-    .fill-pink   { background: linear-gradient(90deg, #e0296f, #f472b6); }
+    .fill-pink   { background: linear-gradient(90deg, #d4326d, #e8679a); }
+    .gap-box   { background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
+    .gap-label { color: #718096; }
+    .gap-value { font-weight: 700; color: #1e2b4a; }
+    .gap-value.alerta { color: #c53030; }
+    .gap-value.ok     { color: #276749; }
+    .section-title { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 18px; }
+    .section-sub   { font-size: 10px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
+    .sub-verde   { background: #276749; }
+    .sub-laranja { background: #b7791f; }
 
     /* ── Fornecedores table ── */
-    .forn-section { margin-top: 14px; }
-    .forn-section-titulo { font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; display: inline-block; }
-    .bg-verde   { background: #276749; }
-    .bg-laranja { background: #b7791f; }
-    .forn-table { width: 100%; border-collapse: collapse; font-size: 11px; border: 1px solid #edf2f7; border-radius: 8px; overflow: hidden; }
-    .forn-table th { text-align: left; padding: 7px 10px; background: #f7f8fa; color: #a0aec0; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid #edf2f7; }
-    .forn-table td { padding: 7px 10px; border-bottom: 1px solid #f7f8fa; color: #4a5568; vertical-align: middle; }
-    .forn-table tr:last-child td { border-bottom: none; }
-    .forn-nome { font-weight: 600; color: #1a2340; display: flex; align-items: center; gap: 6px; }
+    .table-wrap { max-height: 420px; overflow-y: auto; overflow-x: auto; border-radius: 8px; border: 1px solid #edf2f7; margin-bottom: 12px; }
+    .fornecedor-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .fornecedor-table thead th { position: sticky; top: 0; background: #f7f8fa; z-index: 1; }
+    .fornecedor-table th { text-align: left; color: #a0aec0; font-weight: 600; padding: 7px 10px; border-bottom: 1px solid #edf2f7; white-space: nowrap; }
+    .fornecedor-table td { padding: 7px 10px; border-bottom: 1px solid #f7f8fa; color: #4a5568; vertical-align: middle; }
+    .fornecedor-table tr:last-child td { border-bottom: none; }
+    .forn-nome { font-weight: 600; color: #1a2340; }
     .badge-novo { display: inline-block; background: #e0296f; color: #fff; border-radius: 4px; padding: 1px 5px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; animation: pulse-novo 1.8s infinite; }
     @keyframes pulse-novo { 0%,100%{opacity:1} 50%{opacity:0.55} }
     .status-sel { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
@@ -192,18 +196,39 @@
 
   // ── Render ────────────────────────────────────────────────────────────────
 
+  const WA_SVG = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.533 5.854L.057 23.943l6.262-1.641A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.36-.213-3.716.975.993-3.624-.234-.373A9.817 9.817 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>';
+
+  function buildFornRow(f, hoje) {
+    const statusAtual = getFornStatus(f.cnpj) || f.status || 'pendente';
+    const vidasAtual  = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
+    const novoBadge   = f.dataEntrada === hoje ? ' <span class="badge-novo">NOVO</span>' : '';
+    const tel = (_ovContacts[f.cnpj] && _ovContacts[f.cnpj].tel) ? _ovContacts[f.cnpj].tel.replace(/\D/g,'') : '';
+    const waBt = tel ? '<a class="btn-wa" href="https://wa.me/55' + tel + '" target="_blank" rel="noopener">' + WA_SVG + '</a>' : '';
+    const cor  = statusAtual === 'contatado' ? '#276749' : '#c53030';
+    const tr   = document.createElement('tr');
+    tr.innerHTML =
+      '<td><span class="forn-nome">' + (f.razaoSocial || '') + novoBadge + '</span></td>' +
+      '<td style="font-family:monospace;font-size:10px;color:#718096;white-space:nowrap">' + (f.cnpj || '') + '</td>' +
+      '<td><select class="status-sel" style="color:' + cor + '" onchange="setFornStatus(\'' + f.cnpj + '\',this.value);this.style.color=this.value===\'contatado\'?\'#276749\':\'#c53030\'">' +
+        '<option value="contatado"' + (statusAtual==='contatado'?' selected':'') + '>Contatado</option>' +
+        '<option value="pendente"'  + (statusAtual==='pendente' ?' selected':'') + '>Pendente</option>' +
+        '<option value="aguardando"'+ (statusAtual==='aguardando'?' selected':'') + '>Aguardando</option>' +
+      '</select></td>' +
+      '<td><input class="vidas-input" type="number" min="0" value="' + vidasAtual + '" onchange="setFornVidas(\'' + f.cnpj + '\',this.value)"/></td>' +
+      '<td>' + waBt + '</td>';
+    return tr;
+  }
+
   function renderApp() {
     if (!_membro || !_dados || !_equipe) return;
 
     const resp = _equipe.responsaveis || {};
     const hoje = new Date().toISOString().slice(0,10);
 
-    // Clientes atribuídos a este membro
-    const clientesDoMembro = (_dados.clientes || []).filter(c => {
-      return c.dataInicio && resp[c.id] && resp[c.id].membroId === _membro.id;
-    });
+    const clientesDoMembro = (_dados.clientes || []).filter(c =>
+      c.dataInicio && resp[c.id] && resp[c.id].membroId === _membro.id
+    );
 
-    // Topbar
     document.getElementById('app-avatar').style.background = _membro.cor || '#3b82f6';
     document.getElementById('app-avatar').textContent = iniciais(_membro.nome);
     document.getElementById('app-nome').textContent = _membro.nome;
@@ -212,36 +237,24 @@
     main.innerHTML = '';
 
     // ── Bônus ──
-    const bonusDiv = document.createElement('div');
-    bonusDiv.className = 'bonus-card';
-
-    let bonusPotencial = 0;
-    let bonusDesbloqueado = 0;
+    let bonusPotencial = 0, bonusDesbloqueado = 0;
     for (const c of clientesDoMembro) {
       const r = resp[c.id] || {};
       const mrr2 = c.mrrFaixa2 || 0;
       bonusPotencial += mrr2 * 0.04;
       if (r.f1Atingida) bonusDesbloqueado += mrr2 * 0.04;
     }
-
     const desbloqueado = bonusDesbloqueado > 0;
+    const bonusDiv = document.createElement('div');
+    bonusDiv.className = 'bonus-card';
     bonusDiv.innerHTML =
       '<div class="bonus-titulo">Bônus de Rampagem</div>' +
       '<div style="text-align:center;padding:12px 0 4px">' +
-        '<div style="font-size:32px;font-weight:800;color:' + (desbloqueado ? '#276749' : '#1a2340') + ';letter-spacing:-1px">' +
-          'R$ ' + bonusPotencial.toLocaleString('pt-BR', {minimumFractionDigits:2}) +
-        '</div>' +
-        '<div style="font-size:12px;color:#a0aec0;margin-top:6px">' +
-          (clientesDoMembro.length === 0
-            ? 'Nenhum cliente atribuído ainda.'
-            : desbloqueado
-              ? 'Bônus liberado — Faixa 2 ativa'
-              : 'Disponível ao atingir a Faixa 1') +
-        '</div>' +
+        '<div style="font-size:32px;font-weight:800;color:' + (desbloqueado?'#276749':'#1e2b4a') + ';letter-spacing:-1px">R$ ' + bonusPotencial.toLocaleString('pt-BR',{minimumFractionDigits:2}) + '</div>' +
+        '<div style="font-size:12px;color:#a0aec0;margin-top:6px">' + (clientesDoMembro.length===0 ? 'Nenhum cliente atribuído ainda.' : desbloqueado ? 'Bônus liberado — Faixa 2 ativa' : 'Disponível ao atingir a Faixa 1') + '</div>' +
       '</div>';
     main.appendChild(bonusDiv);
 
-    // ── Clientes ──
     if (clientesDoMembro.length > 0) {
       const secTit = document.createElement('div');
       secTit.className = 'section-titulo';
@@ -250,107 +263,91 @@
     }
 
     for (const c of clientesDoMembro) {
-      let card;
       try {
-      card = document.createElement('div');
-      card.className = 'cliente-card';
+        const card = document.createElement('div');
+        card.className = 'card';
 
-      const metaF1 = c.metaVidasF1 || null;
-      const metaF2 = c.metaVidasF2 || null;
-      const metaAd = c.metaAderencia || 50;
-      const vidas = c.vidas || 0;
-      const ader  = c.aderencia || 0;
-      const pctF1 = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
-      const pctF2 = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
-      const pctAd = Math.min(ader / metaAd * 100, 100);
-      const vidasCls = metaF1 && vidas >= metaF1 ? 'ok' : vidas >= (metaF1||0)*0.7 ? '' : 'alerta';
-      const aderCls  = ader >= metaAd ? 'ok' : ader >= metaAd*0.7 ? '' : 'alerta';
+        const metaF1 = c.metaVidasF1 || null;
+        const metaF2 = c.metaVidasF2 || null;
+        const metaAd = c.metaAderencia || 50;
+        const vidas  = c.vidas || 0;
+        const ader   = c.aderencia || 0;
+        const pctAd  = Math.min(ader / metaAd * 100, 100);
+        const pctF1  = metaF1 ? Math.min(vidas / metaF1 * 100, 100) : 0;
+        const pctF2  = metaF2 ? Math.min(vidas / metaF2 * 100, 100) : null;
+        const gapF1  = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
+        const gapAd  = metaAd - ader;
 
-      const dataFmt = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR');
-      const prazo = new Date(c.dataInicio + 'T00:00:00');
-      prazo.setDate(prazo.getDate() + 45);
-      const diasRestantes = Math.ceil((prazo - new Date()) / 86400000);
-      const prazoStr = diasRestantes > 0 ? diasRestantes + ' dias restantes' : 'Prazo encerrado';
+        const badgeVidasCls = metaF1 === null ? 'status-atencao' : vidas >= metaF1 ? 'status-ok' : vidas >= metaF1*0.75 ? 'status-atencao' : 'status-critico';
+        const badgeVidasTxt = metaF1 === null ? 'Sem meta'        : vidas >= metaF1 ? 'Vidas OK' : vidas >= metaF1*0.75 ? 'Vidas: Atenção' : 'Crítico';
+        const badgeAderCls  = ader >= metaAd ? 'status-ok' : ader >= metaAd-5 ? 'status-atencao' : 'status-critico';
+        const badgeAderTxt  = ader >= metaAd ? 'Aderência OK'    : ader >= metaAd-5 ? 'Aderência: Atenção' : 'Aderência: Crítico';
 
-      // Fornecedores
-      const fornAll = (c.fornecedores || []);
-      const comVidas = fornAll.filter(f => {
-        const v = getFornVidas(f.cnpj);
-        return v !== null ? v > 0 : (f.vidas || 0) > 0;
-      });
-      const pendentes = fornAll.filter(f => {
-        const s = getFornStatus(f.cnpj) || f.status;
-        return s === 'pendente' || s === 'aguardando';
-      });
-      const contatados = fornAll.filter(f => {
-        const s = getFornStatus(f.cnpj) || f.status;
-        return s === 'contatado';
-      });
+        const prazoDate = new Date(c.dataInicio + 'T00:00:00');
+        prazoDate.setDate(prazoDate.getDate() + 45);
+        const dias    = Math.ceil((prazoDate - new Date()) / 86400000);
+        const urgente = dias <= 15;
+        const prazoFmt = prazoDate.toLocaleDateString('pt-BR');
+        const inicioFmt = new Date(c.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR');
 
-      function buildFornTable(lista, titulo, cls) {
-        if (!lista.length) return '';
-        let rows = '';
-        for (const f of lista) {
-          const statusAtual = getFornStatus(f.cnpj) || f.status || 'pendente';
-          const vidasAtual = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
-          const isNovo = f.dataEntrada === hoje;
-          const novoBadge = isNovo ? ' <span class="badge-novo">NOVO</span>' : '';
-          const tel = (_ovContacts[f.cnpj] && _ovContacts[f.cnpj].tel) ? _ovContacts[f.cnpj].tel.replace(/\D/g,'') : '';
-          const waBt = tel
-            ? '<a class="btn-wa" href="https://wa.me/55' + tel + '" target="_blank" rel="noopener" title="Abrir WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.533 5.854L.057 23.943l6.262-1.641A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.36-.213-3.716.975.993-3.624-.234-.373A9.817 9.817 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg></a>'
-            : '';
-          rows +=
-            '<tr>' +
-            '<td><span class="forn-nome">' + (f.razaoSocial || '') + novoBadge + '</span></td>' +
-            '<td>' +
-              '<select class="status-sel" data-cnpj="' + f.cnpj + '" onchange="setFornStatus(\'' + f.cnpj + '\', this.value); this.style.color=this.value===\'contatado\'?\'#276749\':\'#c53030\'"' +
-              ' style="color:' + (statusAtual==='contatado'?'#276749':'#c53030') + '">' +
-                '<option value="contatado"' + (statusAtual==='contatado'?' selected':'') + '>Contatado</option>' +
-                '<option value="pendente"' + (statusAtual==='pendente'?' selected':'') + '>Pendente</option>' +
-                '<option value="aguardando"' + (statusAtual==='aguardando'?' selected':'') + '>Aguardando</option>' +
-              '</select>' +
-            '</td>' +
-            '<td><input class="vidas-input" type="number" min="0" value="' + vidasAtual + '" data-cnpj="' + f.cnpj + '" onchange="setFornVidas(\'' + f.cnpj + '\', this.value)" /></td>' +
-            '<td>' + waBt + '</td>' +
-            '</tr>';
-        }
-        return '<div class="forn-section">' +
-          '<span class="forn-section-titulo ' + cls + '">' + titulo + '</span>' +
-          '<table class="forn-table"><thead><tr><th>Fornecedor</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>' +
-          '</div>';
-      }
+        const fornAll    = c.fornecedores || [];
+        const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
+        const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
+        const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'pendente' || s === 'aguardando'; });
 
-      const tabContatados = buildFornTable(contatados, 'Contatados (' + contatados.length + ')', 'bg-verde');
-      const tabPendentes  = buildFornTable(pendentes,  'Pendentes / Aguardando (' + pendentes.length + ')', 'bg-laranja');
-
-      card.innerHTML =
-        '<div class="cliente-card-header">' +
-          '<div>' +
-            '<div class="cliente-nome">' + c.nome + '</div>' +
-            '<div class="cliente-data">Início: ' + dataFmt + ' · ' + prazoStr + '</div>' +
+        card.innerHTML =
+          // ── Header ──
+          '<div class="card-header">' +
+            '<div>' +
+              '<div class="card-title">' + c.nome + '</div>' +
+              (c.cnpj ? '<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">' + c.cnpj + '</div>' : '') +
+            '</div>' +
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">' +
+              '<span class="status-badge ' + badgeVidasCls + '">' + badgeVidasTxt + '</span>' +
+              '<span class="status-badge ' + badgeAderCls  + '">' + badgeAderTxt  + '</span>' +
+            '</div>' +
           '</div>' +
-          '<div style="display:flex;gap:6px;flex-shrink:0">' +
-            '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
-            '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
+          // ── Prazo ──
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;background:' + (urgente?'#fff0f3':'#f7f8fa') + ';border:1px solid ' + (urgente?'#feb2b2':'#e2e6ef') + ';border-radius:10px;padding:10px 14px;font-size:12px;">' +
+            '<span style="font-size:22px;font-weight:800;color:' + (urgente?'#c53030':'#1e2b4a') + '">' + Math.max(dias,0) + '</span>' +
+            '<span style="color:' + (urgente?'#c53030':'#718096') + '">dias restantes · prazo <strong style="color:' + (urgente?'#c53030':'#1e2b4a') + '">' + prazoFmt + '</strong> · início ' + inicioFmt + '</span>' +
           '</div>' +
-        '</div>' +
-        '<div class="metricas-row">' +
-          '<div class="metrica-box"><div class="metrica-label">Vidas</div><div class="metrica-valor ' + vidasCls + '">' + vidas + '</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">meta F1: ' + (metaF1||'—') + (metaF2 ? ' · F2: '+metaF2 : '') + '</div></div>' +
-          '<div class="metrica-box"><div class="metrica-label">Aderência</div><div class="metrica-valor ' + aderCls + '">' + ader.toFixed(1) + '%</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">meta: ' + metaAd + '%</div></div>' +
-          '<div class="metrica-box"><div class="metrica-label">Fornec. c/ vidas</div><div class="metrica-valor">' + comVidas.length + '</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">de ' + fornAll.length + '</div></div>' +
-        '</div>' +
-        '<div class="prog-label"><span>Progresso vidas F1</span><span>' + vidas + ' / ' + (metaF1||'—') + '</span></div>' +
-        '<div class="prog-bar"><div class="prog-fill ' + (pctF1>=100?'fill-green':'fill-orange') + '" style="width:' + pctF1 + '%"></div></div>' +
-        (pctF2 !== null ?
-          '<div class="prog-label"><span>Progresso vidas F2</span><span>' + vidas + ' / ' + metaF2 + '</span></div>' +
-          '<div class="prog-bar"><div class="prog-fill fill-pink" style="width:' + pctF2 + '%"></div></div>'
-          : '') +
-        '<div class="prog-label"><span>Aderência</span><span>' + ader.toFixed(1) + '% / ' + metaAd + '%</span></div>' +
-        '<div class="prog-bar"><div class="prog-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div>' +
-        tabContatados +
-        tabPendentes;
+          // ── Métricas ──
+          '<div class="metric-row">' +
+            '<div class="metric-box"><div class="metric-label">Vidas</div><div class="metric-value' + (metaF1&&vidas>=metaF1?' ok':'') + '">' + vidas + '</div><div class="metric-sub">meta F1: ' + (metaF1||'—') + (metaF2?' · F2: '+metaF2:'') + '</div></div>' +
+            '<div class="metric-box"><div class="metric-label">Aderência</div><div class="metric-value' + (ader>=metaAd?' ok':'') + '">' + ader.toFixed(1) + '%</div><div class="metric-sub">meta: ' + metaAd + '%</div></div>' +
+            '<div class="metric-box"><div class="metric-label">Fornec. c/ vidas</div><div class="metric-value">' + comVidas.length + '</div><div class="metric-sub">de ' + fornAll.length + '</div></div>' +
+          '</div>' +
+          // ── Barras de progresso ──
+          '<div class="progress-section"><div class="progress-label"><span>Aderência — Meta ' + metaAd + '%</span><span>' + ader.toFixed(1) + '%</span></div><div class="progress-bar"><div class="progress-fill ' + (pctAd>=100?'fill-green':'fill-orange') + '" style="width:' + pctAd + '%"></div></div></div>' +
+          (metaF1 ? '<div class="progress-section"><div class="progress-label"><span>Faixa 1 — Meta ' + metaF1 + ' vidas</span><span>' + vidas + ' / ' + metaF1 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF1 + '%"></div></div></div>' : '') +
+          (pctF2!==null ? '<div class="progress-section"><div class="progress-label"><span>Faixa 2 — Meta ' + metaF2 + ' vidas</span><span>' + vidas + ' / ' + metaF2 + '</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:' + pctF2 + '%"></div></div></div>' : '') +
+          // ── Gap boxes ──
+          (gapF1!==null ? '<div class="gap-box"><span class="gap-label">Gap para faixa 1 (' + metaF1 + ' vidas)</span><span class="gap-value ' + (gapF1===0?'ok':'alerta') + '">' + (gapF1===0?'✓ Faixa 1 atingida':gapF1+' vidas') + '</span></div>' : '') +
+          (metaF2 ? '<div class="gap-box"><span class="gap-label">Gap para faixa 2 (' + metaF2 + ' vidas)</span><span class="gap-value alerta">' + Math.max(metaF2-vidas,0) + ' vidas</span></div>' : '') +
+          '<div class="gap-box"><span class="gap-label">Gap de aderência para ' + metaAd + '%</span><span class="gap-value ' + (gapAd<=0?'ok':'alerta') + '">' + (gapAd<=0?'✓ Meta atingida':gapAd.toFixed(1)+' p.p.') + '</span></div>' +
+          // ── Fornecedores header ──
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px">' +
+            '<div class="section-title" style="margin:0">Fornecedores ' + c.nome + ' <span style="color:#a0aec0;font-weight:400">(' + fornAll.length + ' total)</span></div>' +
+            '<div style="display:flex;gap:6px">' +
+              '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
+              '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
+            '</div>' +
+          '</div>' +
+          // ── Tabelas (preenchidas abaixo via DOM) ──
+          '<div class="section-sub sub-verde">✓ Já contatados (' + contatados.length + ')</div>' +
+          '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
+          (pendentes.length>0 ?
+            '<div class="section-sub sub-laranja">⏳ Pendentes / Aguardando (' + pendentes.length + ')</div>' +
+            '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
+            : '');
 
-      main.appendChild(card);
+        const tC = card.querySelector('#tc-' + c.id);
+        const tP = card.querySelector('#tp-' + c.id);
+        contatados.forEach(f => tC && tC.appendChild(buildFornRow(f, hoje)));
+        pendentes.forEach(f  => tP && tP.appendChild(buildFornRow(f, hoje)));
+
+        main.appendChild(card);
       } catch(e) { console.error('Erro ao renderizar cliente', c.id, e); }
     }
 
