@@ -516,21 +516,21 @@ window.WEHANDLE_OVERRIDES = {
   "equipe": {
     "membros": [
       {
-        "id": "elenice_mqfdhkqv",
+        "id": "elenice_mqfexi4f",
         "nome": "Elenice",
         "pin": "1234",
         "cor": "#ef4444",
-        "token": "tok_36dcabj8"
+        "token": "tok_lyahr0i4"
       }
     ],
     "responsaveis": {
       "netzsch": {
-        "membroId": "elenice_mqfdhkqv",
+        "membroId": "elenice_mqfexi4f",
         "dataTransferencia": "2026-06-15",
         "f1Atingida": true
       },
       "saint-gobain": {
-        "membroId": "elenice_mqfdhkqv",
+        "membroId": "elenice_mqfexi4f",
         "dataTransferencia": "2026-06-15",
         "f1Atingida": false
       }
