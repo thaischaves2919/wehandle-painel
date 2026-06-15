@@ -501,22 +501,8 @@ window.WEHANDLE_OVERRIDES = {
       "via": "email"
     },
     "equipe": {
-      "membros": [
-        {
-          "id": "elenice_mqfccbfl",
-          "nome": "Elenice",
-          "pin": "1234",
-          "cor": "#ef4444",
-          "token": "tok_ddhl2381"
-        }
-      ],
-      "responsaveis": {
-        "netzsch": {
-          "membroId": "elenice_mqfccbfl",
-          "dataTransferencia": "2026-06-15",
-          "f1Atingida": true
-        }
-      }
+      "membros": [],
+      "responsaveis": {}
     }
   },
   "clientesExtras": [],
@@ -532,21 +518,7 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [
-      {
-        "id": "elenice_mqfccbfl",
-        "nome": "Elenice",
-        "pin": "1234",
-        "cor": "#ef4444",
-        "token": "tok_ddhl2381"
-      }
-    ],
-    "responsaveis": {
-      "netzsch": {
-        "membroId": "elenice_mqfccbfl",
-        "dataTransferencia": "2026-06-15",
-        "f1Atingida": true
-      }
-    }
+    "membros": [],
+    "responsaveis": {}
   }
 };
