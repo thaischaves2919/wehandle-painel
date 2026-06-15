@@ -22,6 +22,13 @@
     .btn-entrar:hover { background: #e0296f; }
     .login-erro { color: #c53030; font-size: 13px; margin-top: 10px; display: none; }
     .login-token-erro { color: #c53030; font-size: 13px; padding: 40px; text-align: center; }
+    .auth-form { text-align: left; margin-top: 4px; }
+    .auth-group { margin-bottom: 14px; }
+    .auth-label { display: block; font-size: 12px; font-weight: 600; color: #4a5568; margin-bottom: 5px; }
+    .auth-input { width: 100%; padding: 11px 13px; border: 1.5px solid #e8eaf0; border-radius: 10px; font-size: 13px; color: #1a2340; outline: none; background: #f7f8fc; }
+    .auth-input:focus { border-color: #1a2340; background: #fff; }
+    .btn-sair { background: transparent; border: none; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.15s; margin-left: 4px; }
+    .btn-sair:hover { color: #fff; background: rgba(255,255,255,0.1); }
 
     /* ── App ── */
     .app-wrap { display: none; }
@@ -107,6 +114,7 @@
       <div id="app-avatar" class="topbar-avatar"></div>
       <div id="app-nome" class="topbar-nome"></div>
       <span class="atualizado-badge" id="badge-atualizado"></span>
+      <button class="btn-sair" onclick="sairMembro()">Sair</button>
     </div>
   </div>
   <div class="main" id="app-main"></div>
@@ -379,6 +387,107 @@
     } catch(e) { return false; }
   }
 
+  // ── Auth helpers ──────────────────────────────────────────────────────────
+  async function _sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function _mAuthKey(t) { return 'wh_auth_m_' + t; }
+  function _mSessKey(t) { return 'wh_sess_m_' + t; }
+  function _getMAuthCreds(t) {
+    try { return JSON.parse(localStorage.getItem(_mAuthKey(t)) || 'null'); } catch(e) { return null; }
+  }
+  function _saveMAuthCreds(t, user, hash) {
+    localStorage.setItem(_mAuthKey(t), JSON.stringify({ user, hash }));
+  }
+
+  function _mostrarTelaAuth(membro, token) {
+    const cor = membro.cor || '#3b82f6';
+    const creds = _getMAuthCreds(token);
+    const header =
+      '<div class="login-logo">wehandle</div>' +
+      '<div class="login-sub">Painel do Membro</div>' +
+      '<div class="login-avatar" style="background:' + cor + '">' + iniciais(membro.nome) + '</div>' +
+      '<div class="login-nome">' + membro.nome + '</div>';
+    if (creds) {
+      document.getElementById('login-box').innerHTML = header +
+        '<div class="login-hint">Olá, ' + creds.user + '! Digite sua senha.</div>' +
+        '<form class="auth-form" onsubmit="event.preventDefault();_doMembroLogin()">' +
+        '<div class="auth-group"><label class="auth-label">Senha</label>' +
+        '<input class="auth-input" id="m-pass" type="password" autocomplete="current-password" autofocus /></div>' +
+        '<div class="login-erro" id="login-erro">Senha incorreta.</div>' +
+        '<button class="btn-entrar" type="submit">Entrar</button>' +
+        '</form>';
+    } else {
+      document.getElementById('login-box').innerHTML = header +
+        '<div class="login-hint">Crie seu acesso para continuar</div>' +
+        '<form class="auth-form" onsubmit="event.preventDefault();_doMembroCriar()">' +
+        '<div class="auth-group"><label class="auth-label">Nome de usuário</label>' +
+        '<input class="auth-input" id="m-user" type="text" autocomplete="username" placeholder="ex: joao.silva" autofocus /></div>' +
+        '<div class="auth-group"><label class="auth-label">Senha</label>' +
+        '<input class="auth-input" id="m-pass" type="password" autocomplete="new-password" /></div>' +
+        '<div class="auth-group"><label class="auth-label">Confirmar senha</label>' +
+        '<input class="auth-input" id="m-conf" type="password" autocomplete="new-password" /></div>' +
+        '<div class="login-erro" id="login-erro"></div>' +
+        '<button class="btn-entrar" type="submit">Criar acesso</button>' +
+        '</form>';
+    }
+  }
+
+  async function _doMembroLogin() {
+    const membro = window._membroParaLogin;
+    const token = getToken();
+    const creds = _getMAuthCreds(token);
+    const passEl = document.getElementById('m-pass');
+    const erro = document.getElementById('login-erro');
+    if (!passEl || !passEl.value) return;
+    const h = await _sha256(passEl.value);
+    if (h !== creds.hash) {
+      erro.style.display = 'block';
+      passEl.value = '';
+      passEl.focus();
+      return;
+    }
+    sessionStorage.setItem(_mSessKey(token), '1');
+    _entrarNoAppMembro(membro);
+  }
+
+  async function _doMembroCriar() {
+    const membro = window._membroParaLogin;
+    const token = getToken();
+    const user = ((document.getElementById('m-user') || {}).value || '').trim();
+    const pass = (document.getElementById('m-pass') || {}).value || '';
+    const conf = (document.getElementById('m-conf') || {}).value || '';
+    const erro = document.getElementById('login-erro');
+    erro.style.display = 'none';
+    if (!user) { erro.textContent = 'Informe um nome de usuário.'; erro.style.display = 'block'; return; }
+    if (pass.length < 6) { erro.textContent = 'Senha com mínimo 6 caracteres.'; erro.style.display = 'block'; return; }
+    if (pass !== conf) { erro.textContent = 'As senhas não coincidem.'; erro.style.display = 'block'; return; }
+    const h = await _sha256(pass);
+    _saveMAuthCreds(token, user, h);
+    sessionStorage.setItem(_mSessKey(token), '1');
+    _entrarNoAppMembro(membro);
+  }
+
+  function _entrarNoAppMembro(membro) {
+    _membro = membro;
+    _contatosLocal = carregarContatos(membro.id);
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('app-wrap').style.display = 'block';
+    renderApp();
+    iniciarPolls();
+  }
+
+  function sairMembro() {
+    const token = getToken();
+    sessionStorage.removeItem(_mSessKey(token));
+    _membro = null;
+    document.getElementById('app-wrap').style.display = 'none';
+    document.getElementById('login-wrap').style.display = 'flex';
+    const membro = window._membroParaLogin;
+    if (membro) _mostrarTelaAuth(membro, token);
+  }
+
   // ── Inicialização ─────────────────────────────────────────────────────────
   async function init() {
     const token = getToken();
@@ -425,44 +534,17 @@
       return;
     }
 
-    // Mostrar tela de PIN
-    const corMembro = membro.cor || '#3b82f6';
-    const loginWrap = document.getElementById('login-wrap');
-    loginWrap.style.display = 'flex';
-    document.getElementById('login-box').innerHTML =
-      '<div class="login-logo">wehandle</div>' +
-      '<div class="login-sub">Painel do Membro</div>' +
-      '<div class="login-avatar" style="background:' + corMembro + '">' + iniciais(membro.nome) + '</div>' +
-      '<div class="login-nome">' + membro.nome + '</div>' +
-      '<div class="login-hint">Digite seu PIN para entrar</div>' +
-      '<input class="pin-input" id="pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autofocus />' +
-      '<button class="btn-entrar" onclick="tentarLogin()">Entrar</button>' +
-      '<div class="login-erro" id="login-erro">PIN incorreto. Tente novamente.</div>';
-
-    document.getElementById('pin-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') tentarLogin();
-    });
-
     window._membroParaLogin = membro;
-  }
 
-  function tentarLogin() {
-    const membro = window._membroParaLogin;
-    if (!membro) return;
-    const pin = document.getElementById('pin-input').value.trim();
-    if (pin !== membro.pin) {
-      document.getElementById('login-erro').style.display = 'block';
-      document.getElementById('pin-input').value = '';
-      document.getElementById('pin-input').focus();
+    // Verificar sessão ativa
+    if (sessionStorage.getItem(_mSessKey(token)) === '1') {
+      _entrarNoAppMembro(membro);
       return;
     }
-    // PIN correto
-    _membro = membro;
-    _contatosLocal = carregarContatos(membro.id);
-    document.getElementById('login-wrap').style.display = 'none';
-    document.getElementById('app-wrap').style.display = 'block';
-    renderApp();
-    iniciarPolls();
+
+    // Mostrar tela de credenciais
+    document.getElementById('login-wrap').style.display = 'flex';
+    _mostrarTelaAuth(membro, token);
   }
 
   function iniciarPolls() {
