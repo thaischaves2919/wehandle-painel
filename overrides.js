@@ -528,6 +528,11 @@ window.WEHANDLE_OVERRIDES = {
         "membroId": "elenice_mqfdhkqv",
         "dataTransferencia": "2026-06-15",
         "f1Atingida": true
+      },
+      "saint-gobain": {
+        "membroId": "elenice_mqfdhkqv",
+        "dataTransferencia": "2026-06-15",
+        "f1Atingida": false
       }
     }
   }
