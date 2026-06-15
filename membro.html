@@ -258,7 +258,7 @@
   function buildFornRow(f, hoje) {
     const statusAtual = getFornStatus(f.cnpj) || f.status || 'pendente';
     const vidasAtual  = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
-    const novoBadge   = f.dataEntrada === hoje ? ' <span class="badge-novo">NOVO</span>' : '';
+    const novoBadge   = f.dataEntrada && (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000 <= 7 ? ' <span class="badge-novo">NOVO</span>' : '';
     const tel = (_ovContacts[f.cnpj] && _ovContacts[f.cnpj].tel) ? _ovContacts[f.cnpj].tel.replace(/\D/g,'') : '';
     const waBt = tel ? '<a class="btn-wa" href="https://wa.me/55' + tel + '" target="_blank" rel="noopener">' + WA_SVG + '</a>' : '';
     const cor  = statusAtual === 'contatado' ? '#276749' : '#c53030';
@@ -303,6 +303,7 @@
     const vidas  = c.vidas || 0;
     const ader   = c.aderencia || 0;
     const fornAll = c.fornecedores || [];
+    const novosCC = fornAll.filter(f => f.dataEntrada && (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000 <= 7).length;
     const adStr  = ader.toFixed(2).replace('.', ',');
     const pctAd  = Math.min(ader / metaAd * 100, 100);
     const metaAlvo = f1Atingida ? metaF2 : metaF1;
@@ -333,7 +334,7 @@
       (metaAlvo ? '<div class="cc-prog"><div class="cc-prog-label"><span>' + (f1Atingida?'Faixa 2':'Faixa 1') + '</span><span>' + vidas + ' / ' + metaAlvo + '</span></div><div class="cc-prog-bar"><div class="cc-prog-fill cc-fill-pink" style="width:' + pctAlvo + '%"></div></div></div>' : '') +
       deadlineHtml +
       '<div class="cc-footer">' +
-        '<span class="cc-fornecedores">' + fornAll.length + ' fornecedor' + (fornAll.length !== 1 ? 'es' : '') + '</span>' +
+        '<span class="cc-fornecedores">' + fornAll.length + ' fornecedor' + (fornAll.length !== 1 ? 'es' : '') + (novosCC > 0 ? ' · <strong style="color:#e0296f">+' + novosCC + ' novo' + (novosCC > 1 ? 's' : '') + '</strong>' : '') + '</span>' +
         '<button class="btn-ver-forn" onclick="event.stopPropagation();abrirDetalheMembro(\'' + c.id + '\')">Ver fornecedores →</button>' +
       '</div>';
     div.addEventListener('click', () => abrirDetalheMembro(c.id));
@@ -354,8 +355,10 @@
     const membroInicio = calcPrazoDt(c.dataInicio);
     const fornAll    = c.fornecedores || [];
     const comVidas   = fornAll.filter(f => { const v = getFornVidas(f.cnpj); return v !== null ? v > 0 : (f.vidas||0) > 0; });
-    const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado'; });
-    const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'pendente' || s === 'aguardando'; });
+    const novos      = fornAll.filter(f => f.dataEntrada && (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000 <= 7);
+    const novosSet   = new Set(novos.map(f => f.cnpj));
+    const contatados = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return s === 'contatado' && !novosSet.has(f.cnpj); });
+    const pendentes  = fornAll.filter(f => { const s = getFornStatus(f.cnpj) || f.status; return (s === 'pendente' || s === 'aguardando') && !novosSet.has(f.cnpj); });
 
     // Barras e gaps dependem da meta do membro (F2 se f1Atingida, senão F1 + F2)
     let barrasHTML = '';
@@ -421,15 +424,21 @@
           '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
         '</div>' +
       '</div>' +
-      '<div class="section-sub sub-verde">✓ Já contatados (' + contatados.length + ')</div>' +
+      (novos.length > 0 ?
+        '<div class="section-sub" style="margin-top:0;background:#fff0f6;border:1px solid #fbb6ce;color:#c4146b;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700">🆕 Novos fornecedores (' + novos.length + ')</div>' +
+        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tn-' + c.id + '"></tbody></table></div>'
+        : '') +
+      '<div class="section-sub sub-verde" style="margin-top:' + (novos.length > 0 ? '12px' : '0') + '">✓ Já contatados (' + contatados.length + ')</div>' +
       '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
       (pendentes.length > 0 ?
         '<div class="section-sub sub-laranja" style="margin-top:12px">⏳ Pendentes / Aguardando (' + pendentes.length + ')</div>' +
         '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
         : '');
 
+    const tN = card.querySelector('#tn-' + c.id);
     const tC = card.querySelector('#tc-' + c.id);
     const tP = card.querySelector('#tp-' + c.id);
+    novos.forEach(f      => tN && tN.appendChild(buildFornRow(f, hoje)));
     contatados.forEach(f => tC && tC.appendChild(buildFornRow(f, hoje)));
     pendentes.forEach(f  => tP && tP.appendChild(buildFornRow(f, hoje)));
     return card;
