@@ -418,11 +418,6 @@ def main():
     alguma_atualizacao = False  # controla se versão precisa bumpar
 
     for c in clientes:
-        if not dentro_do_prazo(c["data_inicio"]):
-            print(f"\n--- {c['nome']} --- (período encerrado, pulando)")
-            relatorio_partes.append(f"\n⚪ {c['nome']} (prazo: {c['prazo']})\n  (período encerrado — sem atualização)")
-            continue
-
         print(f"\n--- {c['nome']} ---")
         vidas     = get_vidas(c["idempresa"], c["data_inicio"])
         aderencia = c["get_aderencia"]()
