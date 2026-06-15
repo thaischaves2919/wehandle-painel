@@ -235,6 +235,23 @@ def atualizar_campo(conteudo, cliente_id, campo, valor):
 def atualizar_data_comentario(conteudo, data_br):
     return re.sub(r"// Última atualização:.*", f"// Última atualização: {data_br}", conteudo)
 
+def bumpar_versao(conteudo):
+    """Gera nova versão com data + sufixo incremental para forçar auto-refresh no painel."""
+    sufixos = list("abcdefghijklmnopqrstuvwxyz")
+    hoje = TODAY.replace("-", "")
+    padrao = re.compile(r"versao:\s*'(\d{8})([a-z])'")
+    m = padrao.search(conteudo)
+    if m:
+        data_atual, letra_atual = m.group(1), m.group(2)
+        if data_atual == hoje:
+            prox = sufixos[sufixos.index(letra_atual) + 1] if letra_atual != 'z' else 'z'
+        else:
+            prox = 'a'
+        nova_versao = f"{hoje}{prox}"
+    else:
+        nova_versao = f"{hoje}a"
+    return re.sub(r"versao:\s*'[^']+'", f"versao: '{nova_versao}'", conteudo)
+
 def atualizar_historico(conteudo, cliente_id, vidas, aderencia):
     idx_cliente = conteudo.find(f"id: '{cliente_id}'")
     if idx_cliente == -1:
@@ -450,6 +467,9 @@ def main():
             aderencia=aderencia, aderencia_meta=c["metaAderencia"],
             atualizado=atualizado, novos_forn=novos_forn,
         ))
+
+    if novos_por_cliente:
+        conteudo = bumpar_versao(conteudo)
 
     conteudo = atualizar_data_comentario(conteudo, TODAY_BR)
     salvar_dados(conteudo)

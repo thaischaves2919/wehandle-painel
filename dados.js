@@ -1,7 +1,7 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 14/06/2026
+// Última atualização: 15/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260612b',
+  versao: '20260615a',
   clientes: [
     {
       id: 'netzsch',
