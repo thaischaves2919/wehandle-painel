@@ -379,7 +379,7 @@ def main():
             "idempresa": 34863, "data_inicio": "2026-04-22",
             "metaVidasF1": 151, "metaAderencia": 50,
             "get_aderencia": lambda: get_aderencia_netzsch(),
-            "sd_table_id": None,  # período encerrado
+            "sd_table_id": 10400,  # SD_NETZSCH
         },
         {
             "id": "saint-gobain", "nome": "Saint-Gobain", "prazo": "06/06",
