@@ -501,7 +501,15 @@ window.WEHANDLE_OVERRIDES = {
       "via": "email"
     },
     "equipe": {
-      "membros": [],
+      "membros": [
+        {
+          "id": "elenice_mqfcelvm",
+          "nome": "Elenice",
+          "pin": "1234",
+          "cor": "#ef4444",
+          "token": "tok_irgy7vq3"
+        }
+      ],
       "responsaveis": {}
     }
   },
@@ -518,7 +526,15 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [],
+    "membros": [
+      {
+        "id": "elenice_mqfcelvm",
+        "nome": "Elenice",
+        "pin": "1234",
+        "cor": "#ef4444",
+        "token": "tok_irgy7vq3"
+      }
+    ],
     "responsaveis": {}
   }
 };
