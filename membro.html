@@ -125,6 +125,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
   const BASE_URL = 'https://thaischaves2919.github.io/wehandle-painel/';
   const DADOS_URL = BASE_URL + 'dados.js?_=';
@@ -328,6 +329,10 @@
             '<div class="cliente-nome">' + c.nome + '</div>' +
             '<div class="cliente-data">Início: ' + dataFmt + ' · ' + prazoStr + '</div>' +
           '</div>' +
+          '<div style="display:flex;gap:6px;flex-shrink:0">' +
+            '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
+            '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
+          '</div>' +
         '</div>' +
         '<div class="metricas-row">' +
           '<div class="metrica-box"><div class="metrica-label">Vidas</div><div class="metrica-valor ' + vidasCls + '">' + vidas + '</div><div style="font-size:10px;color:#a0aec0;margin-top:3px">meta F1: ' + (metaF1||'—') + (metaF2 ? ' · F2: '+metaF2 : '') + '</div></div>' +
@@ -492,6 +497,66 @@
     document.getElementById('login-wrap').style.display = 'flex';
     const membro = window._membroParaLogin;
     if (membro) _mostrarTelaAuth(membro, token);
+  }
+
+  // ── Email em massa ────────────────────────────────────────────────────────
+  function enviarEmailMassaMembro(clienteId) {
+    const c = (_dados && _dados.clientes || []).find(cl => cl.id === clienteId);
+    if (!c) return;
+    const pendentes = (c.fornecedores || []).filter(f => {
+      const s = getFornStatus(f.cnpj) || f.status;
+      return s === 'pendente' || s === 'aguardando';
+    });
+    const emails = pendentes.map(f => {
+      const ov = _ovContacts[f.cnpj];
+      return (ov && ov.email) ? ov.email : (f.email || '');
+    }).filter(e => e && e.includes('@'));
+    if (!emails.length) { mostrarToast('Nenhum e-mail cadastrado nos pendentes'); return; }
+    const nome = _membro ? _membro.nome : 'wehandle';
+    const assunto = encodeURIComponent('Cadastro de colaboradores na plataforma wehandle — ' + c.nome);
+    const corpo = encodeURIComponent(
+      'Olá, tudo bem?\n\n' +
+      'Meu nome é ' + nome + ' e sou responsável pelo acompanhamento da implantação na plataforma wehandle.\n\n' +
+      'Estou entrando em contato para apoiar vocês neste início com a ' + c.nome + ', auxiliando no cadastro de colaboradores, aderência e conformidade da documentação e explicando o funcionamento da plataforma da melhor forma possível.\n\n' +
+      'Em caso de dúvidas, pode responder este e-mail.\n\n' +
+      'Att,\n' + nome
+    );
+    window.open('mailto:?bcc=' + emails.join(',') + '&subject=' + assunto + '&body=' + corpo);
+    mostrarToast('✓ ' + emails.length + ' e-mail(s) aberto(s)');
+  }
+
+  // ── Exportar planilha ─────────────────────────────────────────────────────
+  function exportarPlanilhaMembro(clienteId) {
+    if (typeof XLSX === 'undefined') { mostrarToast('Aguarde o carregamento da página...'); return; }
+    const c = (_dados && _dados.clientes || []).find(cl => cl.id === clienteId);
+    if (!c) return;
+    const todos = (c.fornecedores || []).map(f => {
+      const ov = _ovContacts[f.cnpj] || {};
+      return {
+        razaoSocial: f.razaoSocial || '',
+        cnpj:        f.cnpj || '',
+        tel:         (ov.tel || f.tel || ''),
+        email:       (ov.email || f.email || ''),
+        via:         f.via || '',
+        contrato:    f.contrato || '',
+        status:      getFornStatus(f.cnpj) || ov.status || f.status || 'pendente',
+        vidas:       getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0),
+      };
+    });
+    const pendentes = todos.filter(f => f.status === 'pendente' || f.status === 'aguardando');
+    if (!pendentes.length) { mostrarToast('Nenhum fornecedor pendente'); return; }
+    const VIA = { whatsapp: 'WhatsApp', email: 'E-mail' };
+    const dados = [
+      ['Empresa', 'CNPJ', 'Telefone', 'E-mail', 'Via de Contato', 'Contrato', 'Vidas'],
+      ...pendentes.map(f => [f.razaoSocial, f.cnpj, f.tel, f.email, VIA[f.via] || f.via, f.contrato, f.vidas])
+    ];
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(dados);
+    ws['!cols'] = [{wch:45},{wch:20},{wch:16},{wch:32},{wch:14},{wch:12},{wch:8}];
+    XLSX.utils.book_append_sheet(wb, ws, 'Pendentes');
+    const hoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    XLSX.writeFile(wb, 'Pendentes_' + c.nome + '_' + hoje + '.xlsx');
+    mostrarToast('✓ Planilha baixada!');
   }
 
   // ── Inicialização ─────────────────────────────────────────────────────────

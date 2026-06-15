@@ -415,6 +415,7 @@ def main():
     conteudo = ler_dados()
     relatorio_partes = [f"📊 Relatório diário — {TODAY_BR}\n"]
     novos_por_cliente = []   # lista de (nome, qtd) para notificação
+    alguma_atualizacao = False  # controla se versão precisa bumpar
 
     for c in clientes:
         if not dentro_do_prazo(c["data_inicio"]):
@@ -461,6 +462,9 @@ def main():
                                 conteudo
                             )
 
+        if atualizado:
+            alguma_atualizacao = True
+
         relatorio_partes.append(formatar_cliente(
             nome=f"🔵 {c['nome']}", prazo=c["prazo"],
             vidas=vidas, vidas_meta=c["metaVidasF1"],
@@ -468,7 +472,7 @@ def main():
             atualizado=atualizado, novos_forn=novos_forn,
         ))
 
-    if novos_por_cliente:
+    if alguma_atualizacao:
         conteudo = bumpar_versao(conteudo)
 
     conteudo = atualizar_data_comentario(conteudo, TODAY_BR)
