@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 16/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260616a',
+  versao: '20260616b',
   clientes: [
     {
       id: 'netzsch',
@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 200,
+      vidas: 204,
       aderencia: 76.76,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -25,7 +25,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-26', vidas: 120, aderencia: 64.0  },
         { data: '2026-06-06', vidas: 159, aderencia: 74.34 },
         { data: '2026-06-15', vidas: 200, aderencia: 77.38 },
-        { data: '2026-06-16', vidas: 200, aderencia: 76.76 }
+        { data: '2026-06-16', vidas: 204, aderencia: 76.76 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -98,7 +98,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'Global Segurança em Máquinas e Equipamentos LTDA', cnpj: '12.373.982/0001-46', contrato: 'contratado', tel: '5484160747', email: 'adm2@globalsa.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'NR SAFETY ENGENHARIA LTDA', cnpj: '15.674.133/0001-10', contrato: 'contratado', tel: '5130436147', email: 'financeiro@nrsafety.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: '37.114.043 THIAGO DA SILVA BARROS', cnpj: '37.114.043/0001-08', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'SKA AUTOMAÇÃO', cnpj: '81.329.823/0001-67', contrato: 'contratado', tel: '5135912900', email: 'thais.galle@ska.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
+        { razaoSocial: 'SKA AUTOMAÇÃO', cnpj: '81.329.823/0001-67', contrato: 'contratado', tel: '5135912900', email: 'thais.galle@ska.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
       ]
     },
     {
@@ -138,8 +139,8 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 58,
-      aderencia: 55.35,
+      vidas: 63,
+      aderencia: 54.95,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -154,7 +155,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-13', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
-        { data: '2026-06-16', vidas: 58, aderencia: 55.35 }
+        { data: '2026-06-16', vidas: 63, aderencia: 54.95 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -219,8 +220,8 @@ var WEHANDLE_DADOS = {
       cnpj: '27.630.446/0001-56',
       idempresa: 78024,
       dataInicio: '2026-06-09',
-      vidas: 28,
-      aderencia: 6.25,
+      vidas: 41,
+      aderencia: 18.58,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -229,7 +230,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-13', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-14', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-15', vidas: 28, aderencia: 2.44 },
-        { data: '2026-06-16', vidas: 28, aderencia: 6.25 }
+        { data: '2026-06-16', vidas: 41, aderencia: 18.58 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
