@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 15/06/2026
+// Última atualização: 16/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260615g',
+  versao: '20260616a',
   clientes: [
     {
       id: 'netzsch',
@@ -10,7 +10,7 @@ var WEHANDLE_DADOS = {
       idempresa: 34863,
       dataInicio: '2026-04-22',
       vidas: 200,
-      aderencia: 77.38,
+      aderencia: 76.76,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
         { data: '2026-04-30', vidas: 46,  aderencia: 47.2  },
@@ -24,7 +24,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-25', vidas: 114, aderencia: 64.03 },
         { data: '2026-05-26', vidas: 120, aderencia: 64.0  },
         { data: '2026-06-06', vidas: 159, aderencia: 74.34 },
-        { data: '2026-06-15', vidas: 200, aderencia: 77.38 }
+        { data: '2026-06-15', vidas: 200, aderencia: 77.38 },
+        { data: '2026-06-16', vidas: 200, aderencia: 76.76 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -93,7 +94,11 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'RDS MONTAGENS LTDA', cnpj: '42.731.670/0001-28', contrato: 'contratado', tel: '5199913528', email: 'ricardo1999santos@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'MILLS LOCACAO SERVICOS E LOGISTICA S.A.', cnpj: '27.093.558/0042-93', contrato: 'contratado', tel: '2121233700', email: 'adm@profrio.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'TERRA  MAR PARTICIPACOES', cnpj: '29.141.162/0001-21', contrato: 'contratado', tel: '4721032905', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
-        { razaoSocial: 'JB MARQUES TELECOM', cnpj: '13.520.771/0001-51', contrato: 'contratado', tel: '1934731027', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
+        { razaoSocial: 'JB MARQUES TELECOM', cnpj: '13.520.771/0001-51', contrato: 'contratado', tel: '1934731027', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'Global Segurança em Máquinas e Equipamentos LTDA', cnpj: '12.373.982/0001-46', contrato: 'contratado', tel: '5484160747', email: 'adm2@globalsa.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'NR SAFETY ENGENHARIA LTDA', cnpj: '15.674.133/0001-10', contrato: 'contratado', tel: '5130436147', email: 'financeiro@nrsafety.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: '37.114.043 THIAGO DA SILVA BARROS', cnpj: '37.114.043/0001-08', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'SKA AUTOMAÇÃO', cnpj: '81.329.823/0001-67', contrato: 'contratado', tel: '5135912900', email: 'thais.galle@ska.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
       ]
     },
     {
@@ -115,7 +120,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-05-25', vidas: 19, aderencia: 91.35 },
         { data: '2026-05-26', vidas: 19, aderencia: 91.35 },
         { data: '2026-06-06', vidas: 19, aderencia: 91.35 },
-        { data: '2026-06-15', vidas: 19, aderencia: 91.35 }
+        { data: '2026-06-15', vidas: 19, aderencia: 91.35 },
+        { data: '2026-06-16', vidas: 19, aderencia: 91.35 }
       ],
       metaVidasF1: 201,
       metaVidasF2: null,
@@ -132,8 +138,8 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 52,
-      aderencia: 56.88,
+      vidas: 58,
+      aderencia: 55.35,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -147,7 +153,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-12', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-13', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
-        { data: '2026-06-15', vidas: 52, aderencia: 56.88 }
+        { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
+        { data: '2026-06-16', vidas: 58, aderencia: 55.35 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -201,7 +208,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'TECNOPRES - MOVEIS PARA ESCRITORIO E HOSPITALARES', cnpj: '96.470.992/0001-90', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'TREAL EQUIPAMENTOS ESPECIAIS LTDA', cnpj: '12.264.795/0001-24', contrato: 'contratado', tel: '1938090577', email: 'adm@treal.com.br', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
-        { razaoSocial: 'L. M. DIVISORIAS E FORROS', cnpj: '09.507.673/0001-07', contrato: 'contratado', tel: '1532132332', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' }
+        { razaoSocial: 'L. M. DIVISORIAS E FORROS', cnpj: '09.507.673/0001-07', contrato: 'contratado', tel: '1532132332', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: '32.696.462 JOAO CARLOS MARQUES', cnpj: '32.696.462/0001-81', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'BLESS SERVICE LTDA', cnpj: '48.001.020/0001-03', contrato: 'contratado', tel: '1149745895', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
       ]
     },
     {
@@ -211,7 +220,7 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 28,
-      aderencia: 2.44,
+      aderencia: 6.25,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -219,7 +228,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-12', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-13', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-14', vidas: 28, aderencia: 2.03 },
-        { data: '2026-06-15', vidas: 28, aderencia: 2.44 }
+        { data: '2026-06-15', vidas: 28, aderencia: 2.44 },
+        { data: '2026-06-16', vidas: 28, aderencia: 6.25 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
