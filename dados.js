@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 16/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260616b',
+  versao: '20260616c',
   clientes: [
     {
       id: 'netzsch',
@@ -99,7 +99,10 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'NR SAFETY ENGENHARIA LTDA', cnpj: '15.674.133/0001-10', contrato: 'contratado', tel: '5130436147', email: 'financeiro@nrsafety.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: '37.114.043 THIAGO DA SILVA BARROS', cnpj: '37.114.043/0001-08', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'SKA AUTOMAÇÃO', cnpj: '81.329.823/0001-67', contrato: 'contratado', tel: '5135912900', email: 'thais.galle@ska.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
+        { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'laner', cnpj: '49.497.694/0001-03', contrato: 'contratado', tel: '4788219664', email: 'orcamento@laner.ind.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'SOUZA MONTAGEM LTDA', cnpj: '58.271.007/0001-28', contrato: 'contratado', tel: '5496443193', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'MOTORMAC RENTAL LOCAÇÕES DE EQUIPAMENTOS', cnpj: '09.348.706/0004-66', contrato: 'contratado', tel: '5130212267', email: 'terceiros@motormac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
       ]
     },
     {
@@ -140,7 +143,7 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 63,
-      aderencia: 54.95,
+      aderencia: 55.07,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -155,7 +158,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-13', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
-        { data: '2026-06-16', vidas: 63, aderencia: 54.95 }
+        { data: '2026-06-16', vidas: 63, aderencia: 55.07 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
