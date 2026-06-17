@@ -549,6 +549,12 @@ window.WEHANDLE_OVERRIDES = {
       "vidas": 19
     }
   },
+  "tiposClientes": {
+    "gestamp": "cliente",
+    "saint-gobain": "poc",
+    "grupo-zelo": "poc",
+    "melitta": "poc"
+  },
   "equipe": {
     "membros": [
       {
