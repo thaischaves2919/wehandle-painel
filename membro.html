@@ -623,8 +623,38 @@
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
-  function _mAuthKey(t) { return 'wh_auth_m_' + t; }
-  function _mSessKey(t) { return 'wh_sess_m_' + t; }
+  function _mAuthKey(t)      { return 'wh_auth_m_' + t; }
+  function _mSessKey(t)      { return 'wh_sess_m_' + t; }
+  function _mSessKeyEmail(id){ return 'wh_sess_em_' + id; }
+
+  function _mostrarTelaLoginEmail() {
+    document.getElementById('login-box').innerHTML =
+      '<div class="login-logo">wehandle</div>' +
+      '<div class="login-hint">Entre com suas credenciais de acesso</div>' +
+      '<form class="auth-form" onsubmit="event.preventDefault();_doEmailLogin()">' +
+        '<div class="auth-group"><label class="auth-label">E-mail</label>' +
+        '<input class="auth-input" id="m-email-login" type="email" autocomplete="username" autofocus placeholder="seu@email.com" /></div>' +
+        '<div class="auth-group"><label class="auth-label">Senha</label>' +
+        '<input class="auth-input" id="m-pass-login" type="password" autocomplete="current-password" placeholder="••••••••" /></div>' +
+        '<div class="login-erro" id="login-erro">E-mail ou senha incorretos.</div>' +
+        '<button class="btn-entrar" type="submit">Entrar</button>' +
+      '</form>';
+  }
+
+  async function _doEmailLogin() {
+    const email = ((document.getElementById('m-email-login') || {}).value || '').trim().toLowerCase();
+    const pass  = ((document.getElementById('m-pass-login')  || {}).value || '');
+    if (!email || !pass) return;
+    const hash = await _sha256(pass);
+    const membro = (_equipe.membros || []).find(m => (m.email || '').toLowerCase() === email && m.senha === hash);
+    if (!membro) {
+      const el = document.getElementById('login-erro');
+      if (el) el.style.display = 'block';
+      return;
+    }
+    sessionStorage.setItem(_mSessKeyEmail(membro.id), '1');
+    _entrarNoAppMembro(membro);
+  }
   function _getMAuthCreds(t) {
     try { return JSON.parse(localStorage.getItem(_mAuthKey(t)) || 'null'); } catch(e) { return null; }
   }
@@ -711,12 +741,20 @@
 
   function sairMembro() {
     const token = getToken();
-    sessionStorage.removeItem(_mSessKey(token));
+    if (token) {
+      sessionStorage.removeItem(_mSessKey(token));
+    } else if (_membro) {
+      sessionStorage.removeItem(_mSessKeyEmail(_membro.id));
+    }
     _membro = null;
     document.getElementById('app-wrap').style.display = 'none';
     document.getElementById('login-wrap').style.display = 'flex';
-    const membro = window._membroParaLogin;
-    if (membro) _mostrarTelaAuth(membro, token);
+    if (token) {
+      const membro = window._membroParaLogin;
+      if (membro) _mostrarTelaAuth(membro, token);
+    } else {
+      _mostrarTelaLoginEmail();
+    }
   }
 
   // ── Email em massa ────────────────────────────────────────────────────────
@@ -786,11 +824,6 @@
   async function init() {
     const token = getToken();
 
-    if (!token) {
-      document.getElementById('login-corpo').innerHTML = '<div class="login-token-erro">Link inválido. Solicite um novo link ao gestor.</div>';
-      return;
-    }
-
     // Na primeira tentativa, mostra "Carregando..."
     if (_initTentativas === 0) {
       document.getElementById('login-box').innerHTML = '<div class="login-logo">wehandle</div><div class="login-sub">Carregando...</div>';
@@ -821,6 +854,16 @@
         '<div class="login-logo">wehandle</div>' +
         '<div style="color:#c53030;font-size:13px;margin-top:10px">Erro ao carregar dados.</div>' +
         '<button class="btn-entrar" onclick="_initTentativas=0;init()" style="margin-top:16px">Tentar novamente</button>';
+      return;
+    }
+
+    // Sem token → fluxo de login por e-mail
+    if (!token) {
+      _initTentativas = 0;
+      const sessaoAtiva = (_equipe.membros || []).find(m => sessionStorage.getItem(_mSessKeyEmail(m.id)) === '1');
+      if (sessaoAtiva) { _entrarNoAppMembro(sessaoAtiva); return; }
+      document.getElementById('login-wrap').style.display = 'flex';
+      _mostrarTelaLoginEmail();
       return;
     }
 
