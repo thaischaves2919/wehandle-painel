@@ -557,13 +557,6 @@ window.WEHANDLE_OVERRIDES = {
         "pin": "2919",
         "cor": "#ef4444",
         "token": "tok_0bgbnvua"
-      },
-      {
-        "id": "mariana_pinheiro_mqi4b408",
-        "nome": "Mariana Pinheiro",
-        "pin": "1234",
-        "cor": "#8b5cf6",
-        "token": "tok_3i5v3ls2"
       }
     ],
     "responsaveis": {
@@ -571,11 +564,6 @@ window.WEHANDLE_OVERRIDES = {
         "membroId": "elenice_mqffyply",
         "dataTransferencia": "2026-06-15",
         "f1Atingida": true
-      },
-      "saint-gobain": {
-        "membroId": "mariana_pinheiro_mqi4b408",
-        "dataTransferencia": "2026-06-17",
-        "f1Atingida": false
       }
     }
   }
