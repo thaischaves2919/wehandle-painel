@@ -565,6 +565,11 @@ window.WEHANDLE_OVERRIDES = {
         "membroId": "mariana_pinheiro_mqi5j30e",
         "dataTransferencia": "2026-06-17",
         "f1Atingida": false
+      },
+      "netzsch": {
+        "membroId": "mariana_pinheiro_mqi5j30e",
+        "dataTransferencia": "2026-06-17",
+        "f1Atingida": true
       }
     }
   }
