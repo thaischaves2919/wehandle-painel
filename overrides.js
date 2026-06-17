@@ -549,6 +549,9 @@ window.WEHANDLE_OVERRIDES = {
       "vidas": 19
     }
   },
+  "tiposClientes": {
+    "gestamp": "poc"
+  },
   "equipe": {
     "membros": [
       {
