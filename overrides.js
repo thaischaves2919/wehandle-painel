@@ -551,7 +551,9 @@ window.WEHANDLE_OVERRIDES = {
   },
   "tiposClientes": {
     "gestamp": "cliente",
-    "saint-gobain": "poc"
+    "saint-gobain": "poc",
+    "grupo-zelo": "poc",
+    "melitta": "poc"
   },
   "equipe": {
     "membros": [
