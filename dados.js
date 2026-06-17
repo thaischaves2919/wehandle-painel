@@ -11,6 +11,8 @@ var WEHANDLE_DADOS = {
       dataInicio: '2026-04-22',
       vidas: 159,
       aderencia: 74.34,
+      vidasFinal: 159,
+      aderenciaFinal: 74.34,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
         { data: '2026-04-30', vidas: 46,  aderencia: 47.2  },
@@ -114,6 +116,8 @@ var WEHANDLE_DADOS = {
       dataInicio: '2026-04-22',
       vidas: 19,
       aderencia: 91.35,
+      vidasFinal: 19,
+      aderenciaFinal: 91.35,
       historico: [
         { data: '2026-05-08', vidas: 19, aderencia: 90.27 },
         { data: '2026-05-11', vidas: 19, aderencia: 90.27 },
@@ -146,6 +150,8 @@ var WEHANDLE_DADOS = {
       dataInicio: '2026-05-21',
       vidas: 63,
       aderencia: 55.07,
+      vidasFinal: 63,
+      aderenciaFinal: 55.07,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -229,6 +235,8 @@ var WEHANDLE_DADOS = {
       dataInicio: '2026-06-09',
       vidas: 41,
       aderencia: 18.58,
+      vidasFinal: 41,
+      aderenciaFinal: 18.58,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },

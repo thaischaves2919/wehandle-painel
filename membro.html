@@ -508,7 +508,7 @@
       const f1Atingida = !!(resp[c.id] && resp[c.id].f1Atingida);
       const membroInicioBonus = calcPrazoDt(c.dataInicio);
       const periodoStr = 'desde ' + membroInicioBonus.toLocaleDateString('pt-BR');
-      const vidas  = c.vidas || 0;
+      const vidas  = c.vidasFinal != null ? c.vidasFinal : (c.vidas || 0);
       const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
       const mrrF1  = c.mrrFaixa1 || null, mrrF2 = c.mrrFaixa2 || null;
       // Membros não têm encerramento — período é indeterminado
