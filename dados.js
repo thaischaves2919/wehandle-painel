@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 17/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260617b',
+  versao: '20260617c',
   clientes: [
     {
       id: 'netzsch',
@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 205,
+      vidas: 209,
       aderencia: 76.68,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
@@ -26,7 +26,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-06', vidas: 159, aderencia: 74.34 },
         { data: '2026-06-15', vidas: 200, aderencia: 77.38 },
         { data: '2026-06-16', vidas: 204, aderencia: 76.76 },
-        { data: '2026-06-17', vidas: 205, aderencia: 76.68 }
+        { data: '2026-06-17', vidas: 209, aderencia: 76.68 }
       ],
       metaVidasF1: 151,
       metaVidasF2: 251,
@@ -217,7 +217,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'UNIKRAFHT COMERCIO DE PRODUTOS QUIMICOS LTDA', cnpj: '69.212.280/0001-06', contrato: 'contratado', tel: '1136450808', email: '', via: 'whatsapp', vidas: 0, status: 'pendente' },
         { razaoSocial: 'L. M. DIVISORIAS E FORROS', cnpj: '09.507.673/0001-07', contrato: 'contratado', tel: '1532132332', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: '32.696.462 JOAO CARLOS MARQUES', cnpj: '32.696.462/0001-81', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'BLESS SERVICE LTDA', cnpj: '48.001.020/0001-03', contrato: 'contratado', tel: '1149745895', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
+        { razaoSocial: 'BLESS SERVICE LTDA', cnpj: '48.001.020/0001-03', contrato: 'contratado', tel: '1149745895', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'RONALDO APARECIDO DE OLIVEIRA', cnpj: '59.396.182/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' }
       ]
     },
     {
