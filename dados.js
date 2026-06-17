@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 17/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260617d',
+  versao: '20260617e',
   clientes: [
     {
       id: 'netzsch',
@@ -9,7 +9,7 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 230,
+      vidas: 209,
       aderencia: 76.68,
       vidasFinal: 159,
       aderenciaFinal: 74.34,
@@ -148,10 +148,10 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 63,
-      aderencia: 55.3,
-      vidasFinal: 63,
-      aderenciaFinal: 55.3,
+      vidas: 65,
+      aderencia: 55.65,
+      vidasFinal: 65,
+      aderenciaFinal: 55.65,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -167,7 +167,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
         { data: '2026-06-16', vidas: 63, aderencia: 55.07 },
-        { data: '2026-06-17', vidas: 63, aderencia: 55.3 }
+        { data: '2026-06-17', vidas: 65, aderencia: 55.65 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -234,9 +234,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 18.58,
+      aderencia: 19.17,
       vidasFinal: 41,
-      aderenciaFinal: 18.58,
+      aderenciaFinal: 19.17,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -246,7 +246,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-14', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-15', vidas: 28, aderencia: 2.44 },
         { data: '2026-06-16', vidas: 41, aderencia: 18.58 },
-        { data: '2026-06-17', vidas: 41, aderencia: 18.58 }
+        { data: '2026-06-17', vidas: 41, aderencia: 19.17 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
