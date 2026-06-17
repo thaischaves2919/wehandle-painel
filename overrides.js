@@ -550,16 +550,7 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [
-      {
-        "id": "elenice_mqia4t7k",
-        "nome": "Elenice",
-        "email": "elenice.pereira@wehandle.com.br",
-        "cor": "#3b82f6",
-        "token": "tok_fw1kizox",
-        "senha": "fdcd0255d0d203ee4916cbee61682cd35e78c5089d23e6b2bf91febd3e1e7e77"
-      }
-    ],
+    "membros": [],
     "responsaveis": {}
   }
 };
