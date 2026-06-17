@@ -487,16 +487,24 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260617b"
     },
     "22.988.664/0001-43": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "12.879.033/0001-32": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "30.058.500/0003-07": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "11.565.394/0001-41": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "08.995.622/0001-09": {
       "via": "email",
@@ -504,7 +512,9 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260617b"
     },
     "67.133.900/0001-88": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "27.542.318/0001-50": {
       "via": "email",
@@ -512,7 +522,17 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260617b"
     },
     "00.612.363/0001-88": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
+    },
+    "73.014.607/0001-02": {
+      "status": "contatado",
+      "__ver": "20260617b"
+    },
+    "12.264.795/0001-24": {
+      "status": "contatado",
+      "__ver": "20260617b"
     }
   },
   "clientesExtras": [],
