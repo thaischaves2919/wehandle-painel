@@ -550,7 +550,22 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [],
-    "responsaveis": {}
+    "membros": [
+      {
+        "id": "elenice_mqiag0wo",
+        "nome": "Elenice",
+        "email": "elenice.pereira@wehandle.com.br",
+        "cor": "#3b82f6",
+        "token": "tok_ue2fneg9",
+        "senha": "c4d1e1c31e003c082ac7cdb9047e1f1db78486cfade517d79e122530981a0a4a"
+      }
+    ],
+    "responsaveis": {
+      "netzsch": {
+        "membroId": "elenice_mqiag0wo",
+        "dataTransferencia": "2026-06-17",
+        "f1Atingida": true
+      }
+    }
   }
 };
