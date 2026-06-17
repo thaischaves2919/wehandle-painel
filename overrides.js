@@ -557,6 +557,13 @@ window.WEHANDLE_OVERRIDES = {
         "pin": "2919",
         "cor": "#ef4444",
         "token": "tok_0bgbnvua"
+      },
+      {
+        "id": "mariana_pinheiro_mqi4b408",
+        "nome": "Mariana Pinheiro",
+        "pin": "1234",
+        "cor": "#8b5cf6",
+        "token": "tok_3i5v3ls2"
       }
     ],
     "responsaveis": {
