@@ -480,7 +480,9 @@ window.WEHANDLE_OVERRIDES = {
       "via": "email"
     },
     "06.240.916/0001-03": {
-      "via": "email"
+      "via": "email",
+      "status": "contatado",
+      "__ver": "20260617b"
     },
     "22.988.664/0001-43": {
       "via": "email"
