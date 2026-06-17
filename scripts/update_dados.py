@@ -419,19 +419,23 @@ def main():
 
     for c in clientes:
         print(f"\n--- {c['nome']} ---")
-        vidas     = get_vidas(c["idempresa"], c["data_inicio"])
-        aderencia = c["get_aderencia"]()
-        print(f"  Vidas: {vidas} | Aderência: {aderencia}%")
-
         atualizado = False
-        if vidas and vidas > 0:
-            conteudo = atualizar_campo(conteudo, c["id"], "vidas", vidas)
-            atualizado = True
-        if aderencia and aderencia > 0:
-            conteudo = atualizar_campo(conteudo, c["id"], "aderencia", aderencia)
-            atualizado = True
-        if atualizado and vidas and aderencia:
-            conteudo = atualizar_historico(conteudo, c["id"], vidas, aderencia)
+        vidas, aderencia = None, None
+
+        if dentro_do_prazo(c["data_inicio"]):
+            vidas     = get_vidas(c["idempresa"], c["data_inicio"])
+            aderencia = c["get_aderencia"]()
+            print(f"  Vidas: {vidas} | Aderência: {aderencia}%")
+            if vidas and vidas > 0:
+                conteudo = atualizar_campo(conteudo, c["id"], "vidas", vidas)
+                atualizado = True
+            if aderencia and aderencia > 0:
+                conteudo = atualizar_campo(conteudo, c["id"], "aderencia", aderencia)
+                atualizado = True
+            if atualizado and vidas and aderencia:
+                conteudo = atualizar_historico(conteudo, c["id"], vidas, aderencia)
+        else:
+            print(f"  ⏸ Período encerrado — vidas/aderência congeladas (não atualizadas)")
 
         # Sincronizar fornecedores novos
         novos_forn = 0
