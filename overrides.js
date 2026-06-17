@@ -550,7 +550,8 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "tiposClientes": {
-    "gestamp": "poc"
+    "gestamp": "cliente",
+    "saint-gobain": "poc"
   },
   "equipe": {
     "membros": [
