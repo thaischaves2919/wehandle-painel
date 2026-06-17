@@ -9,8 +9,8 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 209,
-      aderencia: 76.68,
+      vidas: 159,
+      aderencia: 74.34,
       historico: [
         { data: '2026-04-22', vidas: 33,  aderencia: 41.4  },
         { data: '2026-04-30', vidas: 46,  aderencia: 47.2  },
