@@ -560,6 +560,12 @@ window.WEHANDLE_OVERRIDES = {
         "senha": "2bf8e39e5ee8dcec8528a4eb85393efcc8ace92b5b8755f550d296b5b790b588"
       }
     ],
-    "responsaveis": {}
+    "responsaveis": {
+      "gestamp": {
+        "membroId": "mariana_pinheiro_mqi5j30e",
+        "dataTransferencia": "2026-06-17",
+        "f1Atingida": false
+      }
+    }
   }
 };
