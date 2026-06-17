@@ -550,7 +550,16 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "equipe": {
-    "membros": [],
+    "membros": [
+      {
+        "id": "mariana_pinheiro_mqi5j30e",
+        "nome": "Mariana Pinheiro",
+        "email": "mariana.melo@wehandle.com.br",
+        "cor": "#8b5cf6",
+        "token": "tok_uh4l8fq6",
+        "senha": "2bf8e39e5ee8dcec8528a4eb85393efcc8ace92b5b8755f550d296b5b790b588"
+      }
+    ],
     "responsaveis": {}
   }
 };
