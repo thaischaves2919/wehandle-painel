@@ -39,4 +39,5 @@ jobs:
           git config user.name "GitHub Actions"
           git add dados.js
           git diff --staged --quiet || git commit -m "📊 Atualização diária — $(date +'%d/%m/%Y')"
+          git pull --rebase origin main
           git push
