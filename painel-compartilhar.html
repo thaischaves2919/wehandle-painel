@@ -124,6 +124,9 @@
     .bp-total .bp-td-val { color: #4ade80; font-size: 18px; }
     .bp-total .bp-td-conf { color: #4ade80; }
     @media (max-width: 600px) { .deadline-card { gap: 16px; padding: 16px; } }
+    .tipo-flag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+    .tipo-cliente { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .tipo-poc { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
   </style>
 </head>
 <body>
@@ -163,10 +166,10 @@
     <div id="secao-encerrados" style="display:none">
       <div class="secao-titulo">Período encerrado</div>
       <button class="btn-colapsar" onclick="toggleEncerrados()">
-        <span id="label-colapsar">▼ Ver clientes encerrados</span>
+        <span id="label-colapsar">▲ Ocultar clientes encerrados</span>
         <span id="count-encerrados" style="background:#e2e6ef;border-radius:99px;padding:1px 8px;font-size:11px"></span>
       </button>
-      <div class="encerrado-wrap" id="encerrado-wrap">
+      <div class="encerrado-wrap aberto" id="encerrado-wrap">
         <div class="grid-encerrados" id="cards-encerrados"></div>
       </div>
     </div>
@@ -177,6 +180,7 @@
 </div>
 
 <script src="dados.js"></script>
+<script src="overrides.js"></script>
 <script>
   const OVERRIDES_KEY           = 'wehandle_contacts_v2';
   const CLIENTES_EXTRAS_KEY     = 'wehandle_clientes_extras_v1';
@@ -296,10 +300,17 @@
     return tr;
   }
 
+  function tipoFlag(clienteId) {
+    const tipos = (window.WEHANDLE_OVERRIDES && window.WEHANDLE_OVERRIDES.tiposClientes) || {};
+    const isPoc = (tipos[clienteId] || 'cliente') === 'poc';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
+  }
+
   function criarCard(cliente, overrides) {
     const mOv       = getMetricasOverride(cliente.id);
-    const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas;
-    const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia;
+    const enc       = clienteEncerrado(cliente);
+    const vidas     = enc && cliente.vidasFinal     != null ? cliente.vidasFinal     : (mOv.vidas     !== undefined ? mOv.vidas     : cliente.vidas);
+    const aderencia = enc && cliente.aderenciaFinal != null ? cliente.aderenciaFinal : (mOv.aderencia !== undefined ? mOv.aderencia : cliente.aderencia);
     const metaF1    = cliente.metaVidasF1  != null ? cliente.metaVidasF1  : null;
     const metaF2    = cliente.metaVidasF2  != null ? cliente.metaVidasF2  : null;
     const metaAd    = cliente.metaAderencia || 50;
@@ -328,7 +339,7 @@
     card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="card-title">${cliente.nome}</div>
+          <div class="card-title">${cliente.nome}${tipoFlag(cliente.id)}</div>
           ${cliente.cnpj ? `<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">${cliente.cnpj}</div>` : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
