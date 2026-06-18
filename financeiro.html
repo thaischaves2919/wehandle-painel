@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WeHandle — Relatório de Bônus de Rampagem</title>
 <script src="dados.js"></script>
+<script src="overrides.js"></script>
 <script src="simulador_tmpl.js"></script>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
@@ -46,6 +47,9 @@
   .val-zero { color: #a0aec0; }
   .val-andamento { color: #2b6cb0; font-weight: 600; font-size: 12px; }
   .nome-cliente { font-weight: 700; color: #1a2340; }
+  .tipo-flag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+  .tipo-cliente { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+  .tipo-poc { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
   .periodo-linha { font-size: 11px; color: #a0aec0; margin-top: 2px; }
 
   /* Cards de evolução */
@@ -171,6 +175,12 @@
     return calcPrazo(c.dataInicio) < new Date();
   }
 
+  function tipoFlag(clienteId) {
+    const tipos = (window.WEHANDLE_OVERRIDES && window.WEHANDLE_OVERRIDES.tiposClientes) || {};
+    const isPoc = (tipos[clienteId] || 'cliente') === 'poc';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
+  }
+
   function periodoStr(c) {
     if (!c.dataInicio) return '—';
     const inicio = fmtData(c.dataInicio);
@@ -194,8 +204,8 @@
 
   clientes.forEach(c => {
     const enc   = encerrado(c);
-    const vidas = c.vidas;
-    const ad    = c.aderencia;
+    const vidas = enc && c.vidasFinal     != null ? c.vidasFinal     : c.vidas;
+    const ad    = enc && c.aderenciaFinal != null ? c.aderenciaFinal : c.aderencia;
     const mF1   = c.metaVidasF1, mF2 = c.metaVidasF2;
     const mAd   = c.metaAderencia || 50;
     const mrr1  = c.mrrFaixa1, mrr2 = c.mrrFaixa2 || null;
@@ -235,7 +245,7 @@
     const tr = document.createElement('tr');
     if (enc) tr.className = 'enc';
     tr.innerHTML = `
-      <td><div class="nome-cliente">${c.nome}</div></td>
+      <td><div class="nome-cliente">${c.nome}${tipoFlag(c.id)}</div></td>
       <td>${encBadge}</td>
       <td style="font-size:12px;color:#4a5568">${periodoStr(c)}</td>
       <td>${vidas}${mF1 ? ' / ' + mF1 : ''}</td>
@@ -278,7 +288,7 @@
     card.innerHTML = `
       <div class="cliente-header">
         <div>
-          <div class="cliente-nome">${c.nome}</div>
+          <div class="cliente-nome">${c.nome}${tipoFlag(c.id)}</div>
           <div class="cliente-periodo">📅 ${periodoStr(c)} &nbsp;·&nbsp; ${enc ? 'Período encerrado' : 'Em andamento'}</div>
         </div>
         <div class="cliente-badges">${encBadge}${adBadge}${hist.length > 0 ? `<button class="btn-evol" onclick="toggleEvol('${c.id}',this)">📊 Evolução</button>` : ''}</div>
