@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
-// Última atualização: 17/06/2026
+// Última atualização: 18/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260617d',
+  versao: '20260618a',
   clientes: [
     {
       id: 'netzsch',
@@ -9,8 +9,8 @@ var WEHANDLE_DADOS = {
       cnpj: '82.749.987/0001-06',
       idempresa: 34863,
       dataInicio: '2026-04-22',
-      vidas: 230,
-      aderencia: 76.68,
+      vidas: 209,
+      aderencia: 76.57,
       vidasFinal: 159,
       aderenciaFinal: 74.34,
       historico: [
@@ -105,7 +105,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'laner', cnpj: '49.497.694/0001-03', contrato: 'contratado', tel: '4788219664', email: 'orcamento@laner.ind.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'SOUZA MONTAGEM LTDA', cnpj: '58.271.007/0001-28', contrato: 'contratado', tel: '5496443193', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'MOTORMAC RENTAL LOCAÇÕES DE EQUIPAMENTOS', cnpj: '09.348.706/0004-66', contrato: 'contratado', tel: '5130212267', email: 'terceiros@motormac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' }
+        { razaoSocial: 'MOTORMAC RENTAL LOCAÇÕES DE EQUIPAMENTOS', cnpj: '09.348.706/0004-66', contrato: 'contratado', tel: '5130212267', email: 'terceiros@motormac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'MARCO ANTONIO FELIPPI', cnpj: '49.510.577/0001-32', contrato: 'contratado', tel: '', email: 'marco_antonio_felippi@hotmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' }
       ]
     },
     {
@@ -148,10 +149,10 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 63,
-      aderencia: 55.3,
-      vidasFinal: 63,
-      aderenciaFinal: 55.3,
+      vidas: 66,
+      aderencia: 55.43,
+      vidasFinal: 66,
+      aderenciaFinal: 55.43,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -167,7 +168,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-14', vidas: 52, aderencia: 57.01 },
         { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
         { data: '2026-06-16', vidas: 63, aderencia: 55.07 },
-        { data: '2026-06-17', vidas: 63, aderencia: 55.3 }
+        { data: '2026-06-17', vidas: 66, aderencia: 55.32 },
+        { data: '2026-06-18', vidas: 66, aderencia: 55.43 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -224,7 +226,10 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'L. M. DIVISORIAS E FORROS', cnpj: '09.507.673/0001-07', contrato: 'contratado', tel: '1532132332', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: '32.696.462 JOAO CARLOS MARQUES', cnpj: '32.696.462/0001-81', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'BLESS SERVICE LTDA', cnpj: '48.001.020/0001-03', contrato: 'contratado', tel: '1149745895', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'RONALDO APARECIDO DE OLIVEIRA', cnpj: '59.396.182/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' }
+        { razaoSocial: 'RONALDO APARECIDO DE OLIVEIRA', cnpj: '59.396.182/0001-04', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
+        { razaoSocial: 'PADUA ENGENHARIA', cnpj: '30.748.977/0001-52', contrato: 'contratado', tel: '1938053735', email: 'felipe.padua@paduaengenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
+        { razaoSocial: 'AC TECH COMERCIO DE MAQUINAS', cnpj: '07.070.817/0001-85', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
+        { razaoSocial: 'GRAFICA M + IMPRESSOS E COMUNICACAO VISUAL', cnpj: '22.546.690/0001-11', contrato: 'contratado', tel: '1532339688', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' }
       ]
     },
     {
@@ -234,9 +239,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 18.58,
+      aderencia: 23.89,
       vidasFinal: 41,
-      aderenciaFinal: 18.58,
+      aderenciaFinal: 23.89,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -246,7 +251,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-14', vidas: 28, aderencia: 2.03 },
         { data: '2026-06-15', vidas: 28, aderencia: 2.44 },
         { data: '2026-06-16', vidas: 41, aderencia: 18.58 },
-        { data: '2026-06-17', vidas: 41, aderencia: 18.58 }
+        { data: '2026-06-17', vidas: 41, aderencia: 20.06 },
+        { data: '2026-06-18', vidas: 41, aderencia: 23.89 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
