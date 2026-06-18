@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 18/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260618c',
+  versao: '20260618d',
   clientes: [
     {
       id: 'netzsch',
@@ -108,7 +108,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'MOTORMAC RENTAL LOCAÇÕES DE EQUIPAMENTOS', cnpj: '09.348.706/0004-66', contrato: 'contratado', tel: '5130212267', email: 'terceiros@motormac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'MARCO ANTONIO FELIPPI', cnpj: '49.510.577/0001-32', contrato: 'contratado', tel: '', email: 'marco_antonio_felippi@hotmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
         { razaoSocial: 'B. GROB DO BRASIL SA', cnpj: '60.586.450/0001-30', contrato: 'contratado', tel: '1143679100', email: 'ana.alves@grob.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
-        { razaoSocial: 'Mendes e Barcelos LTDA', cnpj: '80.737.695/0001-28', contrato: 'contratado', tel: '4799860370', email: 'comercial.int.evol@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' }
+        { razaoSocial: 'Mendes e Barcelos LTDA', cnpj: '80.737.695/0001-28', contrato: 'contratado', tel: '4799860370', email: 'comercial.int.evol@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
+        { razaoSocial: 'Atitude Comunicação Visual', cnpj: '07.497.580/0001-13', contrato: 'contratado', tel: '', email: 'atitude.jean@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
+        { razaoSocial: 'Terraplanagem Knopf Ltda', cnpj: '05.263.279/0001-10', contrato: 'contratado', tel: '473872474', email: 'terraplanagemknopf@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' }
       ]
     },
     {
@@ -152,9 +154,9 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 66,
-      aderencia: 55.72,
+      aderencia: 56.16,
       vidasFinal: 66,
-      aderenciaFinal: 55.72,
+      aderenciaFinal: 56.16,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -171,7 +173,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-15', vidas: 52, aderencia: 56.88 },
         { data: '2026-06-16', vidas: 63, aderencia: 55.07 },
         { data: '2026-06-17', vidas: 66, aderencia: 55.32 },
-        { data: '2026-06-18', vidas: 66, aderencia: 55.72 }
+        { data: '2026-06-18', vidas: 66, aderencia: 56.16 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
