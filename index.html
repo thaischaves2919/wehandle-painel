@@ -96,6 +96,9 @@
     .card { background: #fff; border: 1px solid #e2e6ef; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(30,43,74,0.06); }
     .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
+    .tipo-flag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+    .tipo-cliente { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .tipo-poc    { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
     .metric-row { display: flex; gap: 12px; margin-bottom: 16px; }
     .metric-box { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
     .metric-label { font-size: 11px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -1147,9 +1150,16 @@
     return tr;
   }
 
+  function tipoFlag(clienteId) {
+    const tipos = (window.WEHANDLE_OVERRIDES && window.WEHANDLE_OVERRIDES.tiposClientes) || {};
+    const isPoc = (tipos[clienteId] || 'cliente') === 'poc';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
+  }
+
   function criarCard(cliente) {
-    const vidas     = cliente.vidas;
-    const aderencia = cliente.aderencia;
+    const enc       = clienteEncerrado(cliente);
+    const vidas     = enc && cliente.vidasFinal     != null ? cliente.vidasFinal     : cliente.vidas;
+    const aderencia = enc && cliente.aderenciaFinal != null ? cliente.aderenciaFinal : cliente.aderencia;
     const metaF1    = cliente.metaVidasF1  || null;
     const metaF2    = cliente.metaVidasF2  || null;
     const metaAd    = cliente.metaAderencia || 50;
@@ -1176,7 +1186,7 @@
     card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="card-title">${cliente.nome}</div>
+          <div class="card-title">${cliente.nome}${tipoFlag(cliente.id)}</div>
           ${cliente.cnpj ? `<div style="font-size:11px;color:#a0aec0;font-family:monospace;margin-top:2px">${cliente.cnpj}</div>` : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1316,8 +1326,9 @@
 
   // ── Compact card for main grid ────────────────────────────────
   function criarCardCompacto(cliente) {
-    const vidas     = cliente.vidas;
-    const aderencia = cliente.aderencia;
+    const enc       = clienteEncerrado(cliente);
+    const vidas     = enc && cliente.vidasFinal     != null ? cliente.vidasFinal     : cliente.vidas;
+    const aderencia = enc && cliente.aderenciaFinal != null ? cliente.aderenciaFinal : cliente.aderencia;
     const metaF1    = cliente.metaVidasF1  || null;
     const metaAd    = cliente.metaAderencia || 50;
     const gapAd     = metaAd - aderencia;
@@ -1553,8 +1564,9 @@
     const lista = todosClientes();
     const rows = lista.map(c => {
       const mOv = getMetricasOverride(c.id);
-      const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : c.vidas;
-      const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia;
+      const enc       = clienteEncerrado(c);
+      const vidas     = enc && c.vidasFinal     != null ? c.vidasFinal     : (mOv.vidas     !== undefined ? mOv.vidas     : c.vidas);
+      const aderencia = enc && c.aderenciaFinal != null ? c.aderenciaFinal : (mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia);
       const metaF1    = c.metaVidasF1  || null;
       const metaAd    = c.metaAderencia || 50;
       const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : null;
@@ -1615,8 +1627,9 @@
     const linhas = [header];
     lista.forEach(c => {
       const mOv = getMetricasOverride(c.id);
-      const vidas     = mOv.vidas     !== undefined ? mOv.vidas     : c.vidas;
-      const aderencia = mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia;
+      const enc       = clienteEncerrado(c);
+      const vidas     = enc && c.vidasFinal     != null ? c.vidasFinal     : (mOv.vidas     !== undefined ? mOv.vidas     : c.vidas);
+      const aderencia = enc && c.aderenciaFinal != null ? c.aderenciaFinal : (mOv.aderencia !== undefined ? mOv.aderencia : c.aderencia);
       const metaF1    = c.metaVidasF1 || null;
       const metaAd    = c.metaAderencia || 50;
       const gapF1     = metaF1 !== null ? Math.max(metaF1 - vidas, 0) : '';
@@ -1691,7 +1704,7 @@
           <td class="bp-td-val aguardando">— a definir</td>
         </tr>`;
       }
-      const vidas  = c.vidas;
+      const vidas  = clienteEncerrado(c) && c.vidasFinal != null ? c.vidasFinal : c.vidas;
       const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
       const mrrF1  = c.mrrFaixa1,   mrrF2  = c.mrrFaixa2 || null;
       const bonusF1 = Math.round(mrrF1 * 0.04);
