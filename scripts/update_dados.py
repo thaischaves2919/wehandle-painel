@@ -211,6 +211,61 @@ def sincronizar_fornecedores(conteudo, cliente_id, fornecedores_metabase):
     novos_objs = [f for f in fornecedores_metabase if re.sub(r'\D', '', f["cnpj"]) not in {re.sub(r'\D', '', c) for c in cnpjs_existentes} and re.sub(r'\D', '', f["cnpj"])]
     return conteudo, novos_objs
 
+def atualizar_contatos_existentes(conteudo, cliente_id, contatos_mb):
+    """Atualiza tel e e-mail de fornecedores já existentes no dados.js com dados do Metabase."""
+    if not contatos_mb:
+        return conteudo, 0
+
+    idx_cliente = conteudo.find(f"id: '{cliente_id}'")
+    if idx_cliente == -1:
+        return conteudo, 0
+
+    idx_forn = conteudo.find("fornecedores:", idx_cliente)
+    if idx_forn == -1:
+        return conteudo, 0
+    inicio_arr = conteudo.find("[", idx_forn)
+    fim_arr    = conteudo.rfind("]", inicio_arr, conteudo.find("\n    }", idx_forn + 200))
+    if inicio_arr == -1 or fim_arr == -1:
+        return conteudo, 0
+
+    bloco    = conteudo[inicio_arr:fim_arr + 1]
+    atualizados = 0
+
+    for cnpj_num, dados in contatos_mb.items():
+        tel_mb   = dados.get("tel",   "").strip()
+        email_mb = dados.get("email", "").strip()
+        if not tel_mb and not email_mb:
+            continue
+
+        # Localiza a linha do fornecedor pelo CNPJ (formatos variados)
+        padrao_cnpj = re.compile(r"cnpj:\s*'([^']*" + re.escape(cnpj_num[-8:]) + r"[^']*)'")
+        m = padrao_cnpj.search(bloco)
+        if not m:
+            continue
+
+        linha_inicio = bloco.rfind("{", 0, m.start())
+        linha_fim    = bloco.find("}", m.end()) + 1
+        if linha_inicio == -1 or linha_fim == 0:
+            continue
+        linha = bloco[linha_inicio:linha_fim]
+        nova_linha = linha
+
+        if tel_mb:
+            nova_linha = re.sub(r"tel:\s*''", f"tel: '{tel_mb}'", nova_linha)
+            nova_linha = re.sub(r"(tel:\s*')([^']+)(')", lambda x: x.group(0) if x.group(2) else f"tel: '{tel_mb}'", nova_linha)
+            # Só atualiza tel vazio
+            nova_linha = re.sub(r"tel:\s*''", f"tel: '{tel_mb}'", nova_linha)
+
+        if email_mb:
+            nova_linha = re.sub(r"email:\s*''", f"email: '{email_mb}'", nova_linha)
+
+        if nova_linha != linha:
+            bloco = bloco[:linha_inicio] + nova_linha + bloco[linha_fim:]
+            atualizados += 1
+
+    conteudo = conteudo[:inicio_arr] + bloco + conteudo[fim_arr + 1:]
+    return conteudo, atualizados
+
 # ── 6. Ler e atualizar dados.js ────────────────────────────────────────────────
 DADOS_PATH = "dados.js"
 
@@ -443,11 +498,19 @@ def main():
         else:
             print(f"  ⏸ Período encerrado — vidasFinal/aderenciaFinal congelados")
 
-        # Sincronizar fornecedores novos
+        # Sincronizar fornecedores novos e atualizar contatos existentes
         novos_forn = 0
         if c.get("sd_table_id"):
             print(f"  Buscando fornecedores na tabela {c['sd_table_id']}...")
             fornecedores_mb = get_fornecedores_sd(c["sd_table_id"], idempresa=c["idempresa"])
+
+            # Atualiza tel/email de fornecedores já cadastrados
+            contatos_mb = get_contatos_prestadores(c["idempresa"])
+            conteudo, n_cont = atualizar_contatos_existentes(conteudo, c["id"], contatos_mb)
+            if n_cont > 0:
+                print(f"  ✓ {n_cont} contato(s) atualizado(s) do Metabase")
+                atualizado = True
+
             conteudo, novos_lista = sincronizar_fornecedores(conteudo, c["id"], fornecedores_mb)
             novos_forn = len(novos_lista)
             if novos_forn > 0:
