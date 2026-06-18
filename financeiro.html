@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WeHandle — Relatório de Bônus de Rampagem</title>
+<script>if(localStorage.getItem('wehandle_tema')==='dark')document.documentElement.classList.add('dark');</script>
 <script src="dados.js"></script>
 <script src="overrides.js"></script>
 <script src="simulador_tmpl.js"></script>
@@ -111,13 +112,54 @@
     .cliente-card { break-inside: avoid; }
     .resumo-card { break-inside: avoid; }
   }
+
+  /* ── Tema Escuro ── */
+  .btn-tema { background: none; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 15px; cursor: pointer; padding: 4px 7px; line-height: 1; transition: background 0.2s; }
+  .btn-tema:hover { background: rgba(255,255,255,0.1); }
+  html.dark body { background: #0f1420; color: #e2e8f0; }
+  html.dark .topbar { background: #0d1526; }
+  html.dark .page-title { color: #e2e8f0; }
+  html.dark .page-sub { color: #6a7f99; }
+  html.dark .atualizado-badge { background: #0d2a1a; color: #4ade80; }
+  html.dark .resumo-card { background: #1a2340; border-color: #252f4a; box-shadow: none; }
+  html.dark .resumo-titulo { color: #e2e8f0; }
+  html.dark .resumo-table th { background: #141c30; color: #6a7f99; border-bottom-color: #252f4a; }
+  html.dark .resumo-table td { border-bottom-color: #1e2840; }
+  html.dark .resumo-table tfoot td { border-top-color: #252f4a; }
+  html.dark .nome-cliente { color: #e2e8f0; }
+  html.dark .periodo-linha { color: #6a7f99; }
+  html.dark .secao-titulo { color: #e2e8f0; }
+  html.dark .cliente-card { background: #1a2340; border-color: #252f4a; box-shadow: none; }
+  html.dark .cliente-header { border-bottom-color: #252f4a; }
+  html.dark .cliente-nome { color: #e2e8f0; }
+  html.dark .cliente-periodo { color: #6a7f99; }
+  html.dark .metrica-box { background: #0f1420; }
+  html.dark .metrica-label { color: #6a7f99; }
+  html.dark .metrica-val { color: #e2e8f0; }
+  html.dark .metrica-meta { color: #8896b0; }
+  html.dark .bonus-box { background: #0d2a1a; border-color: #1a4a30; }
+  html.dark .bonus-box.pendente { background: #2a1f08; border-color: #4a3a10; }
+  html.dark .bonus-box.zero { background: #141c30; border-color: #252f4a; }
+  html.dark .bonus-box.aguard { background: #2a1f08; border-color: #4a3010; }
+  html.dark .bonus-detalhe { color: #8896b0; }
+  html.dark .bonus-detalhe strong { color: #e2e8f0; }
+  html.dark .evol-secao-titulo { color: #6a7f99; }
+  html.dark .evol-table th { background: #141c30; color: #6a7f99; border-bottom-color: #252f4a; }
+  html.dark .evol-table td { border-bottom-color: #1e2840; color: #9ab0cc; }
+  html.dark .evol-table tr.atual td { background: #0f1e30; }
+  html.dark .tipo-cliente { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
+  html.dark .tipo-poc { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
+  html.dark .footer { color: #6a7f99; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-logo">we<span>handle</span></div>
-  <div class="topbar-sub">Relatório de Bônus — Rampagem de Vidas</div>
+  <div>
+    <div class="topbar-logo">we<span>handle</span></div>
+    <div class="topbar-sub">Relatório de Bônus — Rampagem de Vidas</div>
+  </div>
+  <button class="btn-tema" id="btn-tema" onclick="toggleTema()" title="Claro / Escuro">🌙</button>
 </div>
 
 <div class="container">
@@ -499,6 +541,17 @@
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   };
+})();
+
+function toggleTema() {
+  const dark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('wehandle_tema', dark ? 'dark' : 'light');
+  const btn = document.getElementById('btn-tema');
+  if (btn) btn.textContent = dark ? '☀️' : '🌙';
+}
+(function() {
+  const btn = document.getElementById('btn-tema');
+  if (btn && document.documentElement.classList.contains('dark')) btn.textContent = '☀️';
 })();
 </script>
 </body>

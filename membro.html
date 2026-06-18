@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>wehandle — Painel do Membro</title>
+  <script>if(localStorage.getItem('wehandle_tema')==='dark')document.documentElement.classList.add('dark');</script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #1e2b4a; min-height: 100vh; }
@@ -160,6 +161,46 @@
     .toast.show { opacity: 1; transform: translateY(0); }
 
     .atualizado-badge { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+    /* ── Tema Escuro ── */
+    .btn-tema { background: none; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 15px; cursor: pointer; padding: 4px 7px; line-height: 1; transition: background 0.2s; }
+    .btn-tema:hover { background: rgba(255,255,255,0.1); }
+    html.dark body { background: #0f1420; color: #e2e8f0; }
+    html.dark .topbar { background: #0d1526; }
+    html.dark .login-box { background: #1a2340; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+    html.dark .login-logo { color: #e2e8f0; }
+    html.dark .login-sub { color: #6a7f99; }
+    html.dark .login-nome { color: #e2e8f0; }
+    html.dark .login-hint { color: #6a7f99; }
+    html.dark .pin-input { background: #0f1420; border-color: #252f4a; color: #e2e8f0; }
+    html.dark .pin-input:focus { background: #141c30; border-color: #8896b0; }
+    html.dark .auth-label { color: #8896b0; }
+    html.dark .auth-input { background: #0f1420; border-color: #252f4a; color: #e2e8f0; }
+    html.dark .auth-input:focus { background: #141c30; border-color: #8896b0; }
+    html.dark .compact-card { background: #1a2340; border-color: #252f4a; box-shadow: none; }
+    html.dark .compact-card:hover { border-color: #e0296f; }
+    html.dark .cc-name { color: #e2e8f0; }
+    html.dark .cc-cnpj { color: #6a7f99; }
+    html.dark .cc-metric { background: #0f1420; }
+    html.dark .cc-metric-label, html.dark .cc-metric-sub, html.dark .cc-prog-label { color: #6a7f99; }
+    html.dark .cc-metric-value { color: #e2e8f0; }
+    html.dark .cc-prog-bar { background: #252f4a; }
+    html.dark .cc-deadline { background: #141c30; color: #8896b0; }
+    html.dark .cc-footer { border-top-color: #252f4a; }
+    html.dark .cc-fornecedores { color: #6a7f99; }
+    html.dark .bp-wrap { background: #1a2340; border-color: #252f4a; }
+    html.dark .bp-titulo { color: #e2e8f0; }
+    html.dark .bp-table th { background: #141c30; color: #6a7f99; border-bottom-color: #252f4a; }
+    html.dark .bp-table td { border-bottom-color: #1e2840; }
+    html.dark .bp-td-nome { color: #e2e8f0; }
+    html.dark .bonus-card { background: #1a2340; border-color: #252f4a; box-shadow: none; }
+    html.dark .bonus-titulo { color: #e2e8f0; }
+    html.dark .secao-titulo { color: #6a7f99; }
+    html.dark .secao-titulo::before, html.dark .secao-titulo::after { background: #252f4a; }
+    html.dark .btn-colapsar { background: #1a2340; border-color: #252f4a; color: #8896b0; }
+    html.dark .toast { background: #252f4a; }
+    html.dark .tipo-cliente { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
+    html.dark .tipo-poc { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
   </style>
 </head>
 <body>
@@ -181,6 +222,7 @@
       <div id="app-avatar" class="topbar-avatar"></div>
       <div id="app-nome" class="topbar-nome"></div>
       <span class="atualizado-badge" id="badge-atualizado"></span>
+      <button class="btn-tema" id="btn-tema" onclick="toggleTema()" title="Claro / Escuro">🌙</button>
       <button class="btn-sair" onclick="sairMembro()">Sair</button>
     </div>
   </div>
@@ -937,6 +979,17 @@
   }
 
   init();
+
+  function toggleTema() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('wehandle_tema', dark ? 'dark' : 'light');
+    const btn = document.getElementById('btn-tema');
+    if (btn) btn.textContent = dark ? '☀️' : '🌙';
+  }
+  (function() {
+    const btn = document.getElementById('btn-tema');
+    if (btn && document.documentElement.classList.contains('dark')) btn.textContent = '☀️';
+  })();
 </script>
 
 </body>

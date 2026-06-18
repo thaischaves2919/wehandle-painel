@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="refresh" content="60" />
   <title>wehandle — Rampagem de Vidas</title>
+  <script>if(localStorage.getItem('wehandle_tema')==='dark')document.documentElement.classList.add('dark');</script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #f4f5f7; color: #1e2b4a; min-height: 100vh; padding: 32px 24px; }
@@ -127,6 +128,57 @@
     .tipo-flag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
     .tipo-cliente { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
     .tipo-poc { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+
+    /* ── Tema Escuro ── */
+    .btn-tema { background: none; border: 1.5px solid #dde1ea; border-radius: 8px; font-size: 15px; cursor: pointer; padding: 4px 7px; line-height: 1; transition: background 0.2s; }
+    .btn-tema:hover { background: #f0f2f7; }
+    html.dark body { background: #0f1420; color: #e2e8f0; }
+    html.dark header { border-color: #252f4a; }
+    html.dark .logo-text { color: #e2e8f0; }
+    html.dark .page-subtitle { color: #6a7f99; }
+    html.dark .badge-prazo { background: #1a2340; border-color: #252f4a; color: #8896b0; }
+    html.dark .badge-prazo strong { color: #e2e8f0; }
+    html.dark .badge-leitura { background: #1e2840; border-color: #252f4a; color: #8896b0; }
+    html.dark .btn-tema { border-color: #252f4a; }
+    html.dark .btn-tema:hover { background: #1e2840; }
+    html.dark .card { background: #1a2340; border-color: #252f4a; box-shadow: none; }
+    html.dark .card-title { color: #e2e8f0; }
+    html.dark .metric-box { background: #0f1420; border-color: #252f4a; }
+    html.dark .metric-label, html.dark .metric-sub { color: #6a7f99; }
+    html.dark .metric-value { color: #e2e8f0; }
+    html.dark .progress-bar { background: #252f4a; }
+    html.dark .progress-label { color: #8896b0; }
+    html.dark .gap-box { background: #0f1420; border-color: #252f4a; }
+    html.dark .gap-label { color: #8896b0; }
+    html.dark .gap-value { color: #e2e8f0; }
+    html.dark .section-title { color: #6a7f99; }
+    html.dark .table-wrap { border-color: #252f4a; }
+    html.dark .fornecedor-table thead th { background: #141c30; }
+    html.dark .fornecedor-table th { color: #6a7f99; border-bottom-color: #252f4a; }
+    html.dark .fornecedor-table td { color: #9ab0cc; border-bottom-color: #1e2840; }
+    html.dark .filtro-label { color: #6a7f99; }
+    html.dark .filtro-btn { background: #1a2340; color: #8896b0; border-color: #252f4a; }
+    html.dark .filtro-btn.ativo { background: #e0296f; color: #fff; border-color: #e0296f; }
+    html.dark .pesquisa-input { background: #1a2340; border-color: #252f4a; color: #e2e8f0; }
+    html.dark .secao-titulo { color: #6a7f99; }
+    html.dark .secao-titulo::before, html.dark .secao-titulo::after { background: #252f4a; }
+    html.dark .btn-colapsar { background: #1a2340; border-color: #252f4a; color: #8896b0; }
+    html.dark .bonus-faixa { background: #0f1420; border-color: #252f4a; }
+    html.dark .bonus-faixa-nome { color: #e2e8f0; }
+    html.dark .bonus-faixa-gap { color: #8896b0; }
+    html.dark .bonus-section { background: #0d1f1a; border-color: #1a4a30; }
+    html.dark .bonus-titulo { color: #4ade80; }
+    html.dark .bp-wrap { background: #1a2340; border-color: #252f4a; }
+    html.dark .bp-titulo { color: #e2e8f0; }
+    html.dark .bp-table th { background: #141c30; color: #6a7f99; border-bottom-color: #252f4a; }
+    html.dark .bp-table td { border-bottom-color: #1e2840; }
+    html.dark .bp-td-nome { color: #e2e8f0; }
+    html.dark .bp-td-faixas { color: #6a7f99; }
+    html.dark .footer-leitura { border-top-color: #252f4a; color: #6a7f99; }
+    html.dark .row-aguardando { background: #1c2a40 !important; }
+    html.dark .row-pendente { background: #1a2638 !important; }
+    html.dark .tipo-cliente { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
+    html.dark .tipo-poc { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
   </style>
 </head>
 <body>
@@ -147,6 +199,7 @@
   <div class="header-right">
     <span class="badge-prazo">Próximo prazo: <strong id="prazo-display">—</strong></span>
     <span class="badge-leitura">Somente leitura</span>
+    <button class="btn-tema" id="btn-tema" onclick="toggleTema()" title="Claro / Escuro">🌙</button>
   </div>
 </header>
 
@@ -546,6 +599,17 @@
   calcDiasRestantes();
   renderizarClientes();
   setInterval(calcDiasRestantes, 60000); // atualiza a cada minuto — vira a data sem precisar de F5
+
+  function toggleTema() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('wehandle_tema', dark ? 'dark' : 'light');
+    const btn = document.getElementById('btn-tema');
+    if (btn) btn.textContent = dark ? '☀️' : '🌙';
+  }
+  (function() {
+    const btn = document.getElementById('btn-tema');
+    if (btn && document.documentElement.classList.contains('dark')) btn.textContent = '☀️';
+  })();
 </script>
 </body>
 </html>
