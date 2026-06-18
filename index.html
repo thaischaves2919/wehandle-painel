@@ -1662,7 +1662,6 @@
         diasStr  = dias <= 0 ? 'Encerrado' : dias + 'd';
         diasCls  = dias <= 0 ? 'rel-neutro' : dias <= 15 ? 'rel-alerta' : 'rel-ok';
       }
-      const enc = clienteEncerrado(c);
       return `<tr${enc ? ' style="opacity:0.6"' : ''}>
         <td><div class="rel-nome">${c.nome}</div>${c.cnpj ? `<div class="rel-sub">${c.cnpj}</div>` : ''}</td>
         <td class="${metaF1 && vidas >= metaF1 ? 'rel-ok' : ''}">${vidas}</td>
