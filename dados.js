@@ -283,9 +283,10 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: 5400,
       mrrFaixa2: 11700,
       fornecedores: [
-        { razaoSocial: 'QUANTUM', cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',      via: 'whatsapp', vidas: 0, status: 'aguardando' },
-        { razaoSocial: 'SODEXO',  cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51993658061', email: 'susana.soares@sodexo.com',   via: 'whatsapp', vidas: 0, status: 'aguardando' },
-        { razaoSocial: 'MANTECH', cnpj: '35.523.140/0001-29', contrato: 'contratado', tel: '51991147879', email: 'rh@mantech.com.br',          via: 'whatsapp', vidas: 0, status: 'aguardando' },
+        { razaoSocial: 'QUANTUM', cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',          via: 'whatsapp', vidas: 0, status: 'aguardando' },
+        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0001-35', contrato: 'contratado', tel: '62996610437', email: 'ana.tocchio@sodexo.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
+        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51981804495', email: 'giuliano.oliveira@sodexo.com', via: 'whatsapp', vidas: 0, status: 'aguardando' },
+        { razaoSocial: 'MANTECH', cnpj: '35.523.140/0001-29', contrato: 'contratado', tel: '51991147879', email: 'rh@mantech.com.br',              via: 'whatsapp', vidas: 0, status: 'aguardando' },
       ]
     }
   ]
