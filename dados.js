@@ -270,12 +270,12 @@ var WEHANDLE_DADOS = {
       cnpj: '92.788.009/0001-27',
       idempresa: 79099,
       dataInicio: '2026-06-09',
-      vidas: 39,
+      vidas: 1,
       aderencia: 23.1,
-      vidasFinal: 39,
+      vidasFinal: 1,
       aderenciaFinal: 23.1,
       historico: [
-        { data: '2026-06-18', vidas: 39, aderencia: 23.1 }
+        { data: '2026-06-18', vidas: 1, aderencia: 23.1 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
