@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 21/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260621a',
+  versao: '20260621b',
   clientes: [
     {
       id: 'netzsch',
@@ -110,7 +110,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'B. GROB DO BRASIL SA', cnpj: '60.586.450/0001-30', contrato: 'contratado', tel: '1143679100', email: 'ana.alves@grob.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
         { razaoSocial: 'Mendes e Barcelos LTDA', cnpj: '80.737.695/0001-28', contrato: 'contratado', tel: '4799860370', email: 'comercial.int.evol@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
         { razaoSocial: 'Atitude Comunicação Visual', cnpj: '07.497.580/0001-13', contrato: 'contratado', tel: '', email: 'atitude.jean@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
-        { razaoSocial: 'Terraplanagem Knopf Ltda', cnpj: '05.263.279/0001-10', contrato: 'contratado', tel: '473872474', email: 'terraplanagemknopf@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' }
+        { razaoSocial: 'Terraplanagem Knopf Ltda', cnpj: '05.263.279/0001-10', contrato: 'contratado', tel: '473872474', email: 'terraplanagemknopf@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
+        { razaoSocial: 'HZ HAUSBAU EMPREITEIRA', cnpj: '42.260.964/0001-19', contrato: 'contratado', tel: '4792839233', email: 'orcamentos.hz@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-21' }
       ]
     },
     {
