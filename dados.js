@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260622a',
+  versao: '20260622b',
   clientes: [
     {
       id: 'netzsch',
@@ -111,7 +111,9 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'Mendes e Barcelos LTDA', cnpj: '80.737.695/0001-28', contrato: 'contratado', tel: '4799860370', email: 'comercial.int.evol@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
         { razaoSocial: 'Atitude Comunicação Visual', cnpj: '07.497.580/0001-13', contrato: 'contratado', tel: '', email: 'atitude.jean@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
         { razaoSocial: 'Terraplanagem Knopf Ltda', cnpj: '05.263.279/0001-10', contrato: 'contratado', tel: '473872474', email: 'terraplanagemknopf@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
-        { razaoSocial: 'HZ HAUSBAU EMPREITEIRA', cnpj: '42.260.964/0001-19', contrato: 'contratado', tel: '4792839233', email: 'orcamentos.hz@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-21' }
+        { razaoSocial: 'HZ HAUSBAU EMPREITEIRA', cnpj: '42.260.964/0001-19', contrato: 'contratado', tel: '4792839233', email: 'orcamentos.hz@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-21' },
+        { razaoSocial: 'HS AUTOMACAO INDUSTRIAL LTDA', cnpj: '13.401.064/0001-46', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' },
+        { razaoSocial: 'SETA MAQUINAS E EQUIPAMENTOS', cnpj: '49.633.249/0001-23', contrato: 'contratado', tel: '4799358800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' }
       ]
     },
     {
@@ -248,9 +250,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 23.89,
+      aderencia: 31.53,
       vidasFinal: 41,
-      aderenciaFinal: 23.89,
+      aderenciaFinal: 31.53,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -265,7 +267,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-19', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-20', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-21', vidas: 41, aderencia: 23.89 },
-        { data: '2026-06-22', vidas: 41, aderencia: 23.89 }
+        { data: '2026-06-22', vidas: 41, aderencia: 31.53 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
