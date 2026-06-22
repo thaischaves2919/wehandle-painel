@@ -1044,8 +1044,9 @@
     nomeSpan.textContent = f.razaoSocial;
     td1.appendChild(nomeSpan);
     if (f.dataEntrada) {
-      const diasDesdeCadastro = (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000;
-      if (diasDesdeCadastro <= 7) {
+      const _h = new Date();
+      const _hojeStr = _h.getFullYear() + '-' + String(_h.getMonth()+1).padStart(2,'0') + '-' + String(_h.getDate()).padStart(2,'0');
+      if (f.dataEntrada === _hojeStr) {
         const badgeNovo = document.createElement('span');
         badgeNovo.className = 'badge-novo';
         badgeNovo.textContent = 'NOVO';
