@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260622c',
+  versao: '20260622d',
   clientes: [
     {
       id: 'netzsch',
@@ -113,7 +113,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'Terraplanagem Knopf Ltda', cnpj: '05.263.279/0001-10', contrato: 'contratado', tel: '473872474', email: 'terraplanagemknopf@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-18' },
         { razaoSocial: 'HZ HAUSBAU EMPREITEIRA', cnpj: '42.260.964/0001-19', contrato: 'contratado', tel: '4792839233', email: 'orcamentos.hz@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-21' },
         { razaoSocial: 'HS AUTOMACAO INDUSTRIAL LTDA', cnpj: '13.401.064/0001-46', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' },
-        { razaoSocial: 'SETA MAQUINAS E EQUIPAMENTOS', cnpj: '49.633.249/0001-23', contrato: 'contratado', tel: '4799358800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' }
+        { razaoSocial: 'SETA MAQUINAS E EQUIPAMENTOS', cnpj: '49.633.249/0001-23', contrato: 'contratado', tel: '4799358800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' },
+        { razaoSocial: 'SUL SERVICE SERVICOS', cnpj: '05.017.262/0001-82', contrato: 'contratado', tel: '1122684548', email: 'atendimento@sulservice.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' }
       ]
     },
     {
@@ -157,9 +158,9 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 66,
-      aderencia: 56.4,
+      aderencia: 56.51,
       vidasFinal: 66,
-      aderenciaFinal: 56.4,
+      aderenciaFinal: 56.51,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -180,7 +181,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-19', vidas: 66, aderencia: 56.6 },
         { data: '2026-06-20', vidas: 66, aderencia: 56.4 },
         { data: '2026-06-21', vidas: 66, aderencia: 56.4 },
-        { data: '2026-06-22', vidas: 66, aderencia: 56.4 }
+        { data: '2026-06-22', vidas: 66, aderencia: 56.51 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -250,9 +251,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 36.28,
+      aderencia: 36.78,
       vidasFinal: 41,
-      aderenciaFinal: 36.28,
+      aderenciaFinal: 36.78,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -267,7 +268,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-19', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-20', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-21', vidas: 41, aderencia: 23.89 },
-        { data: '2026-06-22', vidas: 41, aderencia: 36.28 }
+        { data: '2026-06-22', vidas: 41, aderencia: 36.78 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
