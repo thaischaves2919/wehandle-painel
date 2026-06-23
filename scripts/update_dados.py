@@ -85,6 +85,28 @@ def get_aderencia_card_breakdown(card_id):
         return round(ad / total * 100, 2)
     return None
 
+def get_aderencia_por_sd(table_id):
+    """Calcula aderência direto de uma tabela SD_CLIENTE via STATUSDOC (sem card específico)."""
+    body = {
+        "database": 14,
+        "type": "query",
+        "query": {"source-table": table_id, "limit": 5000}
+    }
+    r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
+    if not r.ok:
+        return None
+    data = r.json().get("data", {})
+    cols = [c["name"] for c in data.get("cols", [])]
+    rows = data.get("rows", [])
+    idx = next((i for i, c in enumerate(cols) if c == "STATUSDOC"), None)
+    if idx is None:
+        return None
+    validos    = [row[idx] for row in rows if row[idx] not in [11, 12]]
+    aderentes  = [s for s in validos if s not in [0, 7]]
+    if validos:
+        return round(len(aderentes) / len(validos) * 100, 2)
+    return None
+
 def get_aderencia_por_cards(card_ader, card_nao_ader):
     r_ad = run_card(card_ader)
     r_na = run_card(card_nao_ader)
@@ -457,14 +479,13 @@ def main():
             "get_aderencia": lambda: get_aderencia_card_breakdown(39958),
             "sd_table_id": 12586,  # SD_ZELO
         },
-        # Melitta — aguardando idempresa e cards de aderência (ainda não cadastrada no Metabase)
-        # {
-        #     "id": "melitta", "nome": "Melitta", "prazo": "24/07",
-        #     "idempresa": ???, "data_inicio": "2026-06-09",
-        #     "metaVidasF1": None, "metaAderencia": 50,
-        #     "get_aderencia": lambda: get_aderencia_por_cards(???, ???),
-        #     "sd_table_id": ???,
-        # },
+        {
+            "id": "melitta", "nome": "Melitta", "prazo": "24/07",
+            "idempresa": 79099, "data_inicio": "2026-06-09",
+            "metaVidasF1": 201, "metaAderencia": 50,
+            "get_aderencia": lambda: get_aderencia_por_sd(12905),  # SD_CELUPA
+            "sd_table_id": 12905,  # SD_CELUPA
+        },
     ]
 
     conteudo = ler_dados()
