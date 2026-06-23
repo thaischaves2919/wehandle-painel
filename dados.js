@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260622a',
+  versao: '20260623a',
   clientes: [
     {
       id: 'netzsch',
@@ -155,9 +155,9 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       vidas: 66,
-      aderencia: 56.4,
+      aderencia: 56.8,
       vidasFinal: 66,
-      aderenciaFinal: 56.4,
+      aderenciaFinal: 56.8,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -178,7 +178,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-19', vidas: 66, aderencia: 56.6 },
         { data: '2026-06-20', vidas: 66, aderencia: 56.4 },
         { data: '2026-06-21', vidas: 66, aderencia: 56.4 },
-        { data: '2026-06-22', vidas: 66, aderencia: 56.4 }
+        { data: '2026-06-22', vidas: 66, aderencia: 56.4 },
+        { data: '2026-06-23', vidas: 66, aderencia: 56.8 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -248,9 +249,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 23.89,
+      aderencia: 36.78,
       vidasFinal: 41,
-      aderenciaFinal: 23.89,
+      aderenciaFinal: 36.78,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -265,7 +266,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-19', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-20', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-21', vidas: 41, aderencia: 23.89 },
-        { data: '2026-06-22', vidas: 41, aderencia: 23.89 }
+        { data: '2026-06-22', vidas: 41, aderencia: 23.89 },
+        { data: '2026-06-23', vidas: 41, aderencia: 36.78 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
@@ -283,12 +285,13 @@ var WEHANDLE_DADOS = {
       cnpj: '92.788.009/0001-27',
       idempresa: 79099,
       dataInicio: '2026-06-09',
-      vidas: 1,
+      vidas: 2,
       aderencia: 23.1,
-      vidasFinal: 1,
+      vidasFinal: 2,
       aderenciaFinal: 23.1,
       historico: [
-        { data: '2026-06-18', vidas: 1, aderencia: 23.1 }
+        { data: '2026-06-18', vidas: 1, aderencia: 23.1 },
+        { data: '2026-06-23', vidas: 2, aderencia: 23.1 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
