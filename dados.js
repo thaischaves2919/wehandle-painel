@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260623a',
+  versao: '20260623b',
   clientes: [
     {
       id: 'netzsch',
@@ -289,12 +289,12 @@ var WEHANDLE_DADOS = {
       idempresa: 79099,
       dataInicio: '2026-06-09',
       vidas: 2,
-      aderencia: 23.1,
+      aderencia: 19.1,
       vidasFinal: 2,
-      aderenciaFinal: 23.1,
+      aderenciaFinal: 19.1,
       historico: [
         { data: '2026-06-18', vidas: 1, aderencia: 23.1 },
-        { data: '2026-06-23', vidas: 2, aderencia: 23.1 }
+        { data: '2026-06-23', vidas: 2, aderencia: 19.1 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
