@@ -404,7 +404,7 @@ window.WEHANDLE_OVERRIDES = {
     },
     "49.930.514/0364-07": {
       "status": "contatado",
-      "__ver": "20260612b"
+      "__ver": "20260623b"
     },
     "87.169.900/0001-45": {
       "status": "aguardando",
