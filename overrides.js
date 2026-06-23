@@ -535,6 +535,10 @@ window.WEHANDLE_OVERRIDES = {
     "12.264.795/0001-24": {
       "status": "contatado",
       "__ver": "20260617b"
+    },
+    "49.930.514/0001-35": {
+      "status": "contatado",
+      "__ver": "20260618a"
     }
   },
   "clientesExtras": [],
@@ -547,6 +551,10 @@ window.WEHANDLE_OVERRIDES = {
     },
     "saint-gobain": {
       "vidas": 19
+    },
+    "melitta": {
+      "aderencia": 19.1,
+      "_mvA": ""
     }
   },
   "tiposClientes": {
