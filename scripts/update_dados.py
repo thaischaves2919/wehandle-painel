@@ -85,26 +85,29 @@ def get_aderencia_card_breakdown(card_id):
         return round(ad / total * 100, 2)
     return None
 
-def get_aderencia_por_sd(table_id):
-    """Calcula aderência direto de uma tabela SD_CLIENTE via STATUSDOC (sem card específico)."""
-    body = {
-        "database": 14,
-        "type": "query",
-        "query": {"source-table": table_id, "limit": 5000}
-    }
+def get_aderencia_por_sd(table_name):
+    """Calcula aderência via SQL GROUP BY STATUSDOC — eficiente para qualquer tamanho de tabela."""
+    sql = (
+        f"SELECT STATUSDOC, COUNT(*) AS cnt "
+        f"FROM DATABUNKER.{table_name} "
+        f"WHERE STATUSDOC NOT IN (11, 12) "
+        f"GROUP BY STATUSDOC"
+    )
+    body = {"database": 14, "type": "native", "native": {"query": sql}}
     r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
     if not r.ok:
         return None
     data = r.json().get("data", {})
-    cols = [c["name"] for c in data.get("cols", [])]
+    cols = [c["name"].upper() for c in data.get("cols", [])]
     rows = data.get("rows", [])
-    idx = next((i for i, c in enumerate(cols) if c == "STATUSDOC"), None)
-    if idx is None:
+    if not rows:
         return None
-    validos    = [row[idx] for row in rows if row[idx] not in [11, 12]]
-    aderentes  = [s for s in validos if s not in [0, 7]]
-    if validos:
-        return round(len(aderentes) / len(validos) * 100, 2)
+    idx_s = next((i for i, c in enumerate(cols) if c == "STATUSDOC"), 0)
+    idx_c = next((i for i, c in enumerate(cols) if c == "CNT"), 1)
+    aderentes = sum(row[idx_c] for row in rows if row[idx_s] not in [0, 7])
+    total     = sum(row[idx_c] for row in rows)
+    if total > 0:
+        return round(aderentes / total * 100, 2)
     return None
 
 def get_aderencia_por_cards(card_ader, card_nao_ader):
@@ -455,7 +458,7 @@ def main():
             "id": "netzsch", "nome": "Netzsch", "prazo": "06/06",
             "idempresa": 34863, "data_inicio": "2026-04-22",
             "metaVidasF1": 151, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_sd(10400),  # SD_NETZSCH
+            "get_aderencia": lambda: get_aderencia_por_sd("SD_NETZSCH"),
             "sd_table_id": 10400,  # SD_NETZSCH
         },
         {
@@ -469,21 +472,21 @@ def main():
             "id": "gestamp", "nome": "Gestamp", "prazo": "05/07",
             "idempresa": 77911, "data_inicio": "2026-05-21",
             "metaVidasF1": 201, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_sd(12220),  # SD_GESTAMP
+            "get_aderencia": lambda: get_aderencia_por_sd("SD_GESTAMP"),
             "sd_table_id": 12220,  # SD_GESTAMP
         },
         {
             "id": "grupo-zelo", "nome": "Grupo Zelo", "prazo": "24/07",
             "idempresa": 78024, "data_inicio": "2026-06-09",
             "metaVidasF1": None, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_sd(12586),  # SD_ZELO
+            "get_aderencia": lambda: get_aderencia_por_sd("SD_ZELO"),
             "sd_table_id": 12586,  # SD_ZELO
         },
         {
             "id": "melitta", "nome": "Melitta", "prazo": "24/07",
             "idempresa": 79099, "data_inicio": "2026-06-09",
             "metaVidasF1": 201, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_sd(12905),  # SD_CELUPA
+            "get_aderencia": lambda: get_aderencia_por_sd("SD_CELUPA"),
             "sd_table_id": 12905,  # SD_CELUPA
         },
     ]
