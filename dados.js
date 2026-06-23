@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260623b',
+  versao: '20260623c',
   clientes: [
     {
       id: 'netzsch',
@@ -115,6 +115,24 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'HS AUTOMACAO INDUSTRIAL LTDA', cnpj: '13.401.064/0001-46', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' },
         { razaoSocial: 'SETA MAQUINAS E EQUIPAMENTOS', cnpj: '49.633.249/0001-23', contrato: 'contratado', tel: '4799358800', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' },
         { razaoSocial: 'SUL SERVICE SERVICOS', cnpj: '05.017.262/0001-82', contrato: 'contratado', tel: '1122684548', email: 'atendimento@sulservice.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-22' }
+      ,
+        { razaoSocial: 'ANDRITZ SEPARATION INDUSTRIA E COMERCIO DE EQUIPAMENTOS DE FILTRACAO LTDA', cnpj: '02.216.876/0002-86', contrato: 'contratado', tel: '', email: 'astec.pomerode@andritz.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'Antunes e Goncalves Consultoria Empresarial Ltda', cnpj: '05.254.863/0001-09', contrato: 'contratado', tel: '', email: 'mauricio.antunes@consultoriaaeg.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'KR TREINAMENTOS E CONSULTORIAL LTDA', cnpj: '07.006.512/0001-04', contrato: 'contratado', tel: '', email: 'rafael_lauer@terra.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'Okta7 Technologies LTDA', cnpj: '07.172.796/0001-09', contrato: 'contratado', tel: '', email: 'hellen.catalao@okta7.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'MIG CONSULTORIA EM GESTAO DE SAUDE E SEGURANCA DO TRABALHO LTDA', cnpj: '35.724.587/0001-66', contrato: 'contratado', tel: '', email: 'ieda@consultoriamig.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'JP GUINDASTES LTDA', cnpj: '41.632.542/0001-64', contrato: 'contratado', tel: '', email: 'financeiro@jpguindastes.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: '64.307.231 SAMUEL FELIPE BARBOSA VIEIRA', cnpj: '64.307.231/0001-25', contrato: 'contratado', tel: '', email: 'gabriela.hemkemaier@p3engenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'BALANTEC', cnpj: '76.839.356/0001-85', contrato: 'contratado', tel: '', email: 'controladoria@balantec.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'GUINCHOS SCHUMANN', cnpj: '81.304.313/0001-35', contrato: 'contratado', tel: '', email: 'sedricksean@gmail.com', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
       ]
     },
     {
@@ -243,6 +261,14 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'PADUA ENGENHARIA', cnpj: '30.748.977/0001-52', contrato: 'contratado', tel: '1938053735', email: 'felipe.padua@paduaengenharia.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
         { razaoSocial: 'AC TECH COMERCIO DE MAQUINAS', cnpj: '07.070.817/0001-85', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' },
         { razaoSocial: 'GRAFICA M + IMPRESSOS E COMUNICACAO VISUAL', cnpj: '22.546.690/0001-11', contrato: 'contratado', tel: '1532339688', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-17' }
+      ,
+        { razaoSocial: 'AT CRANES', cnpj: '54.532.878/0001-05', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'GRUPO DUETTO', cnpj: '54.767.022/0001-00', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'SANTOS PORTO LOCACAO DE BENS MOVEIS E SERVICOS LTDA', cnpj: '57.525.107/0001-70', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
+      ,
+        { razaoSocial: 'STEMAC SA GRUPOS GERADORES', cnpj: '92.753.268/0010-03', contrato: 'contratado', tel: '', email: 'fernando.campanhola@stemac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
       ]
     },
     {
