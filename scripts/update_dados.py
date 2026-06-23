@@ -455,28 +455,28 @@ def main():
             "id": "netzsch", "nome": "Netzsch", "prazo": "06/06",
             "idempresa": 34863, "data_inicio": "2026-04-22",
             "metaVidasF1": 151, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_netzsch(),
+            "get_aderencia": lambda: get_aderencia_por_sd(10400),  # SD_NETZSCH
             "sd_table_id": 10400,  # SD_NETZSCH
         },
         {
             "id": "saint-gobain", "nome": "Saint-Gobain", "prazo": "06/06",
             "idempresa": 6, "data_inicio": "2026-04-22",
             "metaVidasF1": 201, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_cards(31360, 31363),
+            "get_aderencia": lambda: get_aderencia_por_cards(31360, 31363),  # aguardando SD table_id
             "sd_table_id": None,  # período encerrado
         },
         {
             "id": "gestamp", "nome": "Gestamp", "prazo": "05/07",
             "idempresa": 77911, "data_inicio": "2026-05-21",
             "metaVidasF1": 201, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_por_cards(38145, 38154),
+            "get_aderencia": lambda: get_aderencia_por_sd(12220),  # SD_GESTAMP
             "sd_table_id": 12220,  # SD_GESTAMP
         },
         {
             "id": "grupo-zelo", "nome": "Grupo Zelo", "prazo": "24/07",
             "idempresa": 78024, "data_inicio": "2026-06-09",
             "metaVidasF1": None, "metaAderencia": 50,
-            "get_aderencia": lambda: get_aderencia_card_breakdown(39958),
+            "get_aderencia": lambda: get_aderencia_por_sd(12586),  # SD_ZELO
             "sd_table_id": 12586,  # SD_ZELO
         },
         {
