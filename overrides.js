@@ -540,44 +540,9 @@ window.WEHANDLE_OVERRIDES = {
       "status": "contatado",
       "__ver": "20260618a"
     },
-    "02.216.876/0002-86": {
-      "tel": "47991543012",
-      "email": "astec.pomerode@andritz.com"
-    },
-    "05.254.863/0001-09": {
-      "tel": "47991885088",
-      "email": "mauricio.antunes@consultoriaaeg.com.br"
-    },
-    "07.006.512/0001-04": {
-      "tel": "47991226466",
-      "email": "rafael_lauer@terra.com.br"
-    },
-    "07.172.796/0001-09": {
-      "tel": "11978447166",
-      "email": "hellen.catalao@okta7.com.br"
-    },
-    "35.724.587/0001-66": {
-      "tel": "41997348888",
-      "email": "ieda@consultoriamig.com.br"
-    },
-    "41.632.542/0001-64": {
-      "tel": "47991089722",
-      "email": "financeiro@jpguindastes.com.br"
-    },
-    "64.307.231/0001-25": {
-      "tel": "47992626441",
-      "email": "gabriela.hemkemaier@p3engenharia.com.br"
-    },
-    "76.839.356/0001-85": {
-      "email": "controladoria@balantec.com.br"
-    },
-    "81.304.313/0001-35": {
-      "tel": "47992085444",
-      "email": "sedricksean@gmail.com"
-    },
     "92.753.268/0010-03": {
-      "tel": "11947175282",
-      "email": "fernando.campanhola@stemac.com.br"
+      "status": "contatado",
+      "__ver": "20260623e"
     }
   },
   "clientesExtras": [],
