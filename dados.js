@@ -1,7 +1,7 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260625e',
+  versao: '20260625f',
   clientes: [
     {
       id: 'netzsch',
@@ -176,9 +176,9 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 76,
+      vidas: 73,
       aderencia: 58.15,
-      vidasFinal: 76,
+      vidasFinal: 73,
       aderenciaFinal: 58.15,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
@@ -202,7 +202,7 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-21', vidas: 66, aderencia: 56.4 },
         { data: '2026-06-22', vidas: 66, aderencia: 56.51 },
         { data: '2026-06-23', vidas: 66, aderencia: 57.11 },
-        { data: '2026-06-25', vidas: 76, aderencia: 58.15 }
+        { data: '2026-06-25', vidas: 73, aderencia: 58.15 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
