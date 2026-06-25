@@ -326,6 +326,24 @@
     const td1 = document.createElement('td'); td1.textContent = f.razaoSocial;
     const td2 = document.createElement('td'); td2.className = 'cnpj'; td2.textContent = f.cnpj;
 
+    const tdVidas = document.createElement('td'); tdVidas.className = 'center';
+    const vidasNum = f.vidas != null ? f.vidas : 0;
+    const vidasColor = vidasNum > 0 ? '#276749' : '#c53030';
+    const vidasBg    = vidasNum > 0 ? '#f0fff4' : '#fff0f3';
+    const vidasBord  = vidasNum > 0 ? '#9ae6b4' : '#feb2b2';
+    tdVidas.innerHTML = '<span style="display:inline-block;font-size:14px;font-weight:700;color:' + vidasColor + ';background:' + vidasBg + ';border:1px solid ' + vidasBord + ';border-radius:6px;padding:3px 10px;min-width:36px;text-align:center">' + vidasNum + '</span>';
+
+    const tdAder = document.createElement('td'); tdAder.className = 'center';
+    if (f.aderencia != null) {
+      const aderNum = f.aderencia;
+      const aderColor = aderNum >= 80 ? '#276749' : aderNum >= 50 ? '#b7791f' : '#c53030';
+      const aderBg    = aderNum >= 80 ? '#f0fff4' : aderNum >= 50 ? '#fffbeb' : '#fff0f3';
+      const aderBord  = aderNum >= 80 ? '#9ae6b4' : aderNum >= 50 ? '#fbd38d' : '#feb2b2';
+      tdAder.innerHTML = '<span style="display:inline-block;font-size:14px;font-weight:700;color:' + aderColor + ';background:' + aderBg + ';border:1px solid ' + aderBord + ';border-radius:6px;padding:3px 10px;min-width:52px;text-align:center">' + aderNum.toFixed(1).replace('.', ',') + '%</span>';
+    } else {
+      tdAder.innerHTML = '<span style="color:#a0aec0;font-size:13px">—</span>';
+    }
+
     const td3 = document.createElement('td'); td3.className = 'center';
     const pCon = document.createElement('span');
     pCon.className = 'pill ' + (f.contrato === 'subcontratado' ? 'pill-sub' : 'pill-sim');
@@ -349,7 +367,7 @@
     statusDisp.className = 'pill ' + curStatus.cls; statusDisp.textContent = curStatus.label;
     td6.appendChild(statusDisp);
 
-    tr.append(td1, td2, td3, td4, td5, td6);
+    tr.append(td1, td2, tdVidas, tdAder, td3, td4, td5, td6);
     return tr;
   }
 
@@ -476,14 +494,14 @@
       <div class="section-sub sub-verde">✓ Já contatados (${contatados.length})</div>
       <div class="table-wrap" style="margin-bottom:12px">
         <table class="fornecedor-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Vidas</th><th class="center">Aderência</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
           <tbody id="tbody-${cliente.id}-contatados"></tbody>
         </table>
       </div>
       <div class="section-sub sub-amarelo">⏰ Aguardando agendamento (${aguardando.length})</div>
       <div class="table-wrap" style="margin-bottom:12px">
         <table class="fornecedor-table">
-          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+          <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Vidas</th><th class="center">Aderência</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
           <tbody id="tbody-${cliente.id}-aguardando"></tbody>
         </table>
       </div>
@@ -491,7 +509,7 @@
         <div class="section-sub sub-laranja">⏳ Pendentes de contato (${pendentes.length})</div>
         <div class="table-wrap" style="margin-top:8px">
           <table class="fornecedor-table">
-            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
+            <thead><tr><th>Razão Social</th><th>CNPJ</th><th class="center">Vidas</th><th class="center">Aderência</th><th class="center">Contrato</th><th>Telefone / E-mail</th><th class="center">Via</th><th class="center">Status</th></tr></thead>
             <tbody id="tbody-${cliente.id}-pendentes"></tbody>
           </table>
         </div>
