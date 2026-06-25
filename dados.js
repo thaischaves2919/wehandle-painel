@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260623e',
+  versao: '20260625a',
   clientes: [
     {
       id: 'netzsch',
@@ -176,10 +176,10 @@ var WEHANDLE_DADOS = {
       cnpj: '02.147.467/0008-60',
       idempresa: 77911,
       dataInicio: '2026-05-21',
-      vidas: 66,
-      aderencia: 57.11,
-      vidasFinal: 66,
-      aderenciaFinal: 57.11,
+      vidas: 76,
+      aderencia: 58.15,
+      vidasFinal: 76,
+      aderenciaFinal: 58.15,
       historico: [
         { data: '2026-05-21', vidas: 17, aderencia: 35.92 },
         { data: '2026-05-22', vidas: 25, aderencia: 36.89 },
@@ -201,7 +201,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-20', vidas: 66, aderencia: 56.4 },
         { data: '2026-06-21', vidas: 66, aderencia: 56.4 },
         { data: '2026-06-22', vidas: 66, aderencia: 56.51 },
-        { data: '2026-06-23', vidas: 66, aderencia: 57.11 }
+        { data: '2026-06-23', vidas: 66, aderencia: 57.11 },
+        { data: '2026-06-25', vidas: 76, aderencia: 58.15 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
@@ -279,9 +280,9 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 40.43,
+      aderencia: 65.64,
       vidasFinal: 41,
-      aderenciaFinal: 40.43,
+      aderenciaFinal: 65.64,
       historico: [
         { data: '2026-06-09', vidas: 0, aderencia: 22.73 },
         { data: '2026-06-10', vidas: 28, aderencia: 2.03 },
@@ -297,7 +298,8 @@ var WEHANDLE_DADOS = {
         { data: '2026-06-20', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-21', vidas: 41, aderencia: 23.89 },
         { data: '2026-06-22', vidas: 41, aderencia: 36.78 },
-        { data: '2026-06-23', vidas: 41, aderencia: 40.43 }
+        { data: '2026-06-23', vidas: 41, aderencia: 40.43 },
+        { data: '2026-06-25', vidas: 41, aderencia: 65.64 }
       ],
       metaVidasF1: 301,
       metaVidasF2: null,
@@ -315,13 +317,14 @@ var WEHANDLE_DADOS = {
       cnpj: '92.788.009/0001-27',
       idempresa: 79099,
       dataInicio: '2026-06-09',
-      vidas: 2,
-      aderencia: 19.1,
-      vidasFinal: 2,
-      aderenciaFinal: 19.1,
+      vidas: 11,
+      aderencia: 17.19,
+      vidasFinal: 11,
+      aderenciaFinal: 17.19,
       historico: [
         { data: '2026-06-18', vidas: 1, aderencia: 23.1 },
-        { data: '2026-06-23', vidas: 2, aderencia: 19.1 }
+        { data: '2026-06-23', vidas: 2, aderencia: 19.1 },
+        { data: '2026-06-25', vidas: 11, aderencia: 17.19 }
       ],
       metaVidasF1: 201,
       metaVidasF2: 401,
