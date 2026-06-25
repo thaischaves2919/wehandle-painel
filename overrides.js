@@ -543,6 +543,10 @@ window.WEHANDLE_OVERRIDES = {
     "92.753.268/0010-03": {
       "status": "contatado",
       "__ver": "20260623e"
+    },
+    "30.748.977/0001-52": {
+      "status": "contatado",
+      "__ver": "20260625g"
     }
   },
   "clientesExtras": [],
