@@ -121,6 +121,123 @@ def get_aderencia_por_cards(card_ader, card_nao_ader):
             return round(ad / total * 100, 2)
     return None
 
+# ── 5a. Métricas por fornecedor (PROD_ANALYTICS) ─────────────────────────────
+
+def _run_native(sql):
+    """Executa SQL nativo no Snowflake (database 14) — para tabelas DATABUNKER e PROD_ANALYTICS."""
+    body = {"database": 14, "type": "native", "native": {"query": sql}}
+    r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
+    if not r.ok:
+        return None
+    data = r.json().get("data", {})
+    cols = [c["name"].upper() for c in data.get("cols", [])]
+    rows = data.get("rows", [])
+    return [dict(zip(cols, row)) for row in rows]
+
+
+def get_aderencia_por_fornecedor(idempresa):
+    """Retorna {cnpj_digits: aderencia_pct} via GOLD_ADERENCIA (data mais recente)."""
+    sql = f"""
+    WITH ultima AS (
+        SELECT MAX(DT_INSERTED) AS dt
+        FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA
+        WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+    )
+    SELECT
+        REGEXP_REPLACE(a.CD_CNPJ, '[^0-9]', '') AS CNPJ_NUM,
+        CASE WHEN a.VL_TOTAL > 0
+             THEN ROUND(a.VL_TOTAL_DOCUMENTOS_ADERENTE / a.VL_TOTAL * 100, 2)
+             ELSE 0
+        END AS ADERENCIA_PCT
+    FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA a
+    JOIN ultima ON a.DT_INSERTED = ultima.dt
+    WHERE a.REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+    """
+    rows = _run_native(sql)
+    if not rows:
+        return {}
+    return {r["CNPJ_NUM"]: float(r["ADERENCIA_PCT"] or 0) for r in rows if r.get("CNPJ_NUM")}
+
+
+def get_vidas_por_fornecedor(idempresa):
+    """Retorna {nome_upper: total_vidas} do mês mais recente em GOLD_VIDAS."""
+    sql = f"""
+    SELECT UPPER(TRIM(NM_EMPRESA_FORNECEDOR)) AS NOME, SUM(QTD_FINAL) AS VIDAS
+    FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS
+    WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+      AND DT_MES_REFERENCIA = (
+          SELECT MAX(DT_MES_REFERENCIA) FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS
+          WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+      )
+    GROUP BY UPPER(TRIM(NM_EMPRESA_FORNECEDOR))
+    """
+    rows = _run_native(sql)
+    if not rows:
+        return {}
+    return {r["NOME"]: int(r["VIDAS"] or 0) for r in rows if r.get("NOME")}
+
+
+def _match_nome_vidas(razao_social, vidas_map):
+    """Casa nome do fornecedor (dados.js) com chave do vidas_map (case-insensitive, substring)."""
+    nome = razao_social.upper().strip()
+    if nome in vidas_map:
+        return vidas_map[nome]
+    for nome_gold, vidas in vidas_map.items():
+        if nome_gold in nome or nome in nome_gold:
+            return vidas
+    return None
+
+
+def atualizar_metricas_fornecedores(conteudo, cliente_id, aderencia_map, vidas_map):
+    """Atualiza aderencia e vidas de cada fornecedor no bloco do cliente em dados.js."""
+    idx_cli = conteudo.find(f"id: '{cliente_id}'")
+    if idx_cli == -1:
+        return conteudo, 0
+    idx_fb = conteudo.find("fornecedores:", idx_cli)
+    if idx_fb == -1:
+        return conteudo, 0
+    inicio = conteudo.find("[", idx_fb)
+    # Delimitar pelo próximo bloco de cliente
+    prox = re.search(r"\n    \{", conteudo[idx_fb + 200:])
+    fim_busca = (idx_fb + 200 + prox.start()) if prox else len(conteudo)
+    fim = conteudo.rfind("]", inicio, fim_busca)
+    if inicio == -1 or fim == -1:
+        return conteudo, 0
+
+    bloco_orig = conteudo[inicio:fim + 1]
+    bloco = bloco_orig
+    atualizados = 0
+
+    for m in re.finditer(r"\{[^{}]*cnpj:\s*'([^']+)'[^{}]*\}", bloco_orig):
+        cnpj_fmt = m.group(1)
+        cnpj_num = re.sub(r'\D', '', cnpj_fmt)
+        linha = m.group(0)
+        nova = linha
+
+        # Aderência por CNPJ (confiável)
+        if cnpj_num in aderencia_map:
+            ader = aderencia_map[cnpj_num]
+            if re.search(r'\baderencia:\s*[\d.]+', nova):
+                nova = re.sub(r'\baderencia:\s*[\d.]+', f'aderencia: {ader}', nova)
+            else:
+                nova = re.sub(r'(\bvidas:\s*\d+)', rf'\1, aderencia: {ader}', nova)
+
+        # Vidas por nome (melhor esforço)
+        if vidas_map:
+            m_nome = re.search(r"razaoSocial:\s*'([^']+)'", nova)
+            if m_nome:
+                vidas_val = _match_nome_vidas(m_nome.group(1), vidas_map)
+                if vidas_val is not None:
+                    nova = re.sub(r'\bvidas:\s*\d+', f'vidas: {vidas_val}', nova)
+
+        if nova != linha:
+            bloco = bloco.replace(linha, nova, 1)
+            atualizados += 1
+
+    conteudo = conteudo[:inicio] + bloco + conteudo[fim + 1:]
+    return conteudo, atualizados
+
+
 # ── 5. Fornecedores — busca e sincronização ────────────────────────────────────
 def get_contatos_prestadores(idempresa):
     """Busca telefone e e-mail dos fornecedores via SILVER_VW_PRESTADORES_CONTATO (table 9046)."""
@@ -553,6 +670,18 @@ def main():
                                 rf"\g<1>{tel_cnpj}\2",
                                 conteudo
                             )
+
+        # Atualizar aderência e vidas por fornecedor (PROD_ANALYTICS)
+        try:
+            aderencia_forn = get_aderencia_por_fornecedor(c["idempresa"])
+            vidas_forn     = get_vidas_por_fornecedor(c["idempresa"])
+            if aderencia_forn or vidas_forn:
+                conteudo, n_forn = atualizar_metricas_fornecedores(conteudo, c["id"], aderencia_forn, vidas_forn)
+                if n_forn > 0:
+                    print(f"  ✓ {n_forn} fornecedor(es) com aderência/vidas atualizados")
+                    atualizado = True
+        except Exception as e:
+            print(f"  ⚠ Métricas por fornecedor falharam: {e}")
 
         if atualizado:
             alguma_atualizacao = True
