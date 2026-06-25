@@ -160,16 +160,17 @@ def get_aderencia_por_fornecedor(idempresa):
 
 
 def get_vidas_por_fornecedor(idempresa):
-    """Retorna {nome_upper: total_vidas} do mês mais recente em GOLD_VIDAS."""
+    """Retorna {nome_upper: total_vidas} do dia mais recente em GOLD_VIDAS_ALOCADAS_DIARIO."""
     sql = f"""
-    SELECT UPPER(TRIM(NM_EMPRESA_FORNECEDOR)) AS NOME, SUM(QTD_FINAL) AS VIDAS
-    FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS
+    SELECT UPPER(TRIM(NM_EMPRESA_FORNECEDOR)) AS NOME, SUM(QTD_VIDAS) AS VIDAS
+    FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS_ALOCADAS_DIARIO
     WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
-      AND DT_MES_REFERENCIA = (
-          SELECT MAX(DT_MES_REFERENCIA) FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS
+      AND DT_DIA_REFERENCIA = (
+          SELECT MAX(DT_DIA_REFERENCIA) FROM PROD_ANALYTICS.GOLD.GOLD_VIDAS_ALOCADAS_DIARIO
           WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
       )
     GROUP BY UPPER(TRIM(NM_EMPRESA_FORNECEDOR))
+    HAVING SUM(QTD_VIDAS) > 0
     """
     rows = _run_native(sql)
     if not rows:
