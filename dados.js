@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 22/06/2026
 var WEHANDLE_DADOS = {
-  versao: '20260625b',
+  versao: '20260625c',
   clientes: [
     {
       id: 'netzsch',
@@ -272,7 +272,7 @@ var WEHANDLE_DADOS = {
       ,
         { razaoSocial: 'STEMAC SA GRUPOS GERADORES', cnpj: '92.753.268/0010-03', contrato: 'contratado', tel: '11947175282', email: 'fernando.campanhola@stemac.com.br', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
-        { razaoSocial: 'JCT SERVICES LTDA', cnpj: '65.511.078/0001-16', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'pendente', dataEntrada: '2026-06-25' }
+        { razaoSocial: 'JCT SERVICES LTDA', cnpj: '65.511.078/0001-16', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, status: 'novo', dataEntrada: '2026-06-25' }
       ]
     },
     {
