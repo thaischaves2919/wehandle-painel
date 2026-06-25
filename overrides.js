@@ -562,7 +562,7 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "tiposClientes": {
-    "gestamp": "poc",
+    "gestamp": "cliente",
     "saint-gobain": "poc",
     "grupo-zelo": "poc",
     "melitta": "poc"
