@@ -568,7 +568,7 @@ window.WEHANDLE_OVERRIDES = {
   "tiposClientes": {
     "gestamp": "cliente",
     "saint-gobain": "poc",
-    "grupo-zelo": "poc",
+    "grupo-zelo": "cliente",
     "melitta": "poc"
   },
   "equipe": {
