@@ -303,7 +303,7 @@
 
   function tipoFlag(clienteId) {
     const isPoc = (_ovTipos[clienteId] || 'cliente') === 'poc';
-    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Implantação') + '</span>';
   }
 
   function buildFornRow(f, hoje) {

@@ -220,7 +220,7 @@
   function tipoFlag(clienteId) {
     const tipos = (window.WEHANDLE_OVERRIDES && window.WEHANDLE_OVERRIDES.tiposClientes) || {};
     const isPoc = (tipos[clienteId] || 'cliente') === 'poc';
-    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Implantação') + '</span>';
   }
 
   function periodoStr(c) {
