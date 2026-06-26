@@ -65,19 +65,19 @@
     .bp-td-periodo { font-size: 10px; color: #a0aec0; font-weight: 400; margin-top: 2px; }
     .bp-total td { background: #1e2b4a; color: #fff; border-bottom: none; font-weight: 700; font-size: 14px; }
     .bp-total .bp-td-nome { color: #8896b3; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
-    .bp-total .bp-td-val  { color: #4ade80; font-size: 18px; }
+    .bp-total .bp-td-val  { color: #22c55e; font-size: 18px; }
 
     /* ── Compact client cards ── */
     .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .compact-card { background: #fff; border: 1.5px solid #e8eaf0; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(26,35,64,0.05); cursor: pointer; transition: all 0.18s; }
-    .compact-card:hover { box-shadow: 0 6px 20px rgba(26,35,64,0.10); transform: translateY(-2px); border-color: #e0296f; }
+    .compact-card:hover { box-shadow: 0 6px 20px rgba(26,35,64,0.10); transform: translateY(-2px); border-color: #94a3b8; }
     .compact-card.encerrado { opacity: 0.6; filter: grayscale(30%); }
     .compact-card.encerrado:hover { opacity: 0.9; filter: grayscale(0%); }
     .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
     .cc-name { font-size: 15px; font-weight: 700; color: #1a2340; }
     .tipo-flag { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 7px; vertical-align: middle; }
     .tipo-cliente { background: #e8edf5; color: #4a6fa5; border: 1px solid #c5d0e6; }
-    .tipo-poc     { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .tipo-poc     { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     .cc-cnpj { font-size: 10px; color: #a0aec0; font-family: monospace; margin-top: 2px; }
     .cc-badges { display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0; }
     .cc-metrics { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -90,16 +90,16 @@
     .cc-prog-label { display: flex; justify-content: space-between; font-size: 10px; color: #a0aec0; margin-bottom: 3px; }
     .cc-prog-bar { height: 5px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
     .cc-prog-fill { height: 100%; border-radius: 99px; }
-    .cc-fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
-    .cc-fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
-    .cc-fill-pink   { background: linear-gradient(90deg, #e0296f, #f472b6); }
+    .cc-fill-green  { background: #48bb78; }
+    .cc-fill-orange { background: #ed8936; }
+    .cc-fill-pink   { background: #64748b; }
     .cc-deadline { font-size: 11px; color: #718096; margin: 10px 0 12px; padding: 7px 10px; background: #f7f8fc; border-radius: 7px; }
     .cc-deadline.urgente { background: #fff0f3; color: #c53030; }
     .cc-deadline strong { font-weight: 700; }
     .cc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f7; }
     .cc-fornecedores { font-size: 11px; color: #a0aec0; }
     .btn-ver-forn { background: #1a2340; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-    .btn-ver-forn:hover { background: #e0296f; }
+    .btn-ver-forn:hover { background: #2d3f65; }
     /* ── Encerrados / Navegação ── */
     .secao-titulo { font-size: 12px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; }
     .secao-titulo::before, .secao-titulo::after { content: ''; flex: 1; height: 1px; background: #e2e6ef; }
@@ -126,9 +126,9 @@
     .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 5px; }
     .progress-bar   { height: 8px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
     .progress-fill  { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
-    .fill-green  { background: linear-gradient(90deg, #38a169, #68d391); }
-    .fill-orange { background: linear-gradient(90deg, #dd6b20, #f6ad55); }
-    .fill-pink   { background: linear-gradient(90deg, #d4326d, #e8679a); }
+    .fill-green  { background: #48bb78; }
+    .fill-orange { background: #ed8936; }
+    .fill-pink   { background: #64748b; }
     .gap-box   { background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
     .gap-label { color: #718096; }
     .gap-value { font-weight: 700; color: #1e2b4a; }
@@ -152,9 +152,9 @@
     .status-sel { font-size: 10px; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 99px; padding: 2px 8px; cursor: pointer; background: #f7f8fa; color: #4a5568; outline: none; }
     .vidas-input { width: 52px; font-size: 11px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 3px 6px; text-align: center; color: #1a2340; outline: none; }
     .vidas-input:focus { border-color: #1a2340; }
-    .btn-wa { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #25d366; border-radius: 50%; text-decoration: none; transition: background 0.15s; }
-    .btn-wa:hover { background: #1da851; }
-    .btn-wa svg { width: 15px; height: 15px; fill: #fff; }
+    .btn-wa { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #ececec; border: 1px solid #d0d0d0; border-radius: 50%; text-decoration: none; transition: background 0.15s; }
+    .btn-wa:hover { background: #d4d4d4; }
+    .btn-wa svg { width: 15px; height: 15px; fill: #444; }
 
     /* ── Toast ── */
     .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2b4a; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; z-index: 9999; }
@@ -201,6 +201,29 @@
     html.dark .toast { background: #252f4a; }
     html.dark .tipo-cliente { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
     html.dark .tipo-poc { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
+
+    /* ── Modal overlay (compartilhado) ── */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,20,50,0.45); z-index:1000; align-items:center; justify-content:center; padding:16px; }
+    .modal-overlay.aberto { display:flex; }
+    .modal-box-m { background:#fff; border-radius:18px; padding:28px; width:100%; max-width:620px; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 8px 40px rgba(10,20,50,0.18); }
+    .modal-titulo-m { font-size:16px; font-weight:800; color:#1a2340; }
+    .btn-modal-cancelar-m { background:#f1f5f9; color:#475569; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+
+    /* ── Evolução ── */
+    .evol-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:12px; }
+    .evol-table th { text-align:right; padding:8px 12px; font-size:11px; font-weight:600; color:#a0aec0; text-transform:uppercase; letter-spacing:0.5px; background:#f7f8fa; border-bottom:2px solid #e2e6ef; }
+    .evol-table th:first-child { text-align:left; }
+    .evol-table td { padding:10px 12px; border-bottom:1px solid #f0f2f7; text-align:right; color:#4a5568; }
+    .evol-table td:first-child { text-align:left; font-weight:600; color:#1a2340; }
+    .evol-table tr:last-child td { border-bottom:none; font-weight:700; background:#f7f8fa; }
+    .evol-ok    { color:#276749 !important; font-weight:700 !important; }
+    .evol-alerta{ color:#c53030 !important; }
+    .btn-evolucao-m { background:#f0f4ff; color:#2b4acb; border:1px solid #c3cfe2; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .btn-evolucao-m:hover { background:#e0e8ff; }
+    .contato-input-m { display:block; width:100%; padding:4px 7px; border:1px solid #e2e6ef; border-radius:6px; font-size:11px; color:#1a2340; background:#f7f8fc; margin-bottom:3px; outline:none; }
+    .contato-input-m:focus { border-color:#64748b; background:#fff; }
+    .btn-exportar-csv-m { background:#276749; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; }
+    .btn-exportar-csv-m:hover { background:#1e5338; }
   </style>
 </head>
 <body>
@@ -303,31 +326,45 @@
 
   function tipoFlag(clienteId) {
     const isPoc = (_ovTipos[clienteId] || 'cliente') === 'poc';
-    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Implantação') + '</span>';
+    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Cliente') + '</span>';
   }
 
   function buildFornRow(f, hoje) {
     const statusAtual = getFornStatus(f.cnpj) || f.status || 'pendente';
     const vidasAtual  = getFornVidas(f.cnpj) !== null ? getFornVidas(f.cnpj) : (f.vidas || 0);
     const novoBadge   = f.dataEntrada && (Date.now() - new Date(f.dataEntrada + 'T12:00:00').getTime()) / 86400000 <= 7 ? ' <span class="badge-novo">NOVO</span>' : '';
-    const ov   = _ovContacts[f.cnpj] || {};
-    const tel  = (ov.tel  || f.tel  || '').replace(/\D/g,'');
-    const email= ov.email || f.email || '';
-    const waBt  = tel   ? '<a class="btn-wa" href="https://wa.me/55' + tel + '" target="_blank" rel="noopener">' + WA_SVG + '</a>' : '';
-    const mailBt= email ? '<a href="mailto:' + email + '" title="' + email + '" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#2b6cb0;border-radius:50%;text-decoration:none;margin-left:4px"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'#fff\' stroke-width=\'2.2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'2\' y=\'4\' width=\'20\' height=\'16\' rx=\'2\'/><path d=\'M2 7l10 7 10-7\'/></svg></a>' : '';
-    const cor  = statusAtual === 'contatado' ? '#276749' : '#c53030';
-    const tr   = document.createElement('tr');
+    const ov      = _ovContacts[f.cnpj] || {};
+    const telRaw  = ov.tel   || f.tel   || '';
+    const emailRaw= ov.email || f.email || '';
+    const telNum  = telRaw.replace(/\D/g,'');
+    const isFixo  = telNum.length === 10 ? !['6','7','8','9'].includes(telNum[2]) : telNum.length === 11 ? telNum[2] !== '9' : false;
+    const waBt    = (telNum && !isFixo) ? '<a class="btn-wa" href="https://wa.me/55' + telNum + '" target="_blank" rel="noopener">' + WA_SVG + '</a>' : '';
+    const cor     = statusAtual === 'contatado' ? '#276749' : '#c53030';
+    const cnpjEsc = f.cnpj.replace(/'/g, "\\'");
+    const tr      = document.createElement('tr');
+    tr.dataset.cnpj = f.cnpj;
     tr.innerHTML =
       '<td><span class="forn-nome">' + (f.razaoSocial || '') + novoBadge + '</span></td>' +
       '<td style="font-family:monospace;font-size:10px;color:#718096;white-space:nowrap">' + (f.cnpj || '') + '</td>' +
-      '<td><select class="status-sel" style="color:' + cor + '" onchange="setFornStatus(\'' + f.cnpj + '\',this.value);this.style.color=this.value===\'contatado\'?\'#276749\':\'#c53030\'">' +
+      '<td><select class="status-sel" style="color:' + cor + '" onchange="setFornStatus(\'' + cnpjEsc + '\',this.value);this.style.color=this.value===\'contatado\'?\'#276749\':\'#c53030\'">' +
         '<option value="contatado"' + (statusAtual==='contatado'?' selected':'') + '>Contatado</option>' +
         '<option value="pendente"'  + (statusAtual==='pendente' ?' selected':'') + '>Pendente</option>' +
         '<option value="aguardando"'+ (statusAtual==='aguardando'?' selected':'') + '>Aguardando</option>' +
       '</select></td>' +
-      '<td><input class="vidas-input" type="number" min="0" value="' + vidasAtual + '" onchange="setFornVidas(\'' + f.cnpj + '\',this.value)"/></td>' +
-      '<td style="white-space:nowrap">' + waBt + mailBt + '</td>';
+      '<td>' +
+        '<input class="contato-input-m tel-m" type="text" placeholder="Telefone" value="' + (telRaw || '') + '" oninput="setFornContato(\'' + cnpjEsc + '\',\'tel\',this.value)"/>' +
+        '<input class="contato-input-m email-m" type="text" placeholder="E-mail" value="' + (emailRaw || '') + '" oninput="setFornContato(\'' + cnpjEsc + '\',\'email\',this.value)"/>' +
+      '</td>' +
+      '<td style="white-space:nowrap">' + waBt + '</td>';
     return tr;
+  }
+
+  function setFornContato(cnpj, campo, valor) {
+    if (!_ovContacts[cnpj]) _ovContacts[cnpj] = {};
+    _ovContacts[cnpj][campo] = valor;
+    if (!_contatosLocal[cnpj]) _contatosLocal[cnpj] = {};
+    _contatosLocal[cnpj][campo] = valor;
+    salvarContatos(_membro.id, _contatosLocal);
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
@@ -474,19 +511,20 @@
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px">' +
         '<div class="section-title" style="margin:0">Fornecedores ' + c.nome + ' <span style="color:#a0aec0;font-weight:400">(' + fornAll.length + ' total)</span></div>' +
         '<div style="display:flex;gap:6px">' +
-          '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail</button>' +
+          (c.historico && c.historico.length > 0 ? '<button class="btn-evolucao-m" onclick="abrirEvolucaoMembro(\'' + c.id + '\')">📈 Ver Evolução</button>' : '') +
+          '<button onclick="enviarEmailMassaMembro(\'' + c.id + '\')" style="background:#2b6cb0;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">📧 E-mail em massa</button>' +
           '<button onclick="exportarPlanilhaMembro(\'' + c.id + '\')" style="background:#276749;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer">⬇ Planilha</button>' +
         '</div>' +
       '</div>' +
       (novos.length > 0 ?
         '<div class="section-sub" style="margin-top:0;background:#fff0f6;border:1px solid #fbb6ce;color:#c4146b;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700">🆕 Novos fornecedores (' + novos.length + ')</div>' +
-        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tn-' + c.id + '"></tbody></table></div>'
+        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Telefone / E-mail</th><th></th></tr></thead><tbody id="tn-' + c.id + '"></tbody></table></div>'
         : '') +
       '<div class="section-sub sub-verde" style="margin-top:' + (novos.length > 0 ? '12px' : '0') + '">✓ Já contatados (' + contatados.length + ')</div>' +
-      '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
+      '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Telefone / E-mail</th><th></th></tr></thead><tbody id="tc-' + c.id + '"></tbody></table></div>' +
       (pendentes.length > 0 ?
         '<div class="section-sub sub-laranja" style="margin-top:12px">⏳ Pendentes / Aguardando (' + pendentes.length + ')</div>' +
-        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Vidas</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
+        '<div class="table-wrap"><table class="fornecedor-table"><thead><tr><th>Razão Social</th><th>CNPJ</th><th>Status</th><th>Telefone / E-mail</th><th></th></tr></thead><tbody id="tp-' + c.id + '"></tbody></table></div>'
         : '');
 
     const tN = card.querySelector('#tn-' + c.id);
@@ -553,7 +591,7 @@
     const viewCards = document.createElement('div');
     viewCards.id = 'view-cards-membro';
 
-    // Bônus
+    // Bônus — 4% sobre a diferença entre MRR_F2 e MRR_F1
     let totalReceber = 0;
     const bpRows = clientesDoMembro.map(c => {
       const f1Atingida = !!(resp[c.id] && resp[c.id].f1Atingida);
@@ -562,35 +600,37 @@
       const vidas  = c.vidasFinal != null ? c.vidasFinal : (c.vidas || 0);
       const metaF1 = c.metaVidasF1, metaF2 = c.metaVidasF2;
       const mrrF1  = c.mrrFaixa1 || null, mrrF2 = c.mrrFaixa2 || null;
-      // Membros não têm encerramento — período é indeterminado
+
+      // Sem MRR definido
+      if (!mrrF1 || !mrrF2) {
+        return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando MRR das faixas</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
+      }
+
+      // Bônus = 4% da diferença MRR_F2 − MRR_F1
+      const bonus = Math.round((mrrF2 - mrrF1) * 0.04);
 
       if (f1Atingida) {
-        if (!mrrF2 || !metaF2) {
-          return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#276749">F1 ✓ (anterior) · sem F2 definida</div></td><td class="bp-td-val aguardando">— sem F2</td></tr>';
-        }
-        const bonusF2 = Math.round(mrrF2 * 0.01);
-        const faltaF2 = Math.max(metaF2 - vidas, 0);
-        const aReceber = vidas >= metaF2 ? bonusF2 : 0;
+        // F1 já foi atingida (pela responsável anterior) — meta do membro é F2
+        const faltaF2 = metaF2 ? Math.max(metaF2 - vidas, 0) : null;
+        const aReceber = (metaF2 && vidas >= metaF2) ? bonus : 0;
         totalReceber += aReceber;
-        const f2Tag = '<span class="' + (faltaF2===0?'ok':'') + '">F2 ' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>';
-        const anteriorTag = '<span style="color:#276749;font-weight:700">F1 ✓ (anterior)</span>';
+        const anteriorTag = '<span style="color:#276749;font-weight:700">F1 ✓ (anterior)</span> ';
+        const f2Tag = metaF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 ' + fmtBRL(bonus) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '<span style="color:#a0aec0">sem F2 definida</span>';
         const valCls = aReceber > 0 ? '' : 'andamento';
         const valTxt = aReceber > 0 ? fmtBRL(aReceber) : '⏳ Em andamento';
         return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + anteriorTag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
       } else {
-        if (!mrrF1) {
-          return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas" style="color:#b7791f">Aguardando metas e MRR</div></td><td class="bp-td-val aguardando">— a definir</td></tr>';
-        }
-        const bonusF1 = Math.round(mrrF1 * 0.04);
-        const bonusF2 = mrrF2 ? Math.round(mrrF2 * 0.01) : null;
-        const faltaF1 = Math.max(metaF1 - vidas, 0);
-        const faltaF2 = bonusF2 && metaF2 ? Math.max(metaF2 - vidas, 0) : null;
-        const aReceber = (bonusF2 && metaF2 && vidas >= metaF2) ? bonusF1 + bonusF2 : vidas >= metaF1 ? bonusF1 : 0;
+        // Membro começa da F1 — bônus total ao bater F2
+        const faltaF1 = metaF1 ? Math.max(metaF1 - vidas, 0) : null;
+        const faltaF2 = metaF2 ? Math.max(metaF2 - vidas, 0) : null;
+        const f1Ok = metaF1 && vidas >= metaF1;
+        const f2Ok = metaF2 && vidas >= metaF2;
+        const aReceber = f2Ok ? bonus : 0;
         totalReceber += aReceber;
-        const f1Tag = '<span class="' + (faltaF1===0?'ok':'') + '">F1 ' + fmtBRL(bonusF1) + ' ' + (faltaF1===0?'✓':'(faltam '+faltaF1+'v)') + '</span>';
-        const f2Tag = bonusF2 ? '<span class="' + (faltaF2===0?'ok':'') + '">F2 +' + fmtBRL(bonusF2) + ' ' + (faltaF2===0?'✓':'(faltam '+faltaF2+'v)') + '</span>' : '';
+        const f1Tag = metaF1 ? '<span class="' + (f1Ok?'ok':'') + '">F1 ' + (f1Ok?'✓':'(faltam '+faltaF1+'v)') + '</span> ' : '';
+        const f2Tag = metaF2 ? '<span class="' + (f2Ok?'ok':'') + '">F2 ' + fmtBRL(bonus) + ' ' + (f2Ok?'✓':'(faltam '+(faltaF2||0)+'v)') + '</span>' : '';
         const valCls = aReceber > 0 ? '' : 'andamento';
-        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : '⏳ Em andamento';
+        const valTxt = aReceber > 0 ? fmtBRL(aReceber) : (f1Ok ? '⏳ ' + fmtBRL(bonus) + ' ao bater F2' : '⏳ Em andamento');
         return '<tr><td><div class="bp-td-nome">' + c.nome + '</div><div class="bp-td-periodo">' + periodoStr + '</div><div class="bp-td-faixas">' + f1Tag + f2Tag + '</div></td><td class="bp-td-val ' + valCls + '">' + valTxt + '</td></tr>';
       }
     });
@@ -829,7 +869,7 @@
     const assunto = encodeURIComponent('Cadastro de colaboradores na plataforma wehandle — ' + c.nome);
     const corpo = encodeURIComponent(
       'Olá, tudo bem?\n\n' +
-      'Meu nome é ' + nome + ' e sou responsável pelo acompanhamento da implantação na plataforma wehandle.\n\n' +
+      'Meu nome é ' + nome + '.\n\n' +
       'Estou entrando em contato para apoiar vocês neste início com a ' + c.nome + ', auxiliando no cadastro de colaboradores, aderência e conformidade da documentação e explicando o funcionamento da plataforma da melhor forma possível.\n\n' +
       'Em caso de dúvidas, pode responder este e-mail.\n\n' +
       'Att,\n' + nome
@@ -954,6 +994,14 @@
       return;
     }
 
+    // Bypass de gestora — só funciona quando servido localmente (localhost / file://)
+    const _bypassParams = new URLSearchParams(location.search);
+    const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
+    if (_bypassParams.get('bypass') === '1' && _isLocal) {
+      _entrarNoAppMembro(membro);
+      return;
+    }
+
     // Mostrar tela de credenciais
     document.getElementById('login-wrap').style.display = 'flex';
     _mostrarTelaAuth(membro, token);
@@ -990,6 +1038,78 @@
     const btn = document.getElementById('btn-tema');
     if (btn && document.documentElement.classList.contains('dark')) btn.textContent = '☀️';
   })();
+</script>
+
+<!-- Modal evolução membro -->
+<div class="modal-overlay" id="modal-evolucao-membro">
+  <div class="modal-box-m">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div class="modal-titulo-m" id="evolucao-titulo-membro">Evolução</div>
+      <button onclick="fecharEvolucaoMembro()" style="background:none;border:none;font-size:20px;color:#a0aec0;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div id="evolucao-corpo-membro" style="overflow-y:auto;flex:1;min-height:0;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+      <button class="btn-exportar-csv-m" id="btn-exportar-csv-membro">⬇ Exportar CSV</button>
+      <button class="btn-modal-cancelar-m" onclick="fecharEvolucaoMembro()">Fechar</button>
+    </div>
+  </div>
+</div>
+<script>
+  function abrirEvolucaoMembro(clienteId) {
+    const cliente = (_dados && _dados.clientes || []).find(c => c.id === clienteId);
+    if (!cliente || !cliente.historico || cliente.historico.length === 0) return;
+    const metaF1 = cliente.metaVidasF1 || null;
+    const metaAd = cliente.metaAderencia || 50;
+    const hist   = [...cliente.historico].reverse();
+    document.getElementById('evolucao-titulo-membro').textContent = 'Evolução — ' + cliente.nome;
+    const linhas = hist.map((h, i) => {
+      const dt      = new Date(h.data + 'T12:00:00').toLocaleDateString('pt-BR');
+      const gapV    = metaF1 !== null ? Math.max(metaF1 - h.vidas, 0) : null;
+      const gapA    = (metaAd - h.aderencia).toFixed(1).replace('.', ',');
+      const adStr   = h.aderencia.toFixed(h.aderencia % 1 === 0 ? 0 : 2).replace('.', ',');
+      const gapVStr = gapV === null ? '—' : gapV === 0 ? '✓' : '+' + gapV + 'v';
+      const gapACls = parseFloat(h.aderencia) >= metaAd ? 'evol-ok' : 'evol-alerta';
+      const gapVCls = gapV === 0 ? 'evol-ok' : 'evol-alerta';
+      const latest  = i === 0 ? ' style="background:#f0f9ff"' : '';
+      return '<tr' + latest + '>' +
+        '<td>' + dt + (i === 0 ? ' <span style="font-size:10px;background:#e0f0ff;color:#2b6cb0;border-radius:4px;padding:1px 5px;font-weight:700">atual</span>' : '') + '</td>' +
+        '<td>' + h.vidas + '</td>' +
+        '<td>' + adStr + '%</td>' +
+        '<td class="' + gapVCls + '">' + gapVStr + '</td>' +
+        '<td class="' + gapACls + '">' + (parseFloat(gapA) <= 0 ? '✓' : gapA + ' p.p.') + '</td>' +
+        '</tr>';
+    });
+    document.getElementById('evolucao-corpo-membro').innerHTML =
+      '<table class="evol-table"><thead><tr>' +
+      '<th>Data</th><th>Vidas</th><th>Aderência</th>' +
+      '<th>Gap F1' + (metaF1 ? ' (' + metaF1 + 'v)' : '') + '</th>' +
+      '<th>Gap Ader. (' + metaAd + '%)</th>' +
+      '</tr></thead><tbody>' + linhas.join('') + '</tbody></table>';
+    document.getElementById('btn-exportar-csv-membro').onclick = function() {
+      const linhasCSV = [['Data','Vidas','Aderencia (%)','Gap Vidas F1','Gap Aderencia (p.p.)']];
+      [...cliente.historico].reverse().forEach(function(h) {
+        const dt   = new Date(h.data + 'T12:00:00').toLocaleDateString('pt-BR');
+        const gapV = metaF1 !== null ? Math.max(metaF1 - h.vidas, 0) : '';
+        const gapA = (metaAd - h.aderencia).toFixed(2);
+        linhasCSV.push([dt, h.vidas, h.aderencia.toFixed(2).replace('.', ','), gapV, gapA.replace('.', ',')]);
+      });
+      const csv  = linhasCSV.map(function(r) { return r.join(';'); }).join('\r\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url;
+      a.download = 'evolucao-' + cliente.nome.toLowerCase().replace(/\s+/g, '-') + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+    document.getElementById('modal-evolucao-membro').classList.add('aberto');
+  }
+  function fecharEvolucaoMembro() {
+    document.getElementById('modal-evolucao-membro').classList.remove('aberto');
+  }
+  document.getElementById('modal-evolucao-membro').addEventListener('click', function(e) {
+    if (e.target === this) fecharEvolucaoMembro();
+  });
 </script>
 
 </body>
