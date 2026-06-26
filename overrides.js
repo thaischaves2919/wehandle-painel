@@ -443,8 +443,8 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260611a"
     },
     "25.320.905/0001-70": {
-      "status": "aguardando",
-      "__ver": "20260611a"
+      "status": "pendente",
+      "__ver": "20260625i"
     },
     "23.823.459/0001-90": {
       "tel": "15 98161-0561",
@@ -568,7 +568,7 @@ window.WEHANDLE_OVERRIDES = {
   "tiposClientes": {
     "gestamp": "cliente",
     "saint-gobain": "poc",
-    "grupo-zelo": "cliente",
+    "grupo-zelo": "poc",
     "melitta": "poc"
   },
   "equipe": {
