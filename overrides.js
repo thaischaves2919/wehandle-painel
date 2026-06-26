@@ -443,7 +443,7 @@ window.WEHANDLE_OVERRIDES = {
       "__ver": "20260611a"
     },
     "25.320.905/0001-70": {
-      "status": "pendente",
+      "status": "contatado",
       "__ver": "20260625i"
     },
     "23.823.459/0001-90": {
