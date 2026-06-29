@@ -571,7 +571,7 @@ window.WEHANDLE_OVERRIDES = {
     "grupo-zelo": "poc",
     "melitta": "poc",
     "sabesp": "cliente",
-    "netzsch": "poc"
+    "netzsch": "cliente"
   },
   "equipe": {
     "membros": [
