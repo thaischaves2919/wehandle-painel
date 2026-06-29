@@ -351,6 +351,24 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51981804495', email: 'giuliano.oliveira@sodexo.com', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'aguardando' },
         { razaoSocial: 'MANTECH', cnpj: '35.523.140/0001-29', contrato: 'contratado', tel: '51991147879', email: 'rh@mantech.com.br',              via: 'whatsapp', vidas: 2, aderencia: 66.67, status: 'aguardando' },
       ]
+    },
+    {
+      id: 'sabesp',
+      nome: 'Sabesp',
+      cnpj: '43.776.517/0001-80',
+      idempresa: null,
+      dataInicio: '2026-06-29',
+      vidas: 0,
+      aderencia: 0,
+      vidasFinal: 0,
+      aderenciaFinal: 0,
+      historico: [],
+      metaVidasF1: null,
+      metaVidasF2: null,
+      metaAderencia: 50,
+      mrrFaixa1: null,
+      mrrFaixa2: null,
+      fornecedores: []
     }
   ]
 };
