@@ -570,7 +570,7 @@ window.WEHANDLE_OVERRIDES = {
     "saint-gobain": "poc",
     "grupo-zelo": "poc",
     "melitta": "poc",
-    "sabesp": "poc"
+    "sabesp": "cliente"
   },
   "equipe": {
     "membros": [
