@@ -95,8 +95,9 @@
     .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .card-title  { font-size: 18px; font-weight: 700; color: #1e2b4a; }
     .tipo-flag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
-    .tipo-cliente { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
-    .tipo-poc    { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .tipo-cliente     { background: #e6f4ea; color: #276749; border: 1px solid #9ae6b4; }
+    .tipo-implantacao { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .tipo-poc         { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
     .metric-row { display: flex; gap: 12px; margin-bottom: 16px; }
     .metric-box { flex: 1; background: #f7f8fa; border: 1px solid #e2e6ef; border-radius: 10px; padding: 14px 12px; text-align: center; }
     .metric-label { font-size: 11px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -360,8 +361,9 @@
     html.dark .toast { background: #252f4a; }
     html.dark .row-aguardando { background: #1c2a40 !important; }
     html.dark .row-pendente { background: #1a2638 !important; }
-    html.dark .tipo-cliente { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
-    html.dark .tipo-poc { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
+    html.dark .tipo-cliente     { background: #1a3a2a; color: #68d391; border-color: #276749; }
+    html.dark .tipo-implantacao { background: #1e3050; color: #90b8e0; border-color: #2a4a70; }
+    html.dark .tipo-poc         { background: #2a2010; color: #d4a040; border-color: #4a3a10; }
   </style>
 </head>
 <body>
@@ -1228,8 +1230,9 @@
 
   function tipoFlag(clienteId) {
     const tipos = (window.WEHANDLE_OVERRIDES && window.WEHANDLE_OVERRIDES.tiposClientes) || {};
-    const isPoc = (tipos[clienteId] || 'cliente') === 'poc';
-    return '<span class="tipo-flag ' + (isPoc ? 'tipo-poc' : 'tipo-cliente') + '">' + (isPoc ? 'POC' : 'Implantação') + '</span>';
+    const tipo = tipos[clienteId] || 'implantacao';
+    const label = tipo === 'poc' ? 'POC' : tipo === 'cliente' ? 'Cliente' : 'Implantação';
+    return '<span class="tipo-flag tipo-' + tipo + '">' + label + '</span>';
   }
 
   function criarCard(cliente) {
