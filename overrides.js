@@ -566,11 +566,11 @@ window.WEHANDLE_OVERRIDES = {
     }
   },
   "tiposClientes": {
-    "gestamp": "cliente",
+    "gestamp": "implantacao",
     "saint-gobain": "poc",
     "grupo-zelo": "poc",
     "melitta": "poc",
-    "sabesp": "implantacao"
+    "sabesp": "cliente"
   },
   "equipe": {
     "membros": [
