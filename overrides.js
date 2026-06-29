@@ -569,7 +569,8 @@ window.WEHANDLE_OVERRIDES = {
     "gestamp": "cliente",
     "saint-gobain": "poc",
     "grupo-zelo": "poc",
-    "melitta": "poc"
+    "melitta": "poc",
+    "sabesp": "poc"
   },
   "equipe": {
     "membros": [
