@@ -376,15 +376,15 @@ var WEHANDLE_DADOS = {
       mrrFaixa2: null,
       fornecedores: [],
       zendesk: {
-        sla: { dentro: 893, fora: 93, naoResolvido: 94 },
+        atualizadoEm: '30/06/2026',
+        sla: { dentro: '1467 (80%)', fora: '193 (11%)', naoResolvido: '166 (9%)' },
         topChamados: [
-          { nome: 'CAMARGO LOCAÇÕES - SABESP',             cnpj: null,                   tel: '', email: '', total: 13 },
-          { nome: 'Adaias Daytona',                        cnpj: '57.615.902/0001-50',   tel: '', email: '', total: 4  },
-          { nome: 'ALITER CONSTRUÇÕES E SANEAMENTO',       cnpj: '53.506.366/0001-01',   tel: '', email: '', total: 3  },
-          { nome: 'ANKARA ENGENHARIA',                     cnpj: '13.578.869/0012-12',   tel: '', email: '', total: 3  },
-          { nome: 'A P DOS SANTOS / BRUTUS TERRAPLENAGEM', cnpj: '18.330.933/0001-02',   tel: '', email: '', total: 2  },
+          { nome: 'SANORTE INFRAESTRUTURA E SANEAMENTO LTDA',    cnpj: '08.762.145/0001-31', tel: '', email: '', total: 73 },
+          { nome: 'TCM SERVICOS DE LIMPEZA E CONSERVACAO LTDA',  cnpj: '06.279.924/0001-55', tel: '', email: '', total: 57 },
+          { nome: 'CONSORCIO AGCS ELEVACAO',                     cnpj: '59.187.124/0001-70', tel: '', email: '', total: 30 },
+          { nome: 'CONSORCIO PERFORMANCE PERUS',                 cnpj: '48.730.268/0001-05', tel: '', email: '', total: 22 },
+          { nome: 'DOM GIOVANI SANEAMENTO E TERRAPLENAGEM LTDA', cnpj: '13.984.677/0001-53', tel: '', email: '', total: 20 },
         ],
-        atualizadoEm: '2026-06-29'
       }
     }
   ]
