@@ -300,7 +300,7 @@ def _run_native(sql):
 
 
 def get_criticos_ranking(idempresa, limite=5):
-    """Retorna lista dos fornecedores com maior volume de documentos não aderentes (GOLD_ADERENCIA)."""
+    """Retorna lista dos fornecedores com maior volume de documentos não aderentes (GOLD_ADERENCIA), com contatos."""
     sql = f"""
     WITH ultima AS (
         SELECT MAX(DT_INSERTED) AS dt
@@ -325,17 +325,22 @@ def get_criticos_ranking(idempresa, limite=5):
     rows = _run_native(sql)
     if not rows:
         return []
+    contatos = get_contatos_prestadores(idempresa)
     resultado = []
     for row in rows:
         nao_ad = float(row.get('NAO_ADERENTES') or 0)
         total  = float(row.get('TOTAL') or 0)
         pct    = round((nao_ad / total) * 100, 1) if total > 0 else 0.0
         digits = re.sub(r'\D', '', str(row.get('CNPJ_NUM') or ''))
+        tel    = contatos.get(digits, {}).get('tel', '')
+        email  = contatos.get(digits, {}).get('email', '')
         resultado.append({
             'nome':           str(row.get('NOME') or ''),
             'cnpj':           format_cnpj(digits),
             'naoAderentes':   int(nao_ad),
             'pctNaoAderente': pct,
+            'tel':            tel,
+            'email':          email,
         })
     return resultado
 
@@ -361,10 +366,13 @@ def atualizar_criticos_ranking(conteudo, cliente_id, fornecedores):
                 break
     linhas = []
     for f in fornecedores:
-        cnpj_js = f"'{f['cnpj']}'" if f.get('cnpj') else "null"
+        cnpj_js  = f"'{f['cnpj']}'"  if f.get('cnpj')  else "null"
+        tel_js   = f"'{f['tel']}'"   if f.get('tel')   else "''"
+        email_js = f"'{f['email']}'" if f.get('email') else "''"
         linhas.append(
             f"        {{ nome: '{f['nome']}', cnpj: {cnpj_js}, "
-            f"naoAderentes: {f['naoAderentes']}, pctNaoAderente: {f['pctNaoAderente']} }}"
+            f"naoAderentes: {f['naoAderentes']}, pctNaoAderente: {f['pctNaoAderente']}, "
+            f"tel: {tel_js}, email: {email_js} }}"
         )
     forn_str = "[\n" + ",\n".join(linhas) + "\n      ]" if linhas else "[]"
     novo = (
