@@ -375,6 +375,16 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: null,
       mrrFaixa2: null,
       fornecedores: [],
+      criticosRanking: {
+        atualizadoEm: '30/06/2026',
+        fornecedores: [
+          { nome: 'PROVIDER SOLUCOES TECNOLOGICAS LTDA',   cnpj: '01.159.435/0001-46', naoAderentes: 17190, pctNaoAderente: 60.5 },
+          { nome: 'AT SANTOS CONSULTORIA E SERVICOS LTDA', cnpj: '10.394.719/0001-08', naoAderentes: 7937,  pctNaoAderente: 70.8 },
+          { nome: 'TEL CENTRO DE CONTATOS LTDA.',           cnpj: '73.663.114/0001-95', naoAderentes: 6861,  pctNaoAderente: 58.7 },
+          { nome: 'CONSORCIO AVBN - PACOTES 22 E 23',       cnpj: '61.062.771/0001-06', naoAderentes: 5719,  pctNaoAderente: 21.0 },
+          { nome: 'JE MARCEL TERRAPLANAGEM LTDA',           cnpj: '57.118.861/0001-96', naoAderentes: 5337,  pctNaoAderente: 34.3 },
+        ],
+      },
       zendesk: {
         atualizadoEm: '30/06/2026',
         sla: { dentro: '1467 (80%)', fora: '193 (11%)', naoResolvido: '166 (9%)' },

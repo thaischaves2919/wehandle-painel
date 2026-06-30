@@ -299,6 +299,84 @@ def _run_native(sql):
     return [dict(zip(cols, row)) for row in rows]
 
 
+def get_criticos_ranking(idempresa, limite=5):
+    """Retorna lista dos fornecedores com maior volume de documentos não aderentes (GOLD_ADERENCIA)."""
+    sql = f"""
+    WITH ultima AS (
+        SELECT MAX(DT_INSERTED) AS dt
+        FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA
+        WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+    )
+    SELECT
+        NM_NOME_FORNECEDOR AS NOME,
+        CD_CODIGO_FISCAL    AS CNPJ_NUM,
+        SUM(VL_TOTAL - VL_TOTAL_DOCUMENTOS_ADERENTE) AS NAO_ADERENTES,
+        SUM(VL_TOTAL) AS TOTAL
+    FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA a
+    JOIN ultima ON a.DT_INSERTED = ultima.dt
+    WHERE a.REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+      AND CD_CODIGO_FISCAL != '{SABESP_CNPJ_NUM}'
+      AND VL_TOTAL > 0
+    GROUP BY CD_CODIGO_FISCAL, NM_NOME_FORNECEDOR
+    HAVING SUM(VL_TOTAL - VL_TOTAL_DOCUMENTOS_ADERENTE) > 0
+    ORDER BY NAO_ADERENTES DESC
+    LIMIT {limite}
+    """
+    rows = _run_native(sql)
+    if not rows:
+        return []
+    resultado = []
+    for row in rows:
+        nao_ad = float(row.get('NAO_ADERENTES') or 0)
+        total  = float(row.get('TOTAL') or 0)
+        pct    = round((nao_ad / total) * 100, 1) if total > 0 else 0.0
+        digits = re.sub(r'\D', '', str(row.get('CNPJ_NUM') or ''))
+        resultado.append({
+            'nome':           str(row.get('NOME') or ''),
+            'cnpj':           format_cnpj(digits),
+            'naoAderentes':   int(nao_ad),
+            'pctNaoAderente': pct,
+        })
+    return resultado
+
+
+def atualizar_criticos_ranking(conteudo, cliente_id, fornecedores):
+    """Atualiza o bloco criticosRanking do cliente em dados.js."""
+    idx_c = conteudo.find(f"id: '{cliente_id}'")
+    if idx_c == -1:
+        return conteudo, False
+    idx_r = conteudo.find("criticosRanking:", idx_c)
+    if idx_r == -1:
+        return conteudo, False
+    inicio = conteudo.find("{", idx_r)
+    nivel = 0
+    fim = inicio
+    for i, ch in enumerate(conteudo[inicio:], start=inicio):
+        if ch == '{':
+            nivel += 1
+        elif ch == '}':
+            nivel -= 1
+            if nivel == 0:
+                fim = i
+                break
+    linhas = []
+    for f in fornecedores:
+        cnpj_js = f"'{f['cnpj']}'" if f.get('cnpj') else "null"
+        linhas.append(
+            f"        {{ nome: '{f['nome']}', cnpj: {cnpj_js}, "
+            f"naoAderentes: {f['naoAderentes']}, pctNaoAderente: {f['pctNaoAderente']} }}"
+        )
+    forn_str = "[\n" + ",\n".join(linhas) + "\n      ]" if linhas else "[]"
+    novo = (
+        "{\n"
+        f"      atualizadoEm: '{TODAY_BR}',\n"
+        f"      fornecedores: {forn_str}\n"
+        "    }"
+    )
+    conteudo = conteudo[:inicio] + novo + conteudo[fim + 1:]
+    return conteudo, True
+
+
 def get_aderencia_por_fornecedor(idempresa):
     """Retorna {cnpj_digits: aderencia_pct} via GOLD_ADERENCIA (data mais recente)."""
     sql = f"""
@@ -882,6 +960,15 @@ def main():
                 )
         except Exception as e:
             print(f"  ⚠ Zendesk ({c['nome']}) falhou: {e}")
+        if c.get('idempresa'):
+            try:
+                ranking = get_criticos_ranking(c['idempresa'])
+                print(f"  Ranking pendências: {len(ranking)} fornecedores")
+                conteudo, ok_r = atualizar_criticos_ranking(conteudo, c['id'], ranking)
+                if ok_r:
+                    alguma_atualizacao = True
+            except Exception as e:
+                print(f"  ⚠ Ranking pendências ({c['nome']}) falhou: {e}")
 
     if alguma_atualizacao:
         conteudo = bumpar_versao(conteudo)
