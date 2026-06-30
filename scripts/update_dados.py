@@ -188,54 +188,40 @@ def get_cnpj_por_nome_aderencia(nome, idempresa):
     return rows[0]['CNPJ_NUM'] if rows and rows[0].get('CNPJ_NUM') else None
 
 
-def get_zendesk_top_chamados(slug, idempresa=None, limite=5):
+def get_zendesk_tickets(slug, limite=15):
+    """Retorna os tickets mais antigos ainda abertos no Zendesk para o cliente."""
     sql = f"""
-    SELECT org_name, cnpj_digits, COUNT(ticket_id) AS total
+    SELECT
+        ticket_id,
+        subject,
+        COALESCE(NULLIF(TRIM(razao_social_ou_unidade), ''), empresa_nome) AS org,
+        status,
+        TO_CHAR(created_at, 'DD/MM') AS data_criacao,
+        COALESCE(NULLIF(TRIM(assignee_name), ''), '') AS responsavel
     FROM PROD_ANALYTICS.SILVER.SILVER_ZENDESK_TICKET_ENRICHED
     WHERE cliente_slug = '{slug}'
       AND perfil = 'fornecedor'
-      AND created_at >= DATEADD(DAY, -30, CURRENT_DATE)
-    GROUP BY org_name, cnpj_digits
-    ORDER BY total DESC
+      AND status NOT IN ('solved', 'closed')
+    ORDER BY created_at ASC
     LIMIT {limite}
     """
     rows = _run_native(sql)
     if not rows:
         return []
-
-    contatos = get_contatos_prestadores(idempresa) if idempresa else {}
-
     resultado = []
     for row in rows:
-        nome   = row.get('ORG_NAME') or ''
-        digits = re.sub(r'\D', '', str(row.get('CNPJ_DIGITS') or ''))
-        total  = int(row.get('TOTAL') or 0)
-
-        # Descartar CNPJ inválido ou CNPJ da própria Sabesp
-        if len(digits) != 14 or digits == SABESP_CNPJ_NUM:
-            digits = None
-
-        # Fallback: buscar CNPJ por nome em GOLD_ADERENCIA
-        if not digits and idempresa and nome:
-            digits = get_cnpj_por_nome_aderencia(nome, idempresa)
-
-        # Buscar email e telefone no Metabase pelo CNPJ
-        tel = email = ''
-        if digits and digits in contatos:
-            tel   = contatos[digits].get('tel', '')
-            email = contatos[digits].get('email', '')
-
         resultado.append({
-            'nome':  nome,
-            'cnpj':  format_cnpj(digits),
-            'tel':   tel,
-            'email': email,
-            'total': total,
+            'id':          int(row.get('TICKET_ID') or 0),
+            'subject':     str(row.get('SUBJECT') or '').replace("'", "\\'"),
+            'org':         str(row.get('ORG') or '').replace("'", "\\'"),
+            'status':      str(row.get('STATUS') or 'open'),
+            'data':        str(row.get('DATA_CRIACAO') or ''),
+            'responsavel': str(row.get('RESPONSAVEL') or '—') or '—',
         })
     return resultado
 
 
-def atualizar_zendesk_bloco(conteudo, cliente_id, sla, top_chamados):
+def atualizar_zendesk_bloco(conteudo, cliente_id, sla, tickets):
     idx_c = conteudo.find(f"id: '{cliente_id}'")
     if idx_c == -1:
         return conteudo, False
@@ -253,23 +239,17 @@ def atualizar_zendesk_bloco(conteudo, cliente_id, sla, top_chamados):
             if nivel == 0:
                 fim = i
                 break
-    if sla:
-        sla_str = (
-            f"{{ dentro: '{sla['dentro']}', "
-            f"fora: '{sla['fora']}', "
-            f"naoResolvido: '{sla['naoResolvido']}' }}"
-        )
-    else:
-        sla_str = "null"
-    if top_chamados:
+    sla_str = (
+        f"{{ dentro: '{sla['dentro']}', fora: '{sla['fora']}', naoResolvido: '{sla['naoResolvido']}' }}"
+        if sla else "null"
+    )
+    if tickets:
         linhas = []
-        for t in top_chamados:
-            cnpj_js  = f"'{t['cnpj']}'"  if t.get('cnpj')  else "null"
-            tel_js   = f"'{t['tel']}'"   if t.get('tel')   else "''"
-            email_js = f"'{t['email']}'" if t.get('email') else "''"
+        for t in tickets:
+            resp_js = f"'{t['responsavel']}'" if t.get('responsavel') else "'—'"
             linhas.append(
-                f"        {{ nome: '{t['nome']}', cnpj: {cnpj_js}, "
-                f"tel: {tel_js}, email: {email_js}, total: {t['total']} }}"
+                f"        {{ id: {t['id']}, subject: '{t['subject']}', org: '{t['org']}', "
+                f"status: '{t['status']}', data: '{t['data']}', responsavel: {resp_js} }}"
             )
         top_str = "[\n" + ",\n".join(linhas) + "\n      ]"
     else:
@@ -278,7 +258,7 @@ def atualizar_zendesk_bloco(conteudo, cliente_id, sla, top_chamados):
         "{\n"
         f"      atualizadoEm: '{TODAY_BR}',\n"
         f"      sla: {sla_str},\n"
-        f"      topChamados: {top_str}\n"
+        f"      topTickets: {top_str}\n"
         "    }"
     )
     conteudo = conteudo[:inicio] + novo + conteudo[fim + 1:]
@@ -299,7 +279,7 @@ def _run_native(sql):
     return [dict(zip(cols, row)) for row in rows]
 
 
-def get_criticos_ranking(idempresa, limite=5):
+def get_criticos_ranking(idempresa, limite=20):
     """Retorna lista dos fornecedores com maior volume de documentos não aderentes (GOLD_ADERENCIA), com contatos."""
     sql = f"""
     WITH ultima AS (
@@ -953,9 +933,9 @@ def main():
         print(f"\n--- {c['nome']} (Zendesk) ---")
         try:
             sla = get_zendesk_sla(c['slug'])
-            top = get_zendesk_top_chamados(c['slug'], idempresa=c.get('idempresa'))
+            top = get_zendesk_tickets(c['slug'])
             print(f"  SLA: {sla}")
-            print(f"  Top chamados: {len(top)} fornecedores")
+            print(f"  Top tickets: {len(top)} tickets abertos")
             conteudo, ok = atualizar_zendesk_bloco(conteudo, c['id'], sla, top)
             if ok:
                 alguma_atualizacao = True
