@@ -18,6 +18,7 @@ ZAPI_INSTANCE  = os.environ.get("ZAPI_INSTANCE", "")
 ZAPI_TOKEN     = os.environ.get("ZAPI_TOKEN", "")
 TODAY      = datetime.date.today().isoformat()          # YYYY-MM-DD
 TODAY_BR   = datetime.date.today().strftime("%d/%m/%Y") # DD/MM/YYYY
+SABESP_CNPJ_NUM = '43776517000180'                     # CNPJ próprio da Sabesp — excluir de lookups
 
 session = requests.Session()
 session.headers.update({
@@ -163,7 +164,31 @@ def get_zendesk_sla(slug):
     }
 
 
-def get_zendesk_top_chamados(slug, limite=5):
+def get_cnpj_por_nome_aderencia(nome, idempresa):
+    """Busca CNPJ de fornecedor por nome aproximado em GOLD_ADERENCIA."""
+    palavras = [p for p in nome.split() if len(p) >= 4]
+    if not palavras:
+        return None
+    busca = palavras[0]
+    sql = f"""
+    WITH ultima AS (
+        SELECT MAX(DT_INSERTED) AS dt FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA
+        WHERE REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+    )
+    SELECT CD_CODIGO_FISCAL AS CNPJ_NUM
+    FROM PROD_ANALYTICS.GOLD.GOLD_ADERENCIA a
+    JOIN ultima ON a.DT_INSERTED = ultima.dt
+    WHERE a.REF_ID_EMPRESA_TOMADOR_PRINCIPAL = '{idempresa}'
+      AND UPPER(NM_NOME_FORNECEDOR) ILIKE '%{busca.upper()}%'
+      AND CD_CODIGO_FISCAL IS NOT NULL
+      AND CD_CODIGO_FISCAL != '{SABESP_CNPJ_NUM}'
+    LIMIT 1
+    """
+    rows = _run_native(sql)
+    return rows[0]['CNPJ_NUM'] if rows and rows[0].get('CNPJ_NUM') else None
+
+
+def get_zendesk_top_chamados(slug, idempresa=None, limite=5):
     sql = f"""
     SELECT org_name, cnpj_digits, COUNT(ticket_id) AS total
     FROM PROD_ANALYTICS.SILVER.SILVER_ZENDESK_TICKET_ENRICHED
@@ -177,12 +202,36 @@ def get_zendesk_top_chamados(slug, limite=5):
     rows = _run_native(sql)
     if not rows:
         return []
+
+    contatos = get_contatos_prestadores(idempresa) if idempresa else {}
+
     resultado = []
     for row in rows:
         nome   = row.get('ORG_NAME') or ''
-        digits = row.get('CNPJ_DIGITS') or ''
+        digits = re.sub(r'\D', '', str(row.get('CNPJ_DIGITS') or ''))
         total  = int(row.get('TOTAL') or 0)
-        resultado.append({'nome': nome, 'cnpj': format_cnpj(digits), 'total': total})
+
+        # Descartar CNPJ inválido ou CNPJ da própria Sabesp
+        if len(digits) != 14 or digits == SABESP_CNPJ_NUM:
+            digits = None
+
+        # Fallback: buscar CNPJ por nome em GOLD_ADERENCIA
+        if not digits and idempresa and nome:
+            digits = get_cnpj_por_nome_aderencia(nome, idempresa)
+
+        # Buscar email e telefone no Metabase pelo CNPJ
+        tel = email = ''
+        if digits and digits in contatos:
+            tel   = contatos[digits].get('tel', '')
+            email = contatos[digits].get('email', '')
+
+        resultado.append({
+            'nome':  nome,
+            'cnpj':  format_cnpj(digits),
+            'tel':   tel,
+            'email': email,
+            'total': total,
+        })
     return resultado
 
 
@@ -215,8 +264,13 @@ def atualizar_zendesk_bloco(conteudo, cliente_id, sla, top_chamados):
     if top_chamados:
         linhas = []
         for t in top_chamados:
-            cnpj_js = f"'{t['cnpj']}'" if t['cnpj'] else "null"
-            linhas.append(f"        {{ nome: '{t['nome']}', cnpj: {cnpj_js}, total: {t['total']} }}")
+            cnpj_js  = f"'{t['cnpj']}'"  if t.get('cnpj')  else "null"
+            tel_js   = f"'{t['tel']}'"   if t.get('tel')   else "''"
+            email_js = f"'{t['email']}'" if t.get('email') else "''"
+            linhas.append(
+                f"        {{ nome: '{t['nome']}', cnpj: {cnpj_js}, "
+                f"tel: {tel_js}, email: {email_js}, total: {t['total']} }}"
+            )
         top_str = "[\n" + ",\n".join(linhas) + "\n      ]"
     else:
         top_str = "[]"
@@ -358,7 +412,7 @@ def get_contatos_prestadores(idempresa):
         "query": {
             "source-table": 9046,
             "filter": ["=", ["field", 218559, None], idempresa],
-            "limit": 1000
+            "limit": 5000
         }
     }
     r = session.post(f"{MB_URL}/api/dataset", json=body, timeout=60)
@@ -806,14 +860,14 @@ def main():
 
     # ── Clientes (tipo 'cliente') — dados Zendesk ─────────────────────────────
     clientes_zendesk = [
-        {"id": "sabesp", "slug": "sabesp", "nome": "Sabesp"},
+        {"id": "sabesp", "slug": "sabesp", "nome": "Sabesp", "idempresa": 56391},
     ]
 
     for c in clientes_zendesk:
         print(f"\n--- {c['nome']} (Zendesk) ---")
         try:
             sla = get_zendesk_sla(c['slug'])
-            top = get_zendesk_top_chamados(c['slug'])
+            top = get_zendesk_top_chamados(c['slug'], idempresa=c.get('idempresa'))
             print(f"  SLA: {sla}")
             print(f"  Top chamados: {len(top)} fornecedores")
             conteudo, ok = atualizar_zendesk_bloco(conteudo, c['id'], sla, top)

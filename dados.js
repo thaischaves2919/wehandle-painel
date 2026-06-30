@@ -362,7 +362,7 @@ var WEHANDLE_DADOS = {
       id: 'sabesp',
       nome: 'Sabesp',
       cnpj: '43.776.517/0001-80',
-      idempresa: null,
+      idempresa: 56391,
       dataInicio: '2026-06-29',
       vidas: 0,
       aderencia: 0,
@@ -374,7 +374,18 @@ var WEHANDLE_DADOS = {
       metaAderencia: 50,
       mrrFaixa1: null,
       mrrFaixa2: null,
-      fornecedores: []
+      fornecedores: [],
+      zendesk: {
+        sla: { dentro: 893, fora: 93, naoResolvido: 94 },
+        topChamados: [
+          { nome: 'CAMARGO LOCAÇÕES - SABESP',             cnpj: null,                   tel: '', email: '', total: 13 },
+          { nome: 'Adaias Daytona',                        cnpj: '57.615.902/0001-50',   tel: '', email: '', total: 4  },
+          { nome: 'ALITER CONSTRUÇÕES E SANEAMENTO',       cnpj: '53.506.366/0001-01',   tel: '', email: '', total: 3  },
+          { nome: 'ANKARA ENGENHARIA',                     cnpj: '13.578.869/0012-12',   tel: '', email: '', total: 3  },
+          { nome: 'A P DOS SANTOS / BRUTUS TERRAPLENAGEM', cnpj: '18.330.933/0001-02',   tel: '', email: '', total: 2  },
+        ],
+        atualizadoEm: '2026-06-29'
+      }
     }
   ]
 };
