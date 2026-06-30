@@ -121,6 +121,116 @@ def get_aderencia_por_cards(card_ader, card_nao_ader):
             return round(ad / total * 100, 2)
     return None
 
+# ── Zendesk (clientes tipo 'cliente') ─────────────────────────────────────────
+
+def format_cnpj(digits):
+    d = re.sub(r'\D', '', str(digits or ''))
+    if len(d) != 14:
+        return None
+    return f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:14]}"
+
+
+def get_zendesk_sla(slug):
+    sql = f"""
+    SELECT classificacao_sla, COUNT(ticket_id) AS total
+    FROM PROD_ANALYTICS.SILVER.SILVER_ZENDESK_TICKET_ENRICHED
+    WHERE cliente_slug = '{slug}'
+      AND created_at >= DATEADD(DAY, -30, CURRENT_DATE)
+    GROUP BY classificacao_sla
+    """
+    rows = _run_native(sql)
+    if not rows:
+        return None
+    dentro = fora = nao_resolvido = 0
+    for row in rows:
+        cls = str(row.get('CLASSIFICACAO_SLA') or '').lower()
+        n   = int(row.get('TOTAL') or 0)
+        if 'dentro' in cls:
+            dentro += n
+        elif 'fora' in cls:
+            fora += n
+        else:
+            nao_resolvido += n
+    total = dentro + fora + nao_resolvido
+    if total == 0:
+        return None
+    def pct(n):
+        return f"{round(n / total * 100)}%"
+    return {
+        'dentro':       f"{dentro} ({pct(dentro)})",
+        'fora':         f"{fora} ({pct(fora)})",
+        'naoResolvido': f"{nao_resolvido} ({pct(nao_resolvido)})",
+    }
+
+
+def get_zendesk_top_chamados(slug, limite=5):
+    sql = f"""
+    SELECT org_name, cnpj_digits, COUNT(ticket_id) AS total
+    FROM PROD_ANALYTICS.SILVER.SILVER_ZENDESK_TICKET_ENRICHED
+    WHERE cliente_slug = '{slug}'
+      AND perfil = 'fornecedor'
+      AND created_at >= DATEADD(DAY, -30, CURRENT_DATE)
+    GROUP BY org_name, cnpj_digits
+    ORDER BY total DESC
+    LIMIT {limite}
+    """
+    rows = _run_native(sql)
+    if not rows:
+        return []
+    resultado = []
+    for row in rows:
+        nome   = row.get('ORG_NAME') or ''
+        digits = row.get('CNPJ_DIGITS') or ''
+        total  = int(row.get('TOTAL') or 0)
+        resultado.append({'nome': nome, 'cnpj': format_cnpj(digits), 'total': total})
+    return resultado
+
+
+def atualizar_zendesk_bloco(conteudo, cliente_id, sla, top_chamados):
+    idx_c = conteudo.find(f"id: '{cliente_id}'")
+    if idx_c == -1:
+        return conteudo, False
+    idx_z = conteudo.find("zendesk:", idx_c)
+    if idx_z == -1:
+        return conteudo, False
+    inicio = conteudo.find("{", idx_z)
+    nivel = 0
+    fim = inicio
+    for i, ch in enumerate(conteudo[inicio:], start=inicio):
+        if ch == '{':
+            nivel += 1
+        elif ch == '}':
+            nivel -= 1
+            if nivel == 0:
+                fim = i
+                break
+    if sla:
+        sla_str = (
+            f"{{ dentro: '{sla['dentro']}', "
+            f"fora: '{sla['fora']}', "
+            f"naoResolvido: '{sla['naoResolvido']}' }}"
+        )
+    else:
+        sla_str = "null"
+    if top_chamados:
+        linhas = []
+        for t in top_chamados:
+            cnpj_js = f"'{t['cnpj']}'" if t['cnpj'] else "null"
+            linhas.append(f"        {{ nome: '{t['nome']}', cnpj: {cnpj_js}, total: {t['total']} }}")
+        top_str = "[\n" + ",\n".join(linhas) + "\n      ]"
+    else:
+        top_str = "[]"
+    novo = (
+        "{\n"
+        f"      atualizadoEm: '{TODAY_BR}',\n"
+        f"      sla: {sla_str},\n"
+        f"      topChamados: {top_str}\n"
+        "    }"
+    )
+    conteudo = conteudo[:inicio] + novo + conteudo[fim + 1:]
+    return conteudo, True
+
+
 # ── 5a. Métricas por fornecedor (PROD_ANALYTICS) ─────────────────────────────
 
 def _run_native(sql):
@@ -693,6 +803,31 @@ def main():
             aderencia=aderencia, aderencia_meta=c["metaAderencia"],
             atualizado=atualizado, novos_forn=novos_forn,
         ))
+
+    # ── Clientes (tipo 'cliente') — dados Zendesk ─────────────────────────────
+    clientes_zendesk = [
+        {"id": "sabesp", "slug": "sabesp", "nome": "Sabesp"},
+    ]
+
+    for c in clientes_zendesk:
+        print(f"\n--- {c['nome']} (Zendesk) ---")
+        try:
+            sla = get_zendesk_sla(c['slug'])
+            top = get_zendesk_top_chamados(c['slug'])
+            print(f"  SLA: {sla}")
+            print(f"  Top chamados: {len(top)} fornecedores")
+            conteudo, ok = atualizar_zendesk_bloco(conteudo, c['id'], sla, top)
+            if ok:
+                alguma_atualizacao = True
+                relatorio_partes.append(
+                    f"\n🟣 {c['nome']} (Cliente)\n"
+                    f"  SLA dentro: {sla['dentro'] if sla else '—'} | "
+                    f"fora: {sla['fora'] if sla else '—'} | "
+                    f"não resolvido: {sla['naoResolvido'] if sla else '—'}\n"
+                    f"  Top {len(top)} fornecedores atualizados"
+                )
+        except Exception as e:
+            print(f"  ⚠ Zendesk ({c['nome']}) falhou: {e}")
 
     if alguma_atualizacao:
         conteudo = bumpar_versao(conteudo)
