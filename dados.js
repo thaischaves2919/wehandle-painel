@@ -1,7 +1,7 @@
 // Fonte de verdade — editar aqui para atualizar AMBOS os painéis
 // Última atualização: 05/07/2026
 var WEHANDLE_DADOS = {
-  versao: '20260705a',
+  versao: '20260705b',
   clientes: [
     {
       id: 'netzsch',
@@ -37,7 +37,7 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: 6500,
       mrrFaixa2: 8750,
       fornecedores: [
-        { razaoSocial: 'BRASIL SUL SERVIÇOS DE SEGURANÇA LTDA',              cnpj: '01.657.361/0001-78', contrato: 'contratado',    tel: '4799490406',  email: 'rh@brasilsulservicos.com.br',        via: 'whatsapp', vidas: 21, aderencia: 100.0, status: 'contatado'  },
+        { razaoSocial: 'BRASIL SUL SERVIÇOS DE SEGURANÇA LTDA',              cnpj: '01.657.361/0001-78', contrato: 'contratado',    tel: '4799490406',  email: 'rh@brasilsulservicos.com.br',        via: 'whatsapp', vidas: 21, aderencia: 93.1, status: 'contatado'  },
         { razaoSocial: 'ELETROWELD INSPEÇÕES LTDA',                          cnpj: '21.062.473/0001-93', contrato: 'contratado',    tel: '47988425048', email: 'adm@eletroweld.com',                 via: 'whatsapp', vidas: 1, aderencia: 100.0,  status: 'contatado'  },
         { razaoSocial: 'SERRALHERIA VOLKHOFF LTDA',                          cnpj: '76.315.688/0001-60', contrato: 'contratado',    tel: '47991488839', email: 'susana@volkhoff.com.br',             via: 'whatsapp', vidas: 6, aderencia: 100.0,  status: 'contatado'  },
         { razaoSocial: 'RC PINTURAS LTDA',                                   cnpj: '02.295.031/0001-42', contrato: 'contratado',    tel: '47999694231', email: 'rcpinturas@hotmail.com',             via: 'whatsapp', vidas: 7, aderencia: 80.0,  status: 'contatado'  },
@@ -51,11 +51,11 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'ELETROBLU SISTEMAS ELÉTRICOS LTDA',                  cnpj: '20.792.878/0001-14', contrato: 'contratado',    tel: '4733338077',  email: 'rh@p3engenharia.com.br',             via: 'whatsapp', vidas: 12, aderencia: 100.0,  status: 'pendente'   },
         { razaoSocial: 'ORTUS SOLUÇÕES AMBIENTAIS LTDA',                     cnpj: '85.143.105/0001-52', contrato: 'contratado',    tel: '47984074508', email: 'sidnei@ortusservicos.com.br',        via: 'whatsapp', vidas: 19, aderencia: 64.1,  status: 'pendente'   },
         { razaoSocial: 'REDETEC SOLUÇÕES EM INFRAESTRUTURA LTDA',            cnpj: '07.293.323/0001-60', contrato: 'contratado',    tel: '4733275087',  email: '',                                   via: 'whatsapp', vidas: 3, aderencia: 83.33,  status: 'aguardando' },
-        { razaoSocial: 'INTEC SOLUÇÕES EM SEGURANÇA E AUTOMAÇÃO LTDA',       cnpj: '40.667.224/0001-76', contrato: 'contratado',    tel: '4784347777',  email: 'redetec@redetec.inf.br',             via: 'whatsapp', vidas: 4, aderencia: 100.0,  status: 'pendente'   },
+        { razaoSocial: 'INTEC SOLUÇÕES EM SEGURANÇA E AUTOMAÇÃO LTDA',       cnpj: '40.667.224/0001-76', contrato: 'contratado',    tel: '4784347777',  email: 'redetec@redetec.inf.br',             via: 'whatsapp', vidas: 4, aderencia: 85.71,  status: 'pendente'   },
         { razaoSocial: 'ENGETEL COMÉRCIO E SERVIÇOS LTDA',                   cnpj: '80.650.633/0001-84', contrato: 'contratado',    tel: '4733270255',  email: 'josue@grupoengetel.com',             via: 'whatsapp', vidas: 4, aderencia: 100.0,  status: 'contatado'  },
         { razaoSocial: 'GLOBAL SPINDLE LTDA',                                cnpj: '27.438.509/0001-77', contrato: 'contratado',    tel: '4730340494',  email: 'global@globalspindle.com.br',        via: 'whatsapp', vidas: 2, aderencia: 100.0,  status: 'aguardando' },
         { razaoSocial: 'CNC SUPPORT MANUTENÇÃO INDUSTRIAL LTDA',             cnpj: '43.474.690/0001-23', contrato: 'contratado',    tel: '4791195132',  email: 'financeiro@cncsupport.com.br',       via: 'whatsapp', vidas: 0,  status: 'aguardando' },
-        { razaoSocial: 'GDV CONSTRUÇÕES LTDA',                               cnpj: '06.374.470/0001-00', contrato: 'contratado',    tel: '4733870938',  email: 'rh.gd@terra.com.br',                 via: 'whatsapp', vidas: 8, aderencia: 100.0,  status: 'aguardando' },
+        { razaoSocial: 'GDV CONSTRUÇÕES LTDA',                               cnpj: '06.374.470/0001-00', contrato: 'contratado',    tel: '4733870938',  email: 'rh.gd@terra.com.br',                 via: 'whatsapp', vidas: 8, aderencia: 90.91,  status: 'aguardando' },
         { razaoSocial: 'BANCO BRADESCO S.A. (filial)',                        cnpj: '60.746.948/2094-29', contrato: 'contratado',    tel: '1170844621',  email: '4260.arnaldo@bradesco.com.br',       via: 'whatsapp', vidas: 1, aderencia: 100.0,  status: 'aguardando' },
         { razaoSocial: 'MASTER VIGILÂNCIA ESPECIALIZADA LTDA',               cnpj: '77.998.912/0008-03', contrato: 'contratado',    tel: '4730346630',  email: 'joinville@mastervigilancia.com.br',  via: 'whatsapp', vidas: 1, aderencia: 0.0,  status: 'pendente'   },
         { razaoSocial: 'TERRA E MAR SERVIÇOS LTDA',                          cnpj: '03.979.360/0001-75', contrato: 'contratado',    tel: '4721032900',  email: 'tmsuporte@terraemar.com.br',         via: 'email',    vidas: 0,  status: 'pendente'   },
@@ -86,24 +86,24 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'COPE CIA LTDA',                                      cnpj: '91.678.342/0004-63', contrato: 'contratado',    tel: '',            email: 'ana.santarem@cope.ind.br',           via: 'email',    vidas: 0, aderencia: 100.0,  status: 'aguardando' },
         { razaoSocial: 'DIRECT SERVICE AUTOMAÇÃO E MANUTENÇÃO INDUSTRIAL LTDA', cnpj: '09.616.551/0001-59', contrato: 'contratado', tel: '5181777777',  email: 'directservice@directservice.biz',    via: 'email',    vidas: 0,  status: 'aguardando' },
         { razaoSocial: 'MARCOS ANTONIO DA SILVA',                            cnpj: '41.578.069/0001-84', contrato: 'contratado',    tel: '1298288300',  email: 'marcosazaleias300@gmail.com',        via: 'email',    vidas: 0,  status: 'aguardando' },
-        { razaoSocial: 'P3 Engenharia', cnpj: '06.964.752/0001-59', contrato: 'contratado', tel: '4733338077', email: 'pier.nunes@p3engenharia.com.br', via: 'whatsapp', vidas: 3, aderencia: 80.0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'P3 Engenharia', cnpj: '06.964.752/0001-59', contrato: 'contratado', tel: '4733338077', email: 'pier.nunes@p3engenharia.com.br', via: 'whatsapp', vidas: 3, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'ProUPS SOLUÇÕES EM ENERGIA LTDA', cnpj: '10.942.926/0001-50', contrato: 'contratado', tel: '4730410808', email: 'garcia@proups.com.br', via: 'whatsapp', vidas: 2, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'LOXAM DO BRASIL SA', cnpj: '57.764.763/0035-75', contrato: 'contratado', tel: '1239327799', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
-        { razaoSocial: 'SIMILAR', cnpj: '82.321.845/0001-43', contrato: 'contratado', tel: '4130740300', email: 'qualidade@similar.ind.br', via: 'whatsapp', vidas: 3, aderencia: 80.0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'SIMILAR', cnpj: '82.321.845/0001-43', contrato: 'contratado', tel: '4130740300', email: 'qualidade@similar.ind.br', via: 'whatsapp', vidas: 3, aderencia: 25.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'HS AUTOMACAO E ROLAMENTOS LTDA', cnpj: '78.323.045/0001-94', contrato: 'contratado', tel: '4733990347', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'ERZINGER INDUSTRIA MECANICA LTDA', cnpj: '80.986.581/0001-11', contrato: 'contratado', tel: '4721011305', email: 'samara@erzinger.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'TALLMANN MANUTENÇÃO ELÉTRICA LTDA.', cnpj: '10.773.592/0001-38', contrato: 'contratado', tel: '4733371774', email: 'tallmann@infratherm.net.br', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'SO PELICULAS - SOLUCOES PARA VIDROS', cnpj: '10.915.070/0001-23', contrato: 'contratado', tel: '4733221844', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'ORGANICA LABORATORIO DE ANALISES QUIMICAS LTDA', cnpj: '05.298.486/0001-00', contrato: 'contratado', tel: '4732761122', email: '', via: 'whatsapp', vidas: 3, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
-        { razaoSocial: 'RDS MONTAGENS LTDA', cnpj: '42.731.670/0001-28', contrato: 'contratado', tel: '5199913528', email: 'ricardo1999santos@gmail.com', via: 'whatsapp', vidas: 4, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-15' },
+        { razaoSocial: 'RDS MONTAGENS LTDA', cnpj: '42.731.670/0001-28', contrato: 'contratado', tel: '5199913528', email: 'ricardo1999santos@gmail.com', via: 'whatsapp', vidas: 4, aderencia: 94.44, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'MILLS LOCACAO SERVICOS E LOGISTICA S.A.', cnpj: '27.093.558/0042-93', contrato: 'contratado', tel: '2121233700', email: 'adm@profrio.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'TERRA  MAR PARTICIPACOES', cnpj: '29.141.162/0001-21', contrato: 'contratado', tel: '4721032905', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'JB MARQUES TELECOM', cnpj: '13.520.771/0001-51', contrato: 'contratado', tel: '1934731027', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-15' },
         { razaoSocial: 'Global Segurança em Máquinas e Equipamentos LTDA', cnpj: '12.373.982/0001-46', contrato: 'contratado', tel: '5484160747', email: 'adm2@globalsa.com.br', via: 'whatsapp', vidas: 10, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'NR SAFETY ENGENHARIA LTDA', cnpj: '15.674.133/0001-10', contrato: 'contratado', tel: '5130436147', email: 'financeiro@nrsafety.com.br', via: 'whatsapp', vidas: 6, aderencia: 21.88, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'NR SAFETY ENGENHARIA LTDA', cnpj: '15.674.133/0001-10', contrato: 'contratado', tel: '5130436147', email: 'financeiro@nrsafety.com.br', via: 'whatsapp', vidas: 6, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: '37.114.043 THIAGO DA SILVA BARROS', cnpj: '37.114.043/0001-08', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'SKA AUTOMAÇÃO', cnpj: '81.329.823/0001-67', contrato: 'contratado', tel: '5135912900', email: 'thais.galle@ska.com.br', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-16' },
-        { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-16' },
+        { razaoSocial: 'Elektra controle e automação industrial', cnpj: '11.051.258/0001-33', contrato: 'contratado', tel: '4733269727', email: 'rafael@elektra.net.br', via: 'whatsapp', vidas: 0, aderencia: 25.0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'laner', cnpj: '49.497.694/0001-03', contrato: 'contratado', tel: '4788219664', email: 'orcamento@laner.ind.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'SOUZA MONTAGEM LTDA', cnpj: '58.271.007/0001-28', contrato: 'contratado', tel: '5496443193', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-16' },
         { razaoSocial: 'MOTORMAC RENTAL LOCAÇÕES DE EQUIPAMENTOS', cnpj: '09.348.706/0004-66', contrato: 'contratado', tel: '5130212267', email: 'terceiros@motormac.com.br', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-16' },
@@ -123,7 +123,7 @@ var WEHANDLE_DADOS = {
       ,
         { razaoSocial: 'KR TREINAMENTOS E CONSULTORIAL LTDA', cnpj: '07.006.512/0001-04', contrato: 'contratado', tel: '47991226466', email: 'rafael_lauer@terra.com.br', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
-        { razaoSocial: 'Okta7 Technologies LTDA', cnpj: '07.172.796/0001-09', contrato: 'contratado', tel: '11978447166', email: 'hellen.catalao@okta7.com.br', via: 'whatsapp', vidas: 1, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-23' }
+        { razaoSocial: 'Okta7 Technologies LTDA', cnpj: '07.172.796/0001-09', contrato: 'contratado', tel: '11978447166', email: 'hellen.catalao@okta7.com.br', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
         { razaoSocial: 'MIG CONSULTORIA EM GESTAO DE SAUDE E SEGURANCA DO TRABALHO LTDA', cnpj: '35.724.587/0001-66', contrato: 'contratado', tel: '41997348888', email: 'ieda@consultoriamig.com.br', via: 'whatsapp', vidas: 2, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
@@ -131,13 +131,13 @@ var WEHANDLE_DADOS = {
       ,
         { razaoSocial: '64.307.231 SAMUEL FELIPE BARBOSA VIEIRA', cnpj: '64.307.231/0001-25', contrato: 'contratado', tel: '47992626441', email: 'gabriela.hemkemaier@p3engenharia.com.br', via: 'whatsapp', vidas: 0, aderencia: 50.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
-        { razaoSocial: 'BALANTEC', cnpj: '76.839.356/0001-85', contrato: 'contratado', tel: '', email: 'controladoria@balantec.com.br', via: 'whatsapp', vidas: 6, aderencia: 81.25, status: 'pendente', dataEntrada: '2026-06-23' }
+        { razaoSocial: 'BALANTEC', cnpj: '76.839.356/0001-85', contrato: 'contratado', tel: '', email: 'controladoria@balantec.com.br', via: 'whatsapp', vidas: 6, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
         { razaoSocial: 'GUINCHOS SCHUMANN', cnpj: '81.304.313/0001-35', contrato: 'contratado', tel: '47992085444', email: 'sedricksean@gmail.com', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' },
-        { razaoSocial: 'FORROTEC FORROS E DIVISÓRIAS LTDA.', cnpj: '04.005.101/0001-06', contrato: 'contratado', tel: '4733265600', email: 'forrotec@forrotec.net', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-25' },
+        { razaoSocial: 'FORROTEC FORROS E DIVISÓRIAS LTDA.', cnpj: '04.005.101/0001-06', contrato: 'contratado', tel: '4733265600', email: 'forrotec@forrotec.net', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-25' },
         { razaoSocial: 'HELYO TECNOLOGIA LTDA', cnpj: '01.084.671/0001-40', contrato: 'contratado', tel: '4731444444', email: 'rh@helyo.com.br', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-25' },
         { razaoSocial: 'Index', cnpj: '62.640.511/0001-25', contrato: 'contratado', tel: '1521026084', email: 'daniela.souren@index-group.com', via: 'whatsapp', vidas: 2, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-27' },
-        { razaoSocial: 'C. O. MUELLER COM DE MOTORES E BOMBAS LTDA', cnpj: '76.511.260/0006-06', contrato: 'contratado', tel: '4131332300', email: 'controladoria01@comueller.com.br', via: 'whatsapp', vidas: 1, status: 'pendente', dataEntrada: '2026-07-04' },
+        { razaoSocial: 'C. O. MUELLER COM DE MOTORES E BOMBAS LTDA', cnpj: '76.511.260/0006-06', contrato: 'contratado', tel: '4131332300', email: 'controladoria01@comueller.com.br', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-07-04' },
         { razaoSocial: 'Toldos Figueira', cnpj: '06.111.559/0001-75', contrato: 'contratado', tel: '', email: 'atendimento@toldosfigueira.com.br', via: 'whatsapp', vidas: 4, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-07-04' },
         { razaoSocial: 'FRAMEWORKS CONSTRUCAO A SECO LTDA', cnpj: '27.776.164/0001-61', contrato: 'contratado', tel: '4733265600', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-07-04' },
         { razaoSocial: 'DECORPLUS FORROS E DIVISORIAS LTDA', cnpj: '16.483.014/0001-43', contrato: 'contratado', tel: '4733265600', email: 'administrativo2@forrotec.net', via: 'whatsapp', vidas: 0, aderencia: 50.0, status: 'pendente', dataEntrada: '2026-07-04' }
@@ -174,7 +174,7 @@ var WEHANDLE_DADOS = {
       mrrFaixa2: null,
       metaAderencia: 50,
       fornecedores: [
-        { razaoSocial: 'AMBPAV SP OBRAS DA CONSTRUÇÃO', cnpj: '17.862.290/0001-85', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 19, aderencia: 92.5, status: 'aguardando' }
+        { razaoSocial: 'AMBPAV SP OBRAS DA CONSTRUÇÃO', cnpj: '17.862.290/0001-85', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 19, aderencia: 100.0, status: 'aguardando' }
       ]
     },
     {
@@ -227,7 +227,7 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: 9100,
       mrrFaixa2: 12300,
       fornecedores: [
-        { razaoSocial: 'GRABER SEGURANCA LTDA',                                               cnpj: '87.169.900/0001-45', contrato: 'contratado', tel: '19996754067',  email: 'flavio.siqueira-ext@hbsa.com.br',              via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente' },
+        { razaoSocial: 'GRABER SEGURANCA LTDA',                                               cnpj: '87.169.900/0001-45', contrato: 'contratado', tel: '19996754067',  email: 'flavio.siqueira-ext@hbsa.com.br',              via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'TOP SERVICE SERVICOS E SISTEMAS S/A',                                 cnpj: '00.973.749/0008-91', contrato: 'contratado', tel: '11940087616',  email: 'flavio.siqueira-ext@hbsa.com.br',           via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente' },
         { razaoSocial: 'DATA PLUS ENGENHARIA LTDA',                                           cnpj: '00.612.363/0001-88', contrato: 'contratado', tel: '31971629816',  email: 'rh@dataplusengenharia.com.br',      via: 'whatsapp', vidas: 2, aderencia: 50.0, status: 'pendente' },
         { razaoSocial: 'ELETRICAPREV LTDA',                                                   cnpj: '12.567.961/0001-61', contrato: 'contratado', tel: '47996242860',   email: 'andre@eletricaprev.com.br',          via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente' },
@@ -243,8 +243,8 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'LL LOCACOES TRANSPORTES E REMOCOES DE MAQUINAS LTDA',                 cnpj: '08.597.674/0001-27', contrato: 'contratado', tel: '11965082070',  email: 'jaqueline.forcelli@ctcinfra.com.br',       via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'LUZA GROUP BRASIL LTDA',                                              cnpj: '30.058.500/0001-45', contrato: 'contratado', tel: '11937103454',  email: 'luana.siqueira@luzagroup.com',             via: 'whatsapp', vidas: 12, aderencia: 100.0, status: 'contatado' },
         { razaoSocial: 'RBW DO BRASIL TERCEIRIZACAO LTDA',                                    cnpj: '04.597.690/0001-69', contrato: 'contratado', tel: '19992801682',  email: 'supervisao.ind@rbwgrupo.com.br',           via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
-        { razaoSocial: 'RFM REFRIGERACAO FERNANDO MARCHETTI LTDA',                            cnpj: '51.423.938/0001-55', contrato: 'contratado', tel: '15974044837',  email: 'atendimento@refrimec.com',                 via: 'whatsapp', vidas: 3, aderencia: 57.14, status: 'contatado' },
-        { razaoSocial: 'RODRIGUES SOLUCOES INDUSTRIAIS LTDA',                                 cnpj: '00.715.152/0001-70', contrato: 'contratado', tel: '15997425939',  email: 'lucio@rodriguessi.com.br',                via: 'whatsapp', vidas: 8, aderencia: 68.0, status: 'pendente' },
+        { razaoSocial: 'RFM REFRIGERACAO FERNANDO MARCHETTI LTDA',                            cnpj: '51.423.938/0001-55', contrato: 'contratado', tel: '15974044837',  email: 'atendimento@refrimec.com',                 via: 'whatsapp', vidas: 3, aderencia: 71.43, status: 'contatado' },
+        { razaoSocial: 'RODRIGUES SOLUCOES INDUSTRIAIS LTDA',                                 cnpj: '00.715.152/0001-70', contrato: 'contratado', tel: '15997425939',  email: 'lucio@rodriguessi.com.br',                via: 'whatsapp', vidas: 8, aderencia: 58.82, status: 'pendente' },
         { razaoSocial: 'SEMATEC LTDA',                                                        cnpj: '52.645.694/0001-18', contrato: 'contratado', tel: '12997519663',  email: 'documentos@sematec.com.br',                via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente' },
         { razaoSocial: 'SERVNEWS ROBOTICA E AUTOMACAO LTDA',                                  cnpj: '02.973.703/0001-21', contrato: 'contratado', tel: '12988438484',   email: 'vanessa@servnews.com.br',                 via: 'whatsapp', vidas: 1, aderencia: 77.78, status: 'contatado' },
         { razaoSocial: 'RED GROUP AUTOMACAO INDUSTRIAL', cnpj: '13.799.959/0001-80', contrato: 'contratado', tel: '11991466262', email: 'rodrigo@redgroupautomacao.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
@@ -256,16 +256,16 @@ var WEHANDLE_DADOS = {
         { razaoSocial: 'ELETROTAU SOLUCOES INDUSTRIAIS', cnpj: '34.913.121/0001-46', contrato: 'contratado', tel: '12991430290', email: 'atendimento@eletrotau.com.br', via: 'whatsapp', vidas: 11, aderencia: 8.33, status: 'pendente' },
         { razaoSocial: 'FLX TECNOLOGIA E INOVACAO LTDA', cnpj: '23.823.459/0001-90', contrato: 'contratado', tel: '15981460127', email: 'adm01@grupocsx.com.br', via: 'whatsapp', vidas: 1, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'HELP SOLUÇÕES AMBIENTAIS LTDA', cnpj: '25.320.905/0001-70', contrato: 'contratado', tel: '15981122673', email: 'juliana.caserta@elogi.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
-        { razaoSocial: 'conceito sul manta asfáltica', cnpj: '08.995.622/0001-09', contrato: 'contratado', tel: '4599214447', email: 'atendimento@conceitosul.com.br', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente' },
+        { razaoSocial: 'conceito sul manta asfáltica', cnpj: '08.995.622/0001-09', contrato: 'contratado', tel: '4599214447', email: 'atendimento@conceitosul.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'Transforma Corporate', cnpj: '11.565.394/0001-41', contrato: 'contratado', tel: '15991517664', email: 'hannah@transformacorporate.com.br', via: 'whatsapp', vidas: 8, aderencia: 90.91, status: 'pendente' },
         { razaoSocial: 'LUZA GROUP', cnpj: '30.058.500/0003-07', contrato: 'contratado', tel: '11937103454', email: 'luana.3424@gmail.com', via: 'whatsapp', vidas: 12, aderencia: 98.28, status: 'pendente' },
         { razaoSocial: 'BOMCLIMA AR CONDICIONADOS', cnpj: '12.879.033/0001-32', contrato: 'contratado', tel: '15996664909', email: 'eliane@bomclimaarcondicionado.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
-        { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
+        { razaoSocial: 'ROBOTCON ROBOTICA LTDA', cnpj: '22.988.664/0001-43', contrato: 'contratado', tel: '1239662748', email: 'sistema@wehandle.com.br', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente' },
         { razaoSocial: 'HELP MANUTENCAO / CONSTRUCAO CIVIL', cnpj: '06.240.916/0001-03', contrato: 'contratado', tel: '15998571162', email: 'william@helpdd.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'MOTOMAN ROBÓTICA DO BRASIL', cnpj: '08.515.495/0001-01', contrato: 'contratado', tel: '11941840201', email: 'fernando.souza@motoman.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'GRP TECHLAN COMERCIO E SERVICOS EM INSTALACOES DE TECNOLOGIA LTDA', cnpj: '23.478.851/0001-40', contrato: 'contratado', tel: '15974034512', email: 'comercial@grptechlan.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'ECO FLORA JARDINAGEM E PAISAGISMO', cnpj: '22.754.843/0001-16', contrato: 'contratado', tel: '15997048467', email: 'contato@ecoflorajardinagem.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
-        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '11947907129', email: 'admvendas@gamafiltros.com.br', via: 'whatsapp', vidas: 3, aderencia: 100.0, status: 'pendente' },
+        { razaoSocial: 'GAMA FILTROS E REFRIGERACAO', cnpj: '13.559.605/0001-69', contrato: 'contratado', tel: '11947907129', email: 'admvendas@gamafiltros.com.br', via: 'whatsapp', vidas: 3, aderencia: 60.0, status: 'pendente' },
         { razaoSocial: 'FRONIUS DO BRASIL COMERCIO, INDUSTRIA E SERVICOS LTDA.', cnpj: '05.603.740/0001-36', contrato: 'contratado', tel: '1135633800', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'BRITO STEEL COMERCIO DE FERRAMENTAS LTDA', cnpj: '05.116.311/0001-34', contrato: 'contratado', tel: '1932317756', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
         { razaoSocial: 'LATITUD SOLUCOES EM ALTURAS', cnpj: '42.452.838/0001-66', contrato: 'contratado', tel: '1532331666', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente' },
@@ -287,7 +287,7 @@ var WEHANDLE_DADOS = {
       ,
         { razaoSocial: 'SANTOS PORTO LOCACAO DE BENS MOVEIS E SERVICOS LTDA', cnpj: '57.525.107/0001-70', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
-        { razaoSocial: 'STEMAC SA GRUPOS GERADORES', cnpj: '92.753.268/0010-03', contrato: 'contratado', tel: '11947175282', email: 'fernando.campanhola@stemac.com.br', via: 'whatsapp', vidas: 0, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-23' }
+        { razaoSocial: 'STEMAC SA GRUPOS GERADORES', cnpj: '92.753.268/0010-03', contrato: 'contratado', tel: '11947175282', email: 'fernando.campanhola@stemac.com.br', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-23' }
       ,
         { razaoSocial: 'JCT SERVICES LTDA', cnpj: '65.511.078/0001-16', contrato: 'contratado', tel: '', email: '', via: 'whatsapp', vidas: 7, aderencia: 20.0, status: 'novo', dataEntrada: '2026-06-25' },
         { razaoSocial: 'Macontrin', cnpj: '09.303.135/0001-09', contrato: 'contratado', tel: '1999910324', email: 'rh@macontrin.com.br', via: 'whatsapp', vidas: 6, aderencia: 80.0, status: 'pendente', dataEntrada: '2026-07-01' }
@@ -337,8 +337,8 @@ var WEHANDLE_DADOS = {
       mrrFaixa1: 10800,
       mrrFaixa2: null,
       fornecedores: [
-        { razaoSocial: 'TRIUNFO SEGURANCA LTDA',       cnpj: '08.562.228/0001-87', contrato: 'contratado', tel: '31993063864', email: 'fat@grupotriunfomg.com.br',                    via: 'whatsapp', vidas: 13, aderencia: 93.75, status: 'aguardando' },
-        { razaoSocial: 'ARTEBRILHO MULTISERVIÇOS LTDA', cnpj: '07.655.416/0001-97', contrato: 'contratado', tel: '31992208954', email: 'gestaodocumental@grupoartebrilho.com.br', via: 'whatsapp', vidas: 28, aderencia: 90.63, status: 'contatado'  },
+        { razaoSocial: 'TRIUNFO SEGURANCA LTDA',       cnpj: '08.562.228/0001-87', contrato: 'contratado', tel: '31993063864', email: 'fat@grupotriunfomg.com.br',                    via: 'whatsapp', vidas: 13, aderencia: 75.86, status: 'aguardando' },
+        { razaoSocial: 'ARTEBRILHO MULTISERVIÇOS LTDA', cnpj: '07.655.416/0001-97', contrato: 'contratado', tel: '31992208954', email: 'gestaodocumental@grupoartebrilho.com.br', via: 'whatsapp', vidas: 28, aderencia: 31.03, status: 'contatado'  },
       ]
     },
     {
@@ -373,8 +373,8 @@ var WEHANDLE_DADOS = {
       mrrFaixa2: 11700,
       fornecedores: [
         { razaoSocial: 'QUANTUM', cnpj: '41.383.971/0001-45', contrato: 'contratado', tel: '11920609531', email: 'joana@gquantum.com.br',          via: 'whatsapp', vidas: 10, aderencia: 10.34, status: 'aguardando' },
-        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0001-35', contrato: 'contratado', tel: '62996610437', email: 'ana.tocchio@sodexo.com', via: 'whatsapp', vidas: 1, aderencia: 100.0, status: 'pendente', dataEntrada: '2026-06-18' },
-        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51981804495', email: 'giuliano.oliveira@sodexo.com', via: 'whatsapp', vidas: 0, aderencia: 0.0, status: 'aguardando' },
+        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0001-35', contrato: 'contratado', tel: '62996610437', email: 'ana.tocchio@sodexo.com', via: 'whatsapp', vidas: 1, aderencia: 0.0, status: 'pendente', dataEntrada: '2026-06-18' },
+        { razaoSocial: 'SODEXO DO BRASIL COMERCIAL S.A.', cnpj: '49.930.514/0364-07', contrato: 'contratado', tel: '51981804495', email: 'giuliano.oliveira@sodexo.com', via: 'whatsapp', vidas: 0, aderencia: 40.0, status: 'aguardando' },
         { razaoSocial: 'MANTECH', cnpj: '35.523.140/0001-29', contrato: 'contratado', tel: '51991147879', email: 'rh@mantech.com.br',              via: 'whatsapp', vidas: 2, aderencia: 76.92, status: 'aguardando' },
       ]
     },
@@ -408,8 +408,8 @@ var WEHANDLE_DADOS = {
         { nome: 'TAB ENERGIA RENOVAVEL LTDA', cnpj: '32.129.994/0001-37', naoAderentes: 4514, pctNaoAderente: 47.8, tel: '', email: '' },
         { nome: 'CONSORCIO GLOBAL CSU', cnpj: '61.158.607/0001-99', naoAderentes: 4420, pctNaoAderente: 23.6, tel: '', email: '' },
         { nome: 'BELLS SERVICOS DE MAO DE OBRA LTDA', cnpj: '05.604.025/0001-18', naoAderentes: 4307, pctNaoAderente: 42.2, tel: '', email: '' },
-        { nome: 'Consorcio Ferraz de Vasconcelos 6B', cnpj: '58.511.151/0001-94', naoAderentes: 4136, pctNaoAderente: 32.1, tel: '', email: '' },
-        { nome: 'CONSORCIO AVANÇA TIETÊ', cnpj: '59.014.935/0001-70', naoAderentes: 3970, pctNaoAderente: 29.7, tel: '', email: '' },
+        { nome: 'Consorcio Ferraz de Vasconcelos 6B', cnpj: '58.511.151/0001-94', naoAderentes: 4120, pctNaoAderente: 32.0, tel: '', email: '' },
+        { nome: 'CONSORCIO AVANÇA TIETÊ', cnpj: '59.014.935/0001-70', naoAderentes: 3966, pctNaoAderente: 29.7, tel: '', email: '' },
         { nome: 'CONSORCIO SE LIGA NA REDE SANTOS', cnpj: '60.850.817/0001-80', naoAderentes: 3930, pctNaoAderente: 18.5, tel: '', email: '' },
         { nome: 'REGIONAL SERVICOS DE SEGURANCA E VIGILANCIA LTDA', cnpj: '13.987.152/0001-71', naoAderentes: 3465, pctNaoAderente: 39.2, tel: '', email: '' },
         { nome: 'JE MARCEL TERRAPLANAGEM LTDA', cnpj: '57.118.861/0001-96', naoAderentes: 3456, pctNaoAderente: 48.6, tel: '', email: '' },
@@ -422,23 +422,23 @@ var WEHANDLE_DADOS = {
     },
       zendesk: {
       atualizadoEm: '05/07/2026',
-      sla: { dentro: '1602 (76%)', fora: '376 (18%)', naoResolvido: '127 (6%)' },
+      sla: { dentro: '1633 (76%)', fora: '378 (18%)', naoResolvido: '135 (6%)' },
       topChamados: [
         { nome: 'CONSORCIO AGCS ELEVACAO', cnpj: '59.187.124/0001-70', tel: '', email: '', total: 7 },
+        { nome: 'CONSORCIO EFICIENCIA VILA ROMANA', cnpj: '54.823.392/0001-18', tel: '', email: '', total: 4 },
         { nome: 'MANPOWER STAFFING LTDA.', cnpj: '01.894.253/0001-19', tel: '', email: '', total: 4 },
         { nome: 'ZANIN  LUCIO LTDA.', cnpj: '22.212.103/0001-58', tel: '', email: '', total: 4 },
-        { nome: 'CONSORCIO EFICIENCIA VILA ROMANA', cnpj: '54.823.392/0001-18', tel: '', email: '', total: 3 },
-        { nome: 'CONSORCIO COLETOR VERTENTE', cnpj: '48.818.902/0001-66', tel: '', email: '', total: 3 },
+        { nome: 'SAVAZONI CONSTRUCOES E SERVICOS LTDA.', cnpj: '34.179.307/0001-13', tel: '', email: '', total: 4 },
         { nome: 'ECOLIXO TRANSPORTE  GESTAO AMBIENTAL LTDA', cnpj: '12.294.564/0001-63', tel: '', email: '', total: 3 },
-        { nome: 'PRIME ENGENHARIA E COMERCIO LTDA', cnpj: '62.803.473/0001-84', tel: '', email: '', total: 3 },
+        { nome: 'CONSORCIO COLETOR VERTENTE', cnpj: '48.818.902/0001-66', tel: '', email: '', total: 3 },
+        { nome: 'GERENTEC ENGENHARIA LTDA.', cnpj: '66.817.412/0001-27', tel: '11988500945', email: 'christiane@gerentec.com.br', total: 3 },
+        { nome: 'CONSORCIO CARIOCA GEL', cnpj: '58.800.318/0001-37', tel: '', email: '', total: 3 },
+        { nome: 'CONSORCIO MANUTENCAO GUARAPIRANGA', cnpj: '61.431.740/0001-77', tel: '', email: '', total: 3 },
         { nome: 'CONSORCIO MANUTENCAO NOVA SP', cnpj: '43.721.116/0001-22', tel: '', email: '', total: 3 },
-        { nome: 'GERENTEC ENGENHARIA LTDA.', cnpj: '66.817.412/0001-27', tel: '', email: '', total: 3 },
-        { nome: 'CONSORCIO CARIOCA GEL', cnpj: '58.800.318/0001-37', tel: '', email: '', total: 2 },
-        { nome: 'OBRAS PASSOS CONSTRUCOES E COMERCIO LTDA', cnpj: '45.063.615/0001-03', tel: '', email: '', total: 2 },
-        { nome: 'ATIVA SOLUCOES TECNOLOGICAS INDUSTRIA E COMERCIO S.A.', cnpj: '06.241.040/0001-01', tel: '', email: '', total: 2 },
-        { nome: 'SANORTE INFRAESTRUTURA E SANEAMENTO LTDA', cnpj: '08.762.145/0001-31', tel: '', email: '', total: 2 },
-        { nome: 'CONSORCIO YPESIAL CAMBUCI', cnpj: '60.529.664/0001-74', tel: '', email: '', total: 2 },
-        { nome: 'CONSORCIO ETA CAROLINA', cnpj: '59.115.502/0001-00', tel: '', email: '', total: 2 }
+        { nome: 'CONSORCIO AVBN - PACOTES 22 E 23', cnpj: '61.062.771/0001-06', tel: '', email: '', total: 2 },
+        { nome: 'FOX GESTAO EM SERVICOS LTDA', cnpj: '40.800.438/0001-79', tel: '', email: '', total: 2 },
+        { nome: 'CONSORCIO ETA CAROLINA', cnpj: '59.115.502/0001-00', tel: '', email: '', total: 2 },
+        { nome: 'SANORTE INFRAESTRUTURA E SANEAMENTO LTDA', cnpj: '08.762.145/0001-31', tel: '', email: '', total: 2 }
       ]
     }
     }
