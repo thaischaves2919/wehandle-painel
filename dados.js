@@ -1,7 +1,7 @@
 ﻿// Fonte de verdade â€” editar aqui para atualizar AMBOS os painÃ©is
 // Ãšltima atualizaÃ§Ã£o: 06/07/2026
 var WEHANDLE_DADOS = {
-  versao: '20260713a',
+  versao: '20260713b',
   clientes: [
     {
       id: 'netzsch',
@@ -10,8 +10,8 @@ var WEHANDLE_DADOS = {
       idempresa: 34863,
       dataInicio: '2026-04-22',
       dataFim: '2026-06-06',
-      vidas: 228,
-      aderencia: 76.97,
+      vidas: 251,
+      aderencia: 76.33,
       vidasFinal: 159,
       aderenciaFinal: 74.34,
       historico: [
@@ -148,7 +148,7 @@ var WEHANDLE_DADOS = {
       dataInicio: '2026-04-22',
       dataFim: '2026-06-06',
       vidas: 19,
-      aderencia: 91.35,
+      aderencia: 83.84,
       vidasFinal: 19,
       aderenciaFinal: 91.35,
       historico: [
@@ -182,8 +182,8 @@ var WEHANDLE_DADOS = {
       idempresa: 77911,
       dataInicio: '2026-05-21',
       dataFim: '2026-07-03',
-      vidas: 82,
-      aderencia: 63.16,
+      vidas: 110,
+      aderencia: 60.29,
       vidasFinal: 82,
       aderenciaFinal: 63.16,
       historico: [
@@ -293,7 +293,7 @@ var WEHANDLE_DADOS = {
       idempresa: 78024,
       dataInicio: '2026-06-09',
       vidas: 41,
-      aderencia: 66.87,
+      aderencia: 55.33,
       vidasFinal: 41,
       aderenciaFinal: 66.87,
       historico: [
@@ -336,7 +336,7 @@ var WEHANDLE_DADOS = {
       idempresa: 79099,
       dataInicio: '2026-06-09',
       vidas: 13,
-      aderencia: 44.22,
+      aderencia: 47.17,
       vidasFinal: 13,
       aderenciaFinal: 44.22,
       historico: [
@@ -367,8 +367,8 @@ var WEHANDLE_DADOS = {
       cnpj: '43.776.517/0001-80',
       idempresa: 56391,
       dataInicio: '2026-06-29',
-      vidas: 0,
-      aderencia: 0,
+      vidas: 45890,
+      aderencia: 82.33,
       vidasFinal: 0,
       aderenciaFinal: 0,
       historico: [],
@@ -450,8 +450,8 @@ var WEHANDLE_DADOS = {
       cnpj: '57.990.933/0001-90',
       idempresa: 79107,
       dataInicio: '2026-07-06',
-      vidas: 276,
-      aderencia: 50.43,
+      vidas: 283,
+      aderencia: 51.02,
       vidasFinal: 0,
       aderenciaFinal: 0,
       historico: [],
